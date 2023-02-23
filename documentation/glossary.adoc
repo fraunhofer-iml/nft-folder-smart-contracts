@@ -1,0 +1,13 @@
+= Glossary for the {projectName}
+
+We define the *project-specific terms* for the {projectName}, and additionally refer to the https://oe160.iml.fraunhofer.de/wiki/display/HOW/Glossary[Silicon Economy Glossary].
+
+[cols="1,3",options="header"]
+|===
+| Term
+| Definition
+
+| TBD
+| TBD
+|===
+

@@ -1,0 +1,80 @@
+{
+  "name": "nft-folder",
+  "version": "1.0.0",
+  "description": "NFT Folder",
+  "author": {
+    "name": "Fraunhofer Institute for Material Flow and Logistics",
+    "url": "https://www.iml.fraunhofer.de/en.html",
+    "email": "maximilian.austerjost@iml.fraunhofer.de"
+  },
+  "license": "Open Logistics License 1.0",
+  "homepage": "https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/solidity-libraries/nft-folder/-/blob/main/README.md",
+  "bugs": {
+    "url": "https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/solidity-libraries/nft-folder/-/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/solidity-libraries/nft-folder"
+  },
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "private": true,
+  "scripts": {
+    "prepare": "husky install",
+    "ganache:start": "npx ganache > /dev/null 2>&1 &",
+    "ganache:stop": "kill $(ps -ef | grep \"nft-folder/node_modules/.bin/ganache\" | awk '{print $2}' | head -n 1)",
+    "clean": "[ -d build ] && rm -r build && echo '\"build\" removed' || echo '\"build\" does not exist'",
+    "compile": "npx truffle compile",
+    "pretest": "npm run ganache:start",
+    "test": "npx truffle test --network=test",
+    "posttest": "npm run ganache:stop",
+    "local:deploy": "npx truffle migrate --network=local",
+    "local:console": "npx truffle console --network=local",
+    "testnet:deploy": "npx truffle migrate --network=testnet",
+    "testnet:console": "npx truffle console --network=testnet",
+    "testnet:verify": "npx truffle run verify Counter --network=testnet",
+    "production:deploy": "npx truffle migrate --network=production",
+    "production:console": "npx truffle console --network=production",
+    "contract-size": "npx truffle run contract-size --contracts Counter",
+    "eslint:check": "npx eslint './**/*.js'",
+    "eslint:fix": "npx eslint --fix './**/*.js'",
+    "prettier:check": "npx prettier --check 'contracts/**/*' 'migrations/**/*' 'test/**/*' ./*.*",
+    "prettier:fix": "npx prettier --write 'contracts/**/*' 'migrations/**/*' 'test/**/*' ./*.*",
+    "solhint": "npx solhint --max-warnings=0 --formatter=table 'contracts/**/*.sol'",
+    "license-checker": "npm run license-checker:all && npm run license-checker:complementary && npm run license-checker:summary",
+    "license-checker:all": "npx license-checker --unknown --csv --out=./third-party-licenses/third-party-licenses.csv",
+    "license-checker:complementary": "npx license-checker --onlyunknown --csv --out=./third-party-licenses/third-party-licenses-complementary.csv",
+    "license-checker:summary": "npx license-checker --unknown --summary --out=./third-party-licenses/third-party-licenses-summary.txt"
+  },
+  "lint-staged": {
+    "package.json": [
+      "npm run license-checker"
+    ]
+  },
+  "dependencies": {
+    "dotenv": "16.0.3"
+  },
+  "devDependencies": {
+    "@openzeppelin/test-helpers": "0.5.16",
+    "@truffle/hdwallet-provider": "2.1.7",
+    "chai": "4.3.7",
+    "eslint": "8.34.0",
+    "eslint-config-prettier": "8.6.0",
+    "eslint-plugin-license-header": "0.6.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "ganache": "7.7.5",
+    "husky": "8.0.3",
+    "license-checker": "25.0.1",
+    "lint-staged": "13.1.2",
+    "prettier": "2.8.4",
+    "prettier-plugin-properties": "0.2.0",
+    "prettier-plugin-solidity": "1.1.2",
+    "solhint": "3.4.0",
+    "solhint-plugin-prettier": "0.0.5",
+    "truffle": "5.7.7",
+    "truffle-contract-size": "2.0.1",
+    "truffle-plugin-verify": "0.6.1"
+  }
+}

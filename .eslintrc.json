@@ -1,0 +1,34 @@
+{
+  "env": {
+    "commonjs": true,
+    "es2022": true,
+    "node": true,
+    "mocha": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "plugins": [
+    "license-header",
+    "prettier"
+  ],
+  "rules": {
+    "license-header/header": [
+      "error",
+      "license-header.js"
+    ],
+    "prettier/prettier": [
+      "error"
+    ]
+  },
+  "globals": {
+    "artifacts": "readonly",
+    "assert": "readonly",
+    "contract": "readonly",
+    "web3": true
+  }
+}

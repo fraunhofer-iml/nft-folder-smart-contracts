@@ -1,0 +1,24 @@
+├─ MIT: 868
+├─ ISC: 99
+├─ Apache-2.0: 43
+├─ BSD-3-Clause: 28
+├─ LGPL-3.0: 21
+├─ BSD-2-Clause: 20
+├─ MPL-2.0: 13
+├─ UNKNOWN: 9
+├─ Unlicense: 5
+├─ CC0-1.0: 2
+├─ (MIT OR Apache-2.0): 2
+├─ 0BSD: 2
+├─ (MIT OR CC0-1.0): 2
+├─ Python-2.0: 1
+├─ WTFPL: 1
+├─ CC-BY-4.0: 1
+├─ (AFL-2.1 OR BSD-3-Clause): 1
+├─ Public Domain: 1
+├─ UNLICENSED: 1
+├─ (MIT AND BSD-3-Clause): 1
+├─ (WTFPL OR MIT): 1
+├─ CC-BY-3.0: 1
+├─ (MIT AND CC-BY-3.0): 1
+└─ Custom: https://secure.travis-ci.org/defunctzombie/node-uuid.png: 1

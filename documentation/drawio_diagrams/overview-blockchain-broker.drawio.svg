@@ -1,0 +1,222 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1121px"
+     height="447px" viewBox="-0.5 -0.5 1121 447"
+     content="&lt;mxfile host=&quot;1jfa6ppu83vg1rb0jni0ahs9h3s6ct8ejj808u7as4vi286bjllg&quot; modified=&quot;2022-03-21T12:49:08.708Z&quot; agent=&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.65.2 Chrome/91.0.4472.164 Electron/13.5.2 Safari/537.36&quot; etag=&quot;CtDnttI4SmikyRnIx0EA&quot; version=&quot;12.2.4&quot; pages=&quot;1&quot;&gt;&lt;diagram id=&quot;XWOaJvcqBV8rnFO-RIZ3&quot; name=&quot;Page-1&quot;&gt;5Zlbb5swFMc/TaTtoVOMc33MrReplSql0rZHFzzwajiRMUnop98xmCTE6VapGWnalwj/fYHzO8fHnNCik3h9pdgiuoOAy5bXDtYtOm153tDr468R8lIYDLqlECoRlBLZCnPxzK3YtmomAp7WBmoAqcWiLvqQJNzXNY0pBav6sF8g63ddsJA7wtxn0lW/i0BH1orKLKNfcxFG1Z1Jb1j2xKwabC1JIxbAakeisxadKABdXsXrCZeGXcWlnHf5Qu/mwRRP9GsmeOWEJZOZtW0swX/yIyYS1McKnriyj6rzyn4FWRJws0S7RcerSGg+XzDf9K7Q4ahFOpbYIngp2SOX95AKLSBBzcdHwzXpeMmVFgj1dm+ABrMCkyI8OHxkOx5Ba4ixw7XZYjAz+HpHsgyuOMRcqxyH2N4Lr2sdYiOyYwNyteteOyTacW2HWpHZkAo3a2+p44UFf9gJ1HHCA2I3/O9YgrH0Rgccg0+vjmfYdvCQQ3h6R6DTceiMMh2BEs+sCBikBEGGZN4bJDJokFLXoXRb3MBrT6QwNp2cDiV1PB5tEE/PsZ8HmNJtExQGVAgJk7OtOq4T2o65BZOgCi6/uda5PZ9YpqFOja+F/mGmfxv0u7b9s2hXrenarl408p3GPVcCrTSZr9Be9EAKmfKtTfb80UyFXNfiwlj7Vy8pLnE7LesH3FuI952AvIGHl48UnIynt8GOR+LCiL6ELGgmNLt72X9zPP8rNAdHCM3BpwjNoRuaVT5oPjaHbmxO5+87JOlrs+UxQrLyzBmdJrTT4GlCyNnxIa9NaUfh432KnEbogaRGTpXUiFtGzGfYnnO1FD6Wy+86vxHSZH5za4rrLGamlrgJ0Cih8y24lnmKnsTbjx/xvaUXmqsvCZjdnnPzK+KF5LGpU4Ovp9/5e1WI129y47tlyMj3kYDeFLNxkR63cM+HLNmv7xpNqT2H7B0kQmMdnIQfg2ejBSFx65N5zFRxhEOiFfM/SJQ2+2I0cKlq9sQjkIEp+s4RKO2fctu7pco9y20OZUlg3j4US1IM1/K/sDRPNY/PmW+jaaBad4fvREGaXownF6OALcwb4RmzbHTze25VNBWh0MwMuqwywDnh3H+Xor3/hxOb288+Rd/OtzM6+wM=&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <rect x="300" y="16" width="820" height="430" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(661.5,-0.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="96" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 98px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Blockchain Broker
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="490" y="61" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(508.5,84.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="82" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 84px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Token Manager
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="490" y="151" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(493.5,174.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="112" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 114px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Authorization Module
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="240" y="201" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(269.5,224.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="60" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 62px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Light Client
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <path d="M 105 231 L 233.63 231" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 238.88 231 L 231.88 234.5 L 233.63 231 L 231.88 227.5 Z" fill="#000000" stroke="#000000"
+              stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 30 211 C 6 211 0 231 19.2 235 C 0 243.8 21.6 263 37.2 255 C 48 271 84 271 96 255 C 120 255 120 239 105 231 C 120 215 96 199 75 207 C 60 195 36 195 30 211 Z"
+              fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(31.5,224.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="56" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 56px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">IoT
+                        Broker
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <path d="M 105 341 L 233.63 341" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 238.88 341 L 231.88 344.5 L 233.63 341 L 231.88 337.5 Z" fill="#000000" stroke="#000000"
+              stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 30 321 C 6 321 0 341 19.2 345 C 0 353.8 21.6 373 37.2 365 C 48 381 84 381 96 365 C 120 365 120 349 105 341 C 120 325 96 309 75 317 C 60 305 36 305 30 321 Z"
+              fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(49.5,334.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="20" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 22px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">IDS
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="240" y="311" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(269.5,334.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="60" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 62px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Light Client
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="240" y="91" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(269.5,114.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="60" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 62px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Light Client
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <path d="M 105 121 L 233.63 121" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 238.88 121 L 231.88 124.5 L 233.63 121 L 231.88 117.5 Z" fill="#000000" stroke="#000000"
+              stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 30 101 C 6 101 0 121 19.2 125 C 0 133.8 21.6 153 37.2 145 C 48 161 84 161 96 145 C 120 145 120 129 105 121 C 120 105 96 89 75 97 C 60 85 36 85 30 101 Z"
+              fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(26.5,114.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="66" height="12">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 66px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">SE
+                        Services
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="490" y="241" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(491.5,243.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="116" height="54">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 116px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Human Identity Service<br/>(not yet implemented)
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="710" y="91" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(711.5,93.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="116" height="54">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 116px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Account Management Service<br/>(not yet implemented)
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="710" y="201" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(711.5,210.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="116" height="40">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 116px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Monitoring Service<br/>(not yet implemented)
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="710" y="311" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(711.5,313.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="116" height="54">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 116px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Smart Contract Service<br/>(not yet implemented)
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="920" y="91" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(921.5,100.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="116" height="40">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 116px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Stakeholder Service<br/>(not yet implemented)
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="920" y="201" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(921.5,203.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="116" height="54">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 116px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Payment and transaction system<br/>(not yet implemented)
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="920" y="311" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(921.5,320.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="116" height="40">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 116px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Cross-BC-Adapter<br/>(not yet implemented)
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+        <rect x="490" y="331" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(491.5,340.5)">
+            <foreignObject style="overflow:visible;" pointer-events="all" width="116" height="40">
+                <div xmlns="http://www.w3.org/1999/xhtml"
+                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 116px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"
+                         style="display:inline-block;text-align:inherit;text-decoration:inherit;white-space:normal;">
+                        Digital Folder<br/>(not yet implemented)
+                    </div>
+                </div>
+            </foreignObject>
+        </g>
+    </g>
+</svg>

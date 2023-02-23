@@ -1,92 +1,377 @@
+<div id="top"></div>
+
 # NFT Folder
 
+---
 
+[[_TOC_]]
 
-## Getting started
+## 📄 Description
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+---
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Creating a robust codebase with comprehensive testing, essential tooling, an efficient pipeline, and thorough
+documentation is crucial for new blockchain projects. However, these tasks can be time-consuming and repetitive. This
+project provides a solution to help you complete these essential tasks more efficiently and enable you to kick-start
+your blockchain project with greater ease.
 
-## Add your files
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## 📖 Documentation
 
-```
-cd existing_repo
-git remote add origin https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/solidity/solidity-libraries/nft-folder.git
-git branch -M main
-git push -uf origin main
-```
+---
 
-## Integrate with your tools
+This project includes a starter documentation that features pre-populated content for specific chapters that are always
+the same in Blockchain Europe projects.
+However, other chapters remain unfilled and require project-specific input.
+This documentation is based on the [arc42 template](https://arc42.org/overview) and included in the
+directory `documentation`.
 
-- [ ] [Set up project integrations](https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/solidity/solidity-libraries/nft-folder/-/settings/integrations)
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>
 
-## Collaborate with your team
+## 🚀 Getting Started
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+---
 
-## Test and Deploy
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>
 
-Use the built-in continuous integration in GitLab.
+### 🛒 Dependencies
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+---
 
-***
+#### [dotenv](https://github.com/motdotla/dotenv)
 
-# Editing this README
+**_Handling environment variables_**
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Loads environment variables from an existing `.env` file into `process.env`.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+#### [OpenZeppelin Test Helpers](https://docs.openzeppelin.com/test-helpers)
 
-## Name
-Choose a self-explaining name for your project.
+**_Ethereum smart contract assertion library_**
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Features:
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+- Checks that transactions revert for the correct reason
+- Verifies events where emitted with the right values
+- Tracks balance changes elegantly
+- Handles very large numbers
+- Simulates the passing of time
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+#### [@truffle/hdwallet-provider](https://www.npmjs.com/package/@truffle/hdwallet-provider)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+**_HD Wallet-enabled Web3 provider_**
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Signs transactions for addresses derived from a 12 or 24 word mnemonic.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+#### [Chai](https://www.chaijs.com)
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+**_BDD/TDD assertion library_**
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Makes the assertions of JavaScript tests more readable.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+#### [ESLint](https://eslint.org)
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+**_Linter for JavaScript code_**
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+This plugin uses the configuration file `.eslintrc.json`. Therein we use the recommended ESLint
+rules (`eslint:recommended`).
 
-## License
-For open source projects, say how it is licensed.
+#### [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**_Turns off all rules in ESLint that are unnecessary or might conflict with Prettier_**
+
+This config is used in the `extends` array of the configuration file `.eslintrc.json`.
+
+#### [eslint-plugin-license-header](https://github.com/nikku/eslint-plugin-license-header)
+
+**_Provides ESLint rules to validate the presence of license headers in source files_**
+
+This plugin is used in the `plugins` array of the configuration file `.eslintrc.json`.
+
+#### [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)
+
+**_Runs Prettier as an ESLint rule and reports differences as individual ESLint issues_**
+
+This plugin is used in the `plugins` array of the configuration file `.eslintrc.json`.
+
+#### [Ganache](https://github.com/trufflesuite/ganache)
+
+**_Local blockchain for fast Ethereum development_**
+
+Ganache is an Ethereum simulator that makes developing Ethereum applications faster, easier, and safer. It includes all
+popular RPC functions and features (like events) and can be run deterministically.
+
+#### [husky](https://typicode.github.io/husky)
+
+**_Runs custom scripts (Git hooks) at certain events in the Git lifecycle_**
+
+The folder `.husky` contains actions for the Git hook `pre-commit`. Currently, only the package **lint-staged** is
+executed before every commit.
+
+#### [NPM License Checker](https://github.com/davglass/license-checker)
+
+**_Checks the license of all installed NPM modules_**
+
+This plugin is used in the `plugins` array of the configuration file `.eslintrc.json`.
+
+#### [lint-staged](https://github.com/okonet/lint-staged)
+
+**_Runs linters and formatters against staged Git files_**
+
+We use this package to run
+
+- the linter **solhint** on Solidity files
+- the formatter **Prettier** on JavaScript and Solidity files
+
+See the object `"lint-staged"` in the `package.json`.
+
+#### [Prettier](https://prettier.io)
+
+**_Opinionated code formatter for many languages_**
+
+The default formatting rules are overridden in the configuration file `.prettierrc.json`.
+
+#### [prettier-plugin-properties](https://github.com/eemeli/prettier-plugin-properties)
+
+**_Plugin for Prettier to format Property files_**
+
+New rules can be added to the configuration file `.prettierrc.json`.
+
+#### [prettier-plugin-solidity](https://github.com/prettier-solidity/prettier-plugin-solidity)
+
+**_Plugin for Prettier to format Solidity files_**
+
+New rules can be added to the configuration file `.prettierrc.json`.
+
+#### [solhint](https://protofire.github.io/solhint)
+
+**_Linter for Solidity code with security and style guide validations_**
+
+This plugin uses the configuration file `.solhint.json`. Therein we have specified the recommended set of rules combined
+with some additional rules, which overall correspond to the
+official [Solidity Style Guide](https://docs.soliditylang.org/en/latest/style-guide.html).
+
+#### [solhint-plugin-prettier](https://github.com/fvictorio/solhint-plugin-prettier)
+
+**_Plugin for Prettier to lint Solidity code_**
+
+We have added this plugin to the array `"plugins": ["prettier"]` inside the configuration file `.solhint.json`.
+The rule `"prettier/prettier": "error"` contained therein emits an error for each difference between our Solidity code
+and how **prettier-plugin-solidity** would format it.
+
+#### [Truffle](https://github.com/trufflesuite/truffle/tree/develop/packages/truffle)
+
+**_Development environment, testing framework and asset pipeline for Ethereum_**
+
+Features:
+
+- Built-in smart contract compilation, linking, deployment and binary management
+- Automated contract testing with Mocha and Chai
+- Configurable build pipeline with support for custom build processes
+- Scriptable deployment & migrations framework
+- Network management for deploying to many public & private networks
+- Interactive console for direct contract communication
+- Instant rebuilding of assets during development
+- External script runner that executes scripts within a Truffle environment
+
+#### [truffle-contract-size](https://github.com/IoBuilders/truffle-contract-size)
+
+**_Smart contract size calculator _**
+
+Displays the contract size of all or a selection of smart contracts in kilobytes.
+
+#### [truffle-plugin-verify](https://github.com/rkalis/truffle-plugin-verify)
+
+**_Smart contract verifier_**
+
+Verifies automatically the smart contracts' source code on [Etherscan](https://etherscan.io).
+
+### 🔎 Prerequisites
+
+---
+
+You have to install the following tools before the installation steps listed below can be performed:
+
+- [git](https://git-scm.com/downloads)
+- [Node.js 16.16.x](https://nodejs.org/en/download)
+- [Ganache](https://trufflesuite.com/ganache)
+- [IntelliJ](https://www.jetbrains.com/idea/download)
+    - [Truffle plugin](https://plugins.jetbrains.com/plugin/18559-truffle)
+    - [Solidity plugin](https://plugins.jetbrains.com/plugin/9475-solidity)
+    - [Prettier plugin](https://plugins.jetbrains.com/plugin/10456-prettier)
+
+#### [Ganache](https://trufflesuite.com/ganache)
+
+This software combines the CLI and GUI components of Ganache in one package. It makes the development process more
+comfortable, instead of using only the CLI.
+
+#### [IntelliJ IDEA](https://www.jetbrains.com/idea)
+
+We recommend IntelliJ IDEA as your local IDE.
+
+At first change the following properties in the settings section:
+
+- **Settings** -> **Editor** -> **Inspections** -> **JavaScript and TypeScript** -> **General**
+    - Disable: **Unneeded last comma in array literal**
+    - Disable: **Unneeded last comma in object literal**
+- **Settings** -> **Languages & Frameworks** > **JavaScript** > **Prettier**
+    - Enable: **On 'Reformat Code' action**
+
+Afterwards install and configure the plugin **SonarLint** according to these
+[instructions](https://oe160.iml.fraunhofer.de/wiki/display/HOW/IntelliJ).
+
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>
+
+### 🛠️ Installation
+
+---
+
+The following installation steps must be performed to develop and interact with the smart contract on your local
+machine:
+
+1. Clone the repository
+    - `git clone git@gitlab.cc-asp.fraunhofer.de:silicon-economy/base/blockchainbroker/ethereum/projects/solidity-libraries/nft-folder.git`
+2. Install dependencies
+    - `npm install`
+3. Start Ganache
+    - Click on **NEW WORKSPACE** and then **ADD PROJECT**
+        - Select the file `truffle-config.js` from the root folder of the cloned repository
+    - Click on **SAVE WORKSPACE**
+    - Click on **CONTRACTS** in the upper navigation bar
+        - The smart contract has yet to be deployed, as evidenced by the message indicating that it is **Not Deployed**.
+4. Execute tests
+    - `npm run test`
+    - Every single test should be executed successfully
+    - Before and after this script is executed the scripts `pretest` and `posttest` are executed respectively
+        - While the former starts the CLI component of Ganache in the background, the latter terminates the
+          corresponding process
+5. Deploy the smart contract to your local Ganache instance
+    - `npm run local:deploy`
+    - For every smart contract, which needs to be deployed, the folder `migrations` contains a migration file
+    - In the **CONTRACTS** overview of Ganache the smart contracts `Migrations` and `Counter` have an
+      address which means that they are now deployed
+
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>
+
+### 🕹️ Usage
+
+---
+
+Once the installation process has been successfully completed, you will be able to interact with the smart contract.
+
+In this example the first account from the **ACCOUNTS** overview of Ganache executes the `increment` function.
+These commands can only be executed with a running Ganache instance.
+
+- `npm run console:local`
+- `const instance = await Counter.deployed();`
+- `instance.increment();`
+
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>
+
+### ⚗️Development
+
+---
+
+This is just a little quickstart. For a thorough introduction into our development process, please refer to
+the [Developer Guidelines](https://oe160.iml.fraunhofer.de/wiki/display/HOW/Developer+Guidelines).
+
+Push never ever to `main` directly! Always create a new branch with a comprehensive name, which consists of three parts
+(e.g. `feature/se1234-implement-staking-mechanism`)
+
+- type (`feature`, `improvement`, `bugfix`, `refactoring`, `documentation`, ...)
+- ticket number (`seDDDD`)
+- what you want to achieve
+
+Every commit message must contain a subject line, written in the imperative mood (e.g. `Fix transfer function`). When
+you merge the branch into `main`, you need to squash all your commits into a single commit. This is where you should
+provide a detailed text so that others (and the future you) understand why you made these changes. Please take a look
+into some good examples and best practices regarding commit messages:
+[#1](https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53)
+[#2](https://wiki.openstack.org/wiki/GitCommitMessages)
+[#3](https://initialcommit.com/blog/git-commit-messages-best-practices)
+
+When you commit, the commands `npm run prettier:check` and `npm run solhint` are executed automatically on your changed
+files. If they find any issues, the commit will not be created. To successfully create the commit, you must fix these
+issues beforehand.
+
+Additionally, everytime the file `package.json` is updated, the command `npm run license-checker` is executed which
+collects all licenses from all npm modules within the folder `node_modules`. These licenses are then written into three
+different files and automatically added to the git staging area:
+
+- `third-party-licenses.csv` contains license information for all npm modules
+- `third-party-licenses-complementary.csv` contains license information for every npm module with an unknown license
+- `third-party-licenses-summary.txt` contains all licenses with their occurrences
+
+After you have made all the necessary changes, someone will need to review and approve your branch. It might be a good
+idea to discuss your implementation with the reviewer beforehand, so he can ask questions to get a better understanding
+of the changes and your thoughts. Afterwards he looks at the changes by himself and makes some comments and suggestions
+in GitLab. You must provide a response to any comments he writes and implement those suggestions as appropriate. If
+something is unclear, talk to the reviewer again. At the end, you need to make sure that all comments are resolved. If
+the reviewer approved your merge request, you may merge your branch into `main`.
+
+### ⬆️Deployment
+
+---
+
+In order to deploy the smart contract to testnet, you have to follow these steps:
+
+1. Make sure the project root folder contains an `.env` file with the following entries:
+
+   |        **Key**         |     **Required for**     | 
+               | :--------------------: | :----------------------: |
+   |  TESTNET_PRIVATE_KEY   |  Deployment to testnet   |
+   |     INFURA_API_KEY     |  Deployment to testnet   |
+   |   ETHERSCAN_API_KEY    |   Verifying on testnet   |
+
+2. Start your local Ganache instance
+
+    - Execute the actual script `npm run ganache:start`
+
+3. Deploy the smart contract to your local Ganache instance
+
+    - Execute the actual script `npm run deploy:local`
+
+4. After you have tested the smart contract in Ganache successfully, you may deploy it to the testnet
+
+    - Execute the script `npm run deploy:testnet`
+    - Now the `Migrations` contract will recognize that the migration script has not been executed for the testnet yet
+    - In order to see the contract code on Etherscan, you need to execute the script `npm run testnet:verify"`
+        - It will verify and publish the new contract source code to Etherscan
+
+### ❗ Known Issues
+
+---
+
+## ✍ Contributing
+
+---
+
+TODO-MP: this will be added sometime in the future
+
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>
+
+## ⚖ License
+
+---
+
+See the file [LICENSE](LICENSE) in the root directory.
+
+For information about licenses of third-party dependencies, please refer to the `README.md` file of the corresponding
+project.
+
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>
+
+## 📧 Contact
+
+---
+
+- Tobias Jornitz (Product Owner) <a href="mailto:tobias.jornitz@iml.fraunhofer.de?">tobias.jornitz@iml.fraunhofer.de</a>
+- Dominik Buß (SCRUM Master) <a href="mailto:dominik.buß@iml.fraunhofer.de?">dominik.buß@iml.fraunhofer.de</a>
+- Stephan Frerichs (Lead Developer) <a href="mailto:stephan.frerichs@iml.fraunhofer.de?">
+  stephan.frerichs@iml.fraunhofer.de</a>
+- Lukas Grieger (Developer) <a href="mailto:lukas.grieger@iml.fraunhofer.de?">lukas.grieger@iml.fraunhofer.de</a>
+- Alexander Needham (Developer) <a href="mailto:alexander.needham@iml.fraunhofer.de?">
+  alexander.needham@iml.fraunhofer.de</a>
+- Michael Pichura (Developer) <a href="mailto:michael.pichura@iml.fraunhofer.de?">michael.pichura@iml.fraunhofer.de</a>
+
+<div style="text-align: right">(<a href="#top">back to top</a>)</div>

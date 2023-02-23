@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "solhint:recommended"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "func-param-name-mixedcase": "error",
+    "modifier-name-mixedcase": "error",
+    "ordering": "error",
+    "compiler-version": [
+      "error",
+      "^0.8.16"
+    ],
+    "func-visibility": [
+      "error",
+      {
+        "ignoreConstructors": true
+      }
+    ],
+    "reason-string": [
+      "error",
+      {
+        "maxLength": 64
+      }
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+= Software Documentation for the {projectName}
+:doctype: book
+:toc: left
+:toclevels: 3
+:sectnumlevels: 5
+:leveloffset: 1
+:icons: font
+:copyright: Blockchain Europe
+:projectName: NFT Folder
+
+= Motivation
+
+The vision of a Silicon Economy (SE) is a data and platform economy, where people, companies, autonomous vehicles and IoT devices interact with each other to achieve logistics goals.
+It uses open, federal structures, AI, autonomous devices, distributed ledger technologies and ensures data sovereignty.
+
+The reference architecture of the Silicon Economy consists of a macro architecture as a common framework in which SE services composed of microservices are loosely embedded.
+The macro architecture essentially consists of an International Data Spaces (IDS) infrastructure as well as three types of brokers.
+
+The Blockchain Broker, contributed by the project Blockchain Europe, is one of three types of brokers of a Silicon Economy Platform.
+This documentation contains the description of all modules of the Blockchain Broker, their context, interaction, constraints and implementation.
+This document is written to be published under the Open Logistics License 1.0.
+
+= Documentation Approach
+
+The documentation of the individual projects is in English and is based on the https://arc42.de/template[arc42 template].
+
+Each project maintains the software documentation on the project-related Confluence page according to this template.
+It is important that the risk assessment (see Chapter 11) and the quality criteria (see Chapters 1 and 10) are described before the start of each project.
+
+The https://agilemanifesto.org/[Agile Manifesto] says: “Working software over comprehensive documentation”.
+It does *not* say “no documentation”.
+Even in lean, agile and iterative development approaches, an appropriate amount of documentation will help numerous stakeholders doing a better job.
+arc42 is completely process-agnostic, and especially well-suited for lean and agile development approaches.
+It is supposed to be used “on demand” - you provide only the type or amount of information required for your specific documentation purpose.
+Documentation shall be part of your Definition-of-Done.
+Therefore, arc42 is _automatically_ included in Scrum processes.
+
+*Main Authors*
+
+[cols=",",options="header",]
+|===
+| Name
+| E-Mail
+
+| Tobias Jornitz (Product Owner)
+| tobias.jornitz@iml.fraunhofer.de
+
+| Dominik Buß (SCRUM Master)
+| dominik.buß@iml.fraunhofer.de
+
+| Stephan Frerichs (Lead Developer)
+| stephan.frerichs@iml.fraunhofer.de
+
+| Maximilian Hegenbarth (Developer)
+| maximilian.hegenbarth@iml.fraunhofer.de
+
+| Alexander Needham (Developer)
+| alexander.needham@iml.fraunhofer.de
+
+| Michael Pichura (Developer)
+| michael.pichura@iml.fraunhofer.de
+|===
+
+include::chapter01.adoc[]
+include::chapter02.adoc[]
+include::chapter03.adoc[]
+include::chapter04.adoc[]
+include::chapter05.adoc[]
+include::chapter06.adoc[]
+include::chapter07.adoc[]
+include::chapter08.adoc[]
+include::chapter09.adoc[]
+include::chapter10.adoc[]
+include::chapter11.adoc[]
+include::chapter12.adoc[]
+include::glossary.adoc[]
