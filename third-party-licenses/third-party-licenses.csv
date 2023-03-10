@@ -105,6 +105,7 @@
 "@nodelib/fs.stat@2.0.5","MIT","https://github.com/nodelib/nodelib/tree/master/packages/fs/fs.stat"
 "@nodelib/fs.walk@1.2.8","MIT","https://github.com/nodelib/nodelib/tree/master/packages/fs/fs.walk"
 "@openzeppelin/contract-loader@0.6.3","MIT","https://github.com/OpenZeppelin/contract-loader"
+"@openzeppelin/contracts@4.8.1","MIT","https://github.com/OpenZeppelin/openzeppelin-contracts"
 "@openzeppelin/test-helpers@0.5.16","MIT","https://github.com/OpenZeppelin/openzeppelin-test-helpers"
 "@protobufjs/aspromise@1.1.2","BSD-3-Clause","https://github.com/dcodeIO/protobuf.js"
 "@protobufjs/base64@1.1.2","BSD-3-Clause","https://github.com/dcodeIO/protobuf.js"
