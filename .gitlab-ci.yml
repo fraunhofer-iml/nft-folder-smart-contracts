@@ -86,7 +86,8 @@ run-slither:
     - pip install --upgrade pip
     - pip install wheel ${SLITHER_ANALYZER_PACKAGE}
   script:
-    - slither . --truffle-ignore-compile --exclude-dependencies --filter-paths openzeppelin
+    # TODO-MP: immutable-states indicates string should be immutable -> will be fixed in Slither 0.9.3
+    - slither . --truffle-ignore-compile --exclude-dependencies --filter-paths openzeppelin --exclude immutable-states
   rules:
     - when: on_success
 
