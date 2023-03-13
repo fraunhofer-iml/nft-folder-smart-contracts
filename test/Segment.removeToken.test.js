@@ -19,21 +19,21 @@ contract("Segment", function (accounts) {
   const INVALID_ADDRESS = constants.ZERO_ADDRESS;
 
   async function removeTokenAndAssertRemoval(tokenInformation) {
-    const receipt = await this.segment.removeToken(tokenInformation.tokenContract, tokenInformation.tokenId);
+    const receipt = await this.segment.removeToken(tokenInformation.token, tokenInformation.tokenId);
 
     expectEvent(receipt, "TokenRemoved", {
       from: ALICE,
-      tokenContract: tokenInformation.tokenContract,
+      token: tokenInformation.token,
       tokenId: tokenInformation.tokenId,
     });
 
     await expectRevert(
-      this.segment.getTokenLocationInSegment(tokenInformation.tokenContract, tokenInformation.tokenId),
-      "Segment: tokenContract and tokenId do not exist in segment"
+      this.segment.getTokenLocationInSegment(tokenInformation.token, tokenInformation.tokenId),
+      "Segment: token and tokenId do not exist in segment"
     );
 
     const actualRemovedTokenInSegment = await this.segment.isTokenInSegment(
-      tokenInformation.tokenContract,
+      tokenInformation.token,
       tokenInformation.tokenId
     );
     expect(actualRemovedTokenInSegment).is.false;
@@ -47,11 +47,11 @@ contract("Segment", function (accounts) {
     await removeTokenAndAssertRemoval(tokenInformation);
 
     const actualMovedTokenInformation = await this.segment.getTokenInformation(movedTokenInformationIndex);
-    expect(actualMovedTokenInformation.tokenContract).equals(expectedMovedTokenInformation.tokenContract);
+    expect(actualMovedTokenInformation.token).equals(expectedMovedTokenInformation.token);
     expect(actualMovedTokenInformation.tokenId).equals(expectedMovedTokenInformation.tokenId);
 
     const actualMovedTokenInSegment = await this.segment.isTokenInSegment(
-      expectedMovedTokenInformation.tokenContract,
+      expectedMovedTokenInformation.token,
       expectedMovedTokenInformation.tokenId
     );
     expect(actualMovedTokenInSegment).is.true;
@@ -64,7 +64,7 @@ contract("Segment", function (accounts) {
 
     it("should add 1 token and remove 1 token", async () => {
       await this.segment.addToken(VALID_TOKEN_ADDRESS_1, "0");
-      await removeTokenAndAssertRemoval.call(this, { tokenContract: VALID_TOKEN_ADDRESS_1, tokenId: "0" });
+      await removeTokenAndAssertRemoval.call(this, { token: VALID_TOKEN_ADDRESS_1, tokenId: "0" });
       await expectRevert(this.segment.getTokenInformation("0"), "Segment: index is too big");
     });
 
@@ -75,12 +75,12 @@ contract("Segment", function (accounts) {
       await removeTokenAndAssertRemovalWithExpectedInformation.call(
         this,
         {
-          tokenContract: VALID_TOKEN_ADDRESS_1,
+          token: VALID_TOKEN_ADDRESS_1,
           tokenId: "0",
         },
         "0",
         {
-          tokenContract: VALID_TOKEN_ADDRESS_1,
+          token: VALID_TOKEN_ADDRESS_1,
           tokenId: "1",
         }
       );
@@ -94,12 +94,12 @@ contract("Segment", function (accounts) {
       await removeTokenAndAssertRemovalWithExpectedInformation.call(
         this,
         {
-          tokenContract: VALID_TOKEN_ADDRESS_1,
+          token: VALID_TOKEN_ADDRESS_1,
           tokenId: "1",
         },
         "0",
         {
-          tokenContract: VALID_TOKEN_ADDRESS_1,
+          token: VALID_TOKEN_ADDRESS_1,
           tokenId: "0",
         }
       );
@@ -114,31 +114,31 @@ contract("Segment", function (accounts) {
       await removeTokenAndAssertRemovalWithExpectedInformation.call(
         this,
         {
-          tokenContract: VALID_TOKEN_ADDRESS_1,
+          token: VALID_TOKEN_ADDRESS_1,
           tokenId: "11",
         },
         "0",
         {
-          tokenContract: VALID_TOKEN_ADDRESS_1,
+          token: VALID_TOKEN_ADDRESS_1,
           tokenId: "12",
         }
       );
 
       // Ensure second token is still in segment (former third element is now first element)
       let actualTokenInformation = await this.segment.getTokenInformation("1");
-      expect(actualTokenInformation.tokenContract).equals(VALID_TOKEN_ADDRESS_2);
+      expect(actualTokenInformation.token).equals(VALID_TOKEN_ADDRESS_2);
       expect(actualTokenInformation.tokenId).equals("21");
 
       // Remove former second token
       await removeTokenAndAssertRemovalWithExpectedInformation.call(
         this,
         {
-          tokenContract: VALID_TOKEN_ADDRESS_2,
+          token: VALID_TOKEN_ADDRESS_2,
           tokenId: "21",
         },
         "0",
         {
-          tokenContract: VALID_TOKEN_ADDRESS_1,
+          token: VALID_TOKEN_ADDRESS_1,
           tokenId: "12",
         }
       );
@@ -147,7 +147,7 @@ contract("Segment", function (accounts) {
       await expectRevert(this.segment.getTokenInformation("1"), "Segment: index is too big");
 
       // Remove former third token
-      await removeTokenAndAssertRemoval.call(this, { tokenContract: VALID_TOKEN_ADDRESS_1, tokenId: "12" });
+      await removeTokenAndAssertRemoval.call(this, { token: VALID_TOKEN_ADDRESS_1, tokenId: "12" });
 
       // Array is empty
       await expectRevert(this.segment.getTokenInformation("0"), "Segment: index is too big");
@@ -160,7 +160,7 @@ contract("Segment", function (accounts) {
     });
 
     it("should require a valid contract address", async () => {
-      await expectRevert(this.segment.removeToken(INVALID_ADDRESS, "0"), "Segment: tokenContract is zero address");
+      await expectRevert(this.segment.removeToken(INVALID_ADDRESS, "0"), "Segment: token is zero address");
     });
 
     it("should require stored tokens", async () => {
@@ -172,7 +172,7 @@ contract("Segment", function (accounts) {
 
       await expectRevert(
         this.segment.removeToken(VALID_TOKEN_ADDRESS_1, "1"),
-        "Segment: tokenContract and tokenId do not exist in segment"
+        "Segment: token and tokenId do not exist in segment"
       );
     });
   });

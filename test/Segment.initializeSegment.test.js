@@ -31,9 +31,9 @@ contract("Segment", function (accounts) {
       expect(actualName).equals("MySegment");
     });
 
-    it("should get containerContract", async () => {
-      const actualContainerContract = await this.segment.getContainerContract();
-      expect(actualContainerContract).equals(VALID_CONTAINER_ADDRESS);
+    it("should get container", async () => {
+      const actualContainer = await this.segment.getContainer();
+      expect(actualContainer).equals(VALID_CONTAINER_ADDRESS);
     });
   });
 
@@ -50,10 +50,7 @@ contract("Segment", function (accounts) {
     });
 
     it("should require a valid container address", async () => {
-      await expectRevert(
-        Segment.new(ALICE, VALID_SEGMENT_NAME, INVALID_ADDRESS),
-        "Segment: containerContract is zero address"
-      );
+      await expectRevert(Segment.new(ALICE, VALID_SEGMENT_NAME, INVALID_ADDRESS), "Segment: container is zero address");
     });
   });
 });

@@ -6,8 +6,9 @@
  */
 
 require("dotenv").config();
+const MNEMONIC = process.env.MNEMONIC;
 const TESTNET_PRIVATE_KEY = process.env.TESTNET_PRIVATE_KEY;
-const PRODUCTION_PRIVATE_KEY = process.env.PRODUCTION_PRIVATE_KEY;
+// const PRODUCTION_PRIVATE_KEY = process.env.PRODUCTION_PRIVATE_KEY;
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
@@ -39,14 +40,15 @@ module.exports = {
     production: {
       provider: () =>
         new HDWalletProvider({
-          privateKeys: [PRODUCTION_PRIVATE_KEY],
-          providerOrUrl: "http://goquorum-node-rpc-1-example-quorum-project.apps.sele.iml.fraunhofer.de",
+          mnemonic: MNEMONIC,
+          providerOrUrl: "http://192.44.23.22:8545",
+          derivationPath: "m/44'/60'/0'/0/",
         }),
-      port: 8080,
       type: "quorum",
       network_id: "*",
       gas: 6000000,
       gasPrice: 0,
+      networkCheckTimeout: 5000,
     },
   },
   compilers: {

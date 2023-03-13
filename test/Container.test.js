@@ -11,7 +11,7 @@ const { expect } = require("chai");
 require("chai").use(require("chai-as-promised")).should();
 
 const Container = artifacts.require("Container");
-const TestSegment = artifacts.require("TestSegment");
+const Segment = artifacts.require("Segment");
 
 contract("Container", function (accounts) {
   describe("is Ownable", function () {
@@ -22,7 +22,6 @@ contract("Container", function (accounts) {
 
       it("should have a owner", async () => {
         const owner = await this.container.owner();
-        console.log(owner);
         expect(owner).to.be.not.null;
         expect(owner).to.be.equal(accounts[0]);
       });
@@ -35,11 +34,37 @@ contract("Container", function (accounts) {
       it("should not allow execution of onlyOwner function", async () => {
         await this.container.addNewSegment("Test").should.be.rejectedWith("Ownable: caller is not the owner.");
 
-        this.segment = await TestSegment.new("mySegment");
+        this.segment = await Segment.new(accounts[0], "mySegment", this.container.address);
         await this.container
           .addSegment(this.segment.address)
           .should.be.rejectedWith("Ownable: caller is not the owner.");
       });
+    });
+  });
+
+  describe("getName", function () {
+    beforeEach(async () => {
+      this.container = await Container.new(accounts[0], "myContainer");
+    });
+
+    it("should return myContainer", async () => {
+      const name = await this.container.getName();
+      expect(name).equals("myContainer");
+    });
+  });
+
+  describe("getSegmentAtIndex", function () {
+    beforeEach(async () => {
+      this.container = await Container.new(accounts[0], "myContainer");
+    });
+
+    it("should reject with 0 segments", async () => {
+      await this.container.getSegmentAtIndex(0).should.be.rejectedWith("Container: no segments stored in container");
+    });
+
+    it("should reject with 1 segment", async () => {
+      await this.container.addNewSegment("Segment");
+      await this.container.getSegmentAtIndex(1).should.be.rejectedWith("Container: index is too big");
     });
   });
 
@@ -49,9 +74,8 @@ contract("Container", function (accounts) {
     });
 
     it("should return 0 for empty segment", async () => {
-      const count = await this.container.getSegmentCount();
-      console.log("Count: " + count);
-      expect(count).to.be.bignumber.equal("0");
+      const segmentCount = await this.container.getSegmentCount();
+      expect(segmentCount).to.be.bignumber.equal("0");
     });
   });
 
@@ -63,8 +87,8 @@ contract("Container", function (accounts) {
     it("should return false for wrong address", async () => {
       await this.container.addNewSegment("Segment");
 
-      const actual = await this.container.isSegmentInContainer(accounts[0]);
-      expect(actual).to.be.false;
+      const segmentInContainer = await this.container.isSegmentInContainer(accounts[0]);
+      expect(segmentInContainer).to.be.false;
     });
   });
 
@@ -76,53 +100,64 @@ contract("Container", function (accounts) {
     it("should create and add new segment", async () => {
       await this.container.addNewSegment("Segment");
 
-      const count = await this.container.getSegmentCount();
-      console.log("Count: " + count);
-      expect(count).to.be.bignumber.equal("1");
+      const segmentCount = await this.container.getSegmentCount();
+      expect(segmentCount).to.be.bignumber.equal("1");
 
       const segmentAddress = await this.container.getSegmentAtIndex(0);
-      console.log("Address: " + segmentAddress);
-      expect(await this.container.isSegmentInContainer(segmentAddress)).to.be.true;
 
-      const segment = await TestSegment.at(segmentAddress);
+      const segmentInContainer = await this.container.isSegmentInContainer(segmentAddress);
+      expect(segmentInContainer).to.be.true;
+
+      const segment = await Segment.at(segmentAddress);
+
       const segmentName = await segment.getName();
-      console.log("Name: " + segmentName);
       expect(segmentName).to.be.equal("Segment");
+
+      const segmentContainer = await segment.getContainer();
+      expect(segmentContainer).to.be.equal(this.container.address);
     });
 
-    it("should create and add multiple segments", async () => {
+    it("should create and add two segments", async () => {
       await this.container.addNewSegment("Segment1");
       await this.container.addNewSegment("Segment2");
 
-      const count = await this.container.getSegmentCount();
-      console.log("Count: " + count);
-      expect(count).to.be.bignumber.equal("2");
+      const segmentCount = await this.container.getSegmentCount();
+      expect(segmentCount).to.be.bignumber.equal("2");
 
+      // Segment 1
       const segmentAddress1 = await this.container.getSegmentAtIndex(0);
-      console.log("Address: " + segmentAddress1);
-      expect(await this.container.isSegmentInContainer(segmentAddress1)).to.be.true;
 
-      const segment1 = await TestSegment.at(segmentAddress1);
+      const segment1InContainer = await this.container.isSegmentInContainer(segmentAddress1);
+      expect(segment1InContainer).to.be.true;
+
+      const segment1 = await Segment.at(segmentAddress1);
+
       const segmentName1 = await segment1.getName();
-      console.log("Name: " + segmentName1);
       expect(segmentName1).to.be.equal("Segment1");
 
-      const segmentAddress2 = await this.container.getSegmentAtIndex(1);
-      console.log("Address: " + segmentAddress2);
-      expect(await this.container.isSegmentInContainer(segmentAddress2)).to.be.true;
+      const segment1Container = await segment1.getContainer();
+      expect(segment1Container).to.be.equal(this.container.address);
 
-      const segment2 = await TestSegment.at(segmentAddress2);
+      // Segment 2
+      const segmentAddress2 = await this.container.getSegmentAtIndex(1);
+
+      const segment2InContainer = await this.container.isSegmentInContainer(segmentAddress2);
+      expect(segment2InContainer).to.be.true;
+
+      const segment2 = await Segment.at(segmentAddress2);
+
       const segmentName2 = await segment2.getName();
-      console.log("Name: " + segmentName2);
       expect(segmentName2).to.be.equal("Segment2");
+
+      const segment2Container = await segment1.getContainer();
+      expect(segment2Container).to.be.equal(this.container.address);
     });
 
     it("should emit event on new segment", async () => {
       await this.container.addNewSegment("Segment");
 
-      const events = await this.container.getPastEvents("SegmentAdded");
-
-      expect(events.length).to.be.equal(1);
+      const pastEvents = await this.container.getPastEvents("SegmentAdded");
+      expect(pastEvents.length).to.be.equal(1);
     });
   });
 
@@ -132,32 +167,35 @@ contract("Container", function (accounts) {
     });
 
     it("should add existing segment", async () => {
-      this.segment = await TestSegment.new("mySegment");
+      this.segment = await Segment.new(accounts[0], "mySegment", this.container.address);
       await this.container.addSegment(this.segment.address);
 
-      const count = await this.container.getSegmentCount();
-      console.log("Count: " + count);
-      expect(count).to.be.bignumber.equal("1");
+      const segmentCount = await this.container.getSegmentCount();
+      expect(segmentCount).to.be.bignumber.equal("1");
 
-      expect(await this.container.isSegmentInContainer(this.segment.address)).to.be.true;
+      const segmentInContainer = await this.container.isSegmentInContainer(this.segment.address);
+      expect(segmentInContainer).to.be.true;
 
-      const segment = await TestSegment.at(await this.container.getSegmentAtIndex(0));
+      const segmentAddress = await this.container.getSegmentAtIndex(0);
+      const segment = await Segment.at(segmentAddress);
+
       const segmentName = await segment.getName();
-      console.log("Name: " + segmentName);
       expect(segmentName).to.be.equal("mySegment");
+
+      const segmentContainer = await segment.getContainer();
+      expect(segmentContainer).to.be.equal(this.container.address);
     });
 
     it("should emit event on adding existing segment", async () => {
-      this.segment = await TestSegment.new("mySegment");
+      this.segment = await Segment.new(accounts[0], "mySegment", this.container.address);
       await this.container.addSegment(this.segment.address);
 
       const events = await this.container.getPastEvents("SegmentAdded");
-
       expect(events.length).to.be.equal(1);
     });
   });
 
-  describe("removeSegment", function () {
+  describe("removeSegmentAtIndex", function () {
     beforeEach(async () => {
       this.container = await Container.new(accounts[0], "myContainer");
     });
@@ -166,41 +204,67 @@ contract("Container", function (accounts) {
       await this.container.addNewSegment("Segment");
       const segmentAddress = await this.container.getSegmentAtIndex(0);
 
-      await this.container.removeSegment(0);
+      const segment = await Segment.at(segmentAddress);
 
-      const count = await this.container.getSegmentCount();
-      expect(count).to.be.bignumber.equal("0");
+      await this.container.removeSegmentAtIndex(0);
 
-      expect(await this.container.isSegmentInContainer(segmentAddress)).to.be.false;
+      const segmentCount = await this.container.getSegmentCount();
+      expect(segmentCount).to.be.bignumber.equal("0");
+
+      const segmentInContainer = await this.container.isSegmentInContainer(segmentAddress);
+      expect(segmentInContainer).to.be.false;
+
+      const segmentContainer = await segment.getContainer();
+      expect(segmentContainer).to.be.equal(this.container.address); // TODO-MP: should be false, see Container.sol
     });
 
-    it("should remove correct Segment from multiple segments", async () => {
+    it("should remove correct Segment from two Segments", async () => {
       await this.container.addNewSegment("Segment1");
       await this.container.addNewSegment("Segment2");
       const segment1Address = await this.container.getSegmentAtIndex(0);
       const segment2Address = await this.container.getSegmentAtIndex(1);
 
-      await this.container.removeSegment(0);
+      let segmentCount = await this.container.getSegmentCount();
+      expect(segmentCount).to.be.bignumber.equal("2");
 
-      const count = await this.container.getSegmentCount();
-      expect(count).to.be.bignumber.equal("1");
+      // Remove first segment
+      await this.container.removeSegmentAtIndex(0);
 
-      expect(await this.container.isSegmentInContainer(segment1Address)).to.be.false;
-      expect(await this.container.isSegmentInContainer(segment2Address)).to.be.true;
-      expect(await this.container.getSegmentAtIndex(0)).to.be.equal(segment2Address);
+      segmentCount = await this.container.getSegmentCount();
+      expect(segmentCount).to.be.bignumber.equal("1");
+
+      const segment1InContainer = await this.container.isSegmentInContainer(segment1Address);
+      expect(segment1InContainer).to.be.false;
+
+      const segment2InContainer = await this.container.isSegmentInContainer(segment2Address);
+      expect(segment2InContainer).to.be.true;
+
+      const segmentAddressAtIndex0 = await this.container.getSegmentAtIndex(0);
+      expect(segmentAddressAtIndex0).to.be.equal(segment2Address);
+
+      // Remove second segment
+      await this.container.removeSegmentAtIndex(0);
+
+      segmentCount = await this.container.getSegmentCount();
+      expect(segmentCount).to.be.bignumber.equal("0");
+
+      const formerSegment2InContainer = await this.container.isSegmentInContainer(segment2Address);
+      expect(formerSegment2InContainer).to.be.false;
+
+      await this.container.getSegmentAtIndex(0).should.be.rejectedWith("Container: no segments stored in container");
     });
 
     it("should be rejected for invald index", async () => {
       await this.container.addNewSegment("Segment");
-      await this.container.removeSegment(1).should.be.rejectedWith("Container: Invalid index to remove segment");
+      await this.container.removeSegmentAtIndex(1).should.be.rejectedWith("Container: Invalid index to remove segment");
     });
 
     it("should emit event on remove segment", async () => {
       await this.container.addNewSegment("Segment");
-      await this.container.removeSegment(0);
+      await this.container.removeSegmentAtIndex(0);
 
-      const events = await this.container.getPastEvents("SegmentRemoved");
-      expect(events.length).to.be.equal(1);
+      const pastEvents = await this.container.getPastEvents("SegmentRemoved");
+      expect(pastEvents.length).to.be.equal(1);
     });
   });
 });
