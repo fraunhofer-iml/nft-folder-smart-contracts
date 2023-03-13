@@ -10,7 +10,7 @@
 pragma solidity ^0.8.16;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {TestSegment} from "./TestSegment.sol";
+import {Segment} from "./Segment.sol";
 
 contract Container is Ownable {
     string private _name;
@@ -27,11 +27,36 @@ contract Container is Ownable {
         _name = name;
     }
 
+    // TODO-MP: maybe a factory contract would be better
+    function addNewSegment(string memory name) external onlyOwner {
+        Segment segment = new Segment(owner(), name, address(this));
+        addSegment(address(segment));
+    }
+
+    // TODO-MP: is this required?
+    // TODO-MP: the container address in the segment must be changed
+    // TODO-MP: segment must not have any NFTs (?)
+    // TODO-MP: add convenience function removeLastSegment (?)
+    function removeSegmentAtIndex(uint index) external onlyOwner {
+        require(index < _segments.length, "Container: Invalid index to remove segment");
+        address segmentAddress = _segments[index];
+        _segmentInContainer[segmentAddress] = false;
+        _segments[index] = _segments[_segments.length - 1];
+        _segments.pop();
+        emit SegmentRemoved(msg.sender, segmentAddress, index);
+    }
+
+    function getName() external view returns (string memory) {
+        return _name;
+    }
+
     function getSegmentCount() external view returns (uint) {
         return _segments.length;
     }
 
     function getSegmentAtIndex(uint index) external view returns (address) {
+        require(_segments.length > 0, "Container: no segments stored in container");
+        require(index < _segments.length, "Container: index is too big");
         return _segments[index];
     }
 
@@ -44,19 +69,5 @@ contract Container is Ownable {
         _segments.push(segment);
         _segmentInContainer[segment] = true;
         emit SegmentAdded(msg.sender, segment, _segments.length - 1);
-    }
-
-    function addNewSegment(string memory name) public onlyOwner {
-        TestSegment segment = new TestSegment(name);
-        addSegment(address(segment));
-    }
-
-    function removeSegment(uint index) public onlyOwner {
-        require(index < _segments.length, "Container: Invalid index to remove segment");
-        address segmentAddress = _segments[index];
-        _segmentInContainer[segmentAddress] = false;
-        _segments[index] = _segments[_segments.length - 1];
-        _segments.pop();
-        emit SegmentRemoved(msg.sender, segmentAddress, index);
     }
 }

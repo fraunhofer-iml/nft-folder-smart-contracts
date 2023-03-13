@@ -18,23 +18,23 @@ contract("Segment", function (accounts) {
   const VALID_TOKEN_ADDRESS_2 = "0x0000000000000000000000000000000000000012";
   const INVALID_ADDRESS = constants.ZERO_ADDRESS;
 
-  async function addTokenAndAssertValues(tokenContract, tokenId, tokenInformationIndex) {
-    const receipt = await this.segment.addToken(tokenContract, tokenId);
+  async function addTokenAndAssertValues(token, tokenId, tokenInformationIndex) {
+    const receipt = await this.segment.addToken(token, tokenId);
     expectEvent(receipt, "TokenAdded", {
       from: ALICE,
-      tokenContract: tokenContract,
+      token: token,
       tokenId: tokenId,
     });
 
     const actualTokenInformation = await this.segment.getTokenInformation(tokenInformationIndex);
-    expect(actualTokenInformation.tokenContract).equals(tokenContract);
+    expect(actualTokenInformation.token).equals(token);
     expect(actualTokenInformation.tokenId).equals(tokenId);
 
-    const actualTokenLocationInSegment = await this.segment.getTokenLocationInSegment(tokenContract, tokenId);
+    const actualTokenLocationInSegment = await this.segment.getTokenLocationInSegment(token, tokenId);
     expect(actualTokenLocationInSegment.present).is.true;
     expect(actualTokenLocationInSegment.tokenInformationIndex).equals(tokenInformationIndex);
 
-    const actualTokenInSegment = await this.segment.isTokenInSegment(tokenContract, tokenId);
+    const actualTokenInSegment = await this.segment.isTokenInSegment(token, tokenId);
     expect(actualTokenInSegment).is.true;
   }
 
@@ -65,7 +65,7 @@ contract("Segment", function (accounts) {
     });
 
     it("should require a valid contract address", async () => {
-      await expectRevert(this.segment.addToken(INVALID_ADDRESS, "0"), "Segment: tokenContract is zero address");
+      await expectRevert(this.segment.addToken(INVALID_ADDRESS, "0"), "Segment: token is zero address");
     });
 
     it("should require an absent token", async () => {
@@ -73,7 +73,7 @@ contract("Segment", function (accounts) {
 
       await expectRevert(
         this.segment.addToken(VALID_TOKEN_ADDRESS_1, "0"),
-        "Segment: tokenContract and tokenId already exist in segment"
+        "Segment: token and tokenId already exist in segment"
       );
     });
   });
