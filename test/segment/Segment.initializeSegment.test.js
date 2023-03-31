@@ -5,20 +5,23 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-const { constants, expectRevert } = require("@openzeppelin/test-helpers");
+const { expectRevert } = require("@openzeppelin/test-helpers");
 const { expect } = require("chai");
 
 const Segment = artifacts.require("Segment");
+const Container = artifacts.require("Container");
 
 contract("Segment", function (accounts) {
   const [ALICE] = accounts;
   const VALID_SEGMENT_NAME = "MySegment";
-  const VALID_CONTAINER_ADDRESS = "0x0000000000000000000000000000000000000001";
-  const INVALID_ADDRESS = constants.ZERO_ADDRESS;
+  let VALID_CONTAINER_ADDRESS;
 
   describe("Initialize Segment", () => {
     beforeEach(async () => {
-      this.segment = await Segment.new(ALICE, VALID_SEGMENT_NAME, VALID_CONTAINER_ADDRESS);
+      this.container = await Container.new(ALICE, "myContainer");
+      VALID_CONTAINER_ADDRESS = this.container.address;
+      await this.container.createSegment(VALID_SEGMENT_NAME);
+      this.segment = await Segment.at(await this.container.getSegmentAtIndex(0));
     });
 
     it("should get owner", async () => {
@@ -38,19 +41,15 @@ contract("Segment", function (accounts) {
   });
 
   describe("Don't Initialize Segment", () => {
-    it("should require a valid owner address", async () => {
-      await expectRevert(
-        Segment.new(INVALID_ADDRESS, VALID_SEGMENT_NAME, VALID_CONTAINER_ADDRESS),
-        "Segment: owner is zero address"
-      );
+    beforeEach(async () => {
+      this.container = await Container.new(ALICE, "myContainer");
+      VALID_CONTAINER_ADDRESS = this.container.address;
+      await this.container.createSegment(VALID_SEGMENT_NAME);
+      this.segment = await Segment.at(await this.container.getSegmentAtIndex(0));
     });
 
     it("should require a valid name string", async () => {
-      await expectRevert(Segment.new(ALICE, "", VALID_CONTAINER_ADDRESS), "Segment: name is empty");
-    });
-
-    it("should require a valid container address", async () => {
-      await expectRevert(Segment.new(ALICE, VALID_SEGMENT_NAME, INVALID_ADDRESS), "Segment: container is zero address");
+      await expectRevert(this.container.createSegment(""), "Container: name is empty");
     });
   });
 });

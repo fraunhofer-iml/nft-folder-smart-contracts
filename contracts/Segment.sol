@@ -10,10 +10,10 @@
 pragma solidity ^0.8.16;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-
-// TODO-MP: how do we make the contract upgradable?
+import {Token} from "./Token.sol";
 
 contract Segment is Ownable {
+    // TODO-MP: maybe both fields can be moved to TokenLocationInSegment
     struct TokenInformation {
         address token;
         uint256 tokenId;
@@ -34,18 +34,19 @@ contract Segment is Ownable {
     event TokenAdded(address indexed from, address indexed token, uint256 tokenId);
     event TokenRemoved(address indexed from, address indexed token, uint256 tokenId);
 
-    // TODO-MP: sync with actual container contract (e.g. check via functions)
-    constructor(address owner, string memory name, address container) {
-        require(owner != address(0), "Segment: owner is zero address");
+    modifier onlyContainer(address container) {
+        require(msg.sender == container, "Segment: can only be created from a container");
+        _;
+    }
+
+    constructor(address owner, string memory name, address container) onlyContainer(container) {
         require(bytes(name).length > 0, "Segment: name is empty");
-        require(container != address(0), "Segment: container is zero address");
 
         _transferOwnership(owner);
         _name = name;
         _container = container;
     }
 
-    // TODO-MP: sync with actual nft contract (e.g. check via functions)
     function addToken(address token, uint256 tokenId) external onlyOwner {
         require(token != address(0), "Segment: token is zero address");
         require(
@@ -59,9 +60,11 @@ contract Segment is Ownable {
         _tokenLocationInSegment[token][tokenId].tokenInformationIndex = _tokenInformation.length - 1;
 
         emit TokenAdded(msg.sender, token, tokenId);
+
+        Token tokenContract = Token(token);
+        tokenContract.addTokenToSegment(tokenId, address(this));
     }
 
-    // TODO-MP: sync with actual nft contract (e.g. check via functions)
     function removeToken(address token, uint256 tokenId) external onlyOwner {
         require(token != address(0), "Segment: token is zero address");
         require(_tokenInformation.length > 0, "Segment: no tokens stored in segment");
@@ -82,6 +85,9 @@ contract Segment is Ownable {
         }
 
         emit TokenRemoved(msg.sender, token, tokenId);
+
+        Token tokenContract = Token(token);
+        tokenContract.removeTokenFromSegment(tokenId, address(this));
     }
 
     function getName() external view returns (string memory) {
