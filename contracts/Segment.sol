@@ -111,6 +111,7 @@ contract Segment is Ownable {
         return _tokenLocationInSegment[token][tokenId];
     }
 
+    // TODO-MP: we do have this function two times
     function isTokenInSegment(address token, uint256 tokenId) external view returns (bool) {
         return _tokenLocationInSegment[token][tokenId].present;
     }

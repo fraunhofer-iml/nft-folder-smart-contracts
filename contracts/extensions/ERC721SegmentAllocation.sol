@@ -90,6 +90,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
         return _segmentContainsToken[tokenId][segmentAddress].index;
     }
 
+    // TODO-MP: we do have this function two times
     function isTokenInSegment(uint256 tokenId, address segmentAddress) external view returns (bool) {
         return _segmentContainsToken[tokenId][segmentAddress].present;
     }
