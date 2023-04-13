@@ -18,7 +18,8 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
         uint256 index;
     }
 
-    // TODO-MP: can this be moved into _segmentContainsToken?
+    // TODO-MP: is it really necessary to have two data structures for this information?
+
     // tokenId -> segment address
     mapping(uint256 => address[]) private _segments;
 
@@ -90,7 +91,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
         return _segmentContainsToken[tokenId][segmentAddress].index;
     }
 
-    // TODO-MP: we do have this function two times
+    // TODO-MP: this function also exists in Segment.sol
     function isTokenInSegment(uint256 tokenId, address segmentAddress) external view returns (bool) {
         return _segmentContainsToken[tokenId][segmentAddress].present;
     }

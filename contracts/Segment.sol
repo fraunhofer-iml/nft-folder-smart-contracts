@@ -15,13 +15,13 @@ import {Token} from "./Token.sol";
 contract Segment is Ownable {
     // TODO-MP: maybe both fields can be moved to TokenLocationInSegment
     struct TokenInformation {
-        address token;
+        address token; // TODO-MP: rename to tokenContract
         uint256 tokenId;
     }
 
     struct TokenLocationInSegment {
         bool present;
-        uint256 tokenInformationIndex;
+        uint256 tokenInformationIndex; // TODO-MP: could be removed along with TokenInformation
     }
 
     string private _name;
@@ -111,7 +111,7 @@ contract Segment is Ownable {
         return _tokenLocationInSegment[token][tokenId];
     }
 
-    // TODO-MP: we do have this function two times
+    // TODO-MP: this function also exists in Token.sol
     function isTokenInSegment(address token, uint256 tokenId) external view returns (bool) {
         return _tokenLocationInSegment[token][tokenId].present;
     }
