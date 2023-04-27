@@ -11,17 +11,17 @@ pragma solidity ^0.8.16;
 
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-abstract contract ERC721MetadataStorage is ERC721URIStorage {
-    mapping(uint256 => string) private _metadataHashes;
+abstract contract ERC721Metadata is ERC721URIStorage {
+    mapping(uint256 => string) private _tokenIdWithMetadataHash;
 
     function getMetadataHash(uint256 tokenId) public view virtual returns (string memory) {
         _requireMinted(tokenId);
-        return _metadataHashes[tokenId];
+        return _tokenIdWithMetadataHash[tokenId];
     }
 
-    function _setMetadata(uint256 tokenId, string memory tokenUri, string memory metadataHash) internal virtual {
-        super._setTokenURI(tokenId, tokenUri);
-        _metadataHashes[tokenId] = metadataHash;
+    function _setMetadataHash(uint256 tokenId, string memory metadataUri, string memory metadataHash) internal virtual {
+        super._setTokenURI(tokenId, metadataUri);
+        _tokenIdWithMetadataHash[tokenId] = metadataHash;
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this
@@ -29,8 +29,8 @@ abstract contract ERC721MetadataStorage is ERC721URIStorage {
     function _burn(uint256 tokenId) internal virtual override {
         super._burn(tokenId);
 
-        if (bytes(_metadataHashes[tokenId]).length != 0) {
-            delete _metadataHashes[tokenId];
+        if (bytes(_tokenIdWithMetadataHash[tokenId]).length != 0) {
+            delete _tokenIdWithMetadataHash[tokenId];
         }
     }
 }

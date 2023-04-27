@@ -13,80 +13,59 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Token} from "./Token.sol";
 
 contract Segment is Ownable {
-    // TODO-MP: maybe both fields can be moved to TokenLocationInSegment
     struct TokenInformation {
-        address token; // TODO-MP: rename to tokenContract
+        address tokenAddress;
         uint256 tokenId;
     }
 
-    struct TokenLocationInSegment {
-        bool present;
-        uint256 tokenInformationIndex; // TODO-MP: could be removed along with TokenInformation
-    }
-
     string private _name;
-    address private immutable _container;
+    address private immutable _containerAddress;
     TokenInformation[] private _tokenInformation;
 
-    // token address -> tokenId -> TokenLocationInSegment
-    mapping(address => mapping(uint256 => TokenLocationInSegment)) private _tokenLocationInSegment;
+    event TokenAdded(address indexed from, address indexed tokenAddress, uint256 tokenId);
+    event TokenRemoved(address indexed from, address indexed tokenAddress, uint256 tokenId);
 
-    event TokenAdded(address indexed from, address indexed token, uint256 tokenId);
-    event TokenRemoved(address indexed from, address indexed token, uint256 tokenId);
-
-    modifier onlyContainer(address container) {
-        require(msg.sender == container, "Segment: can only be created from a container");
+    modifier onlyContainer(address containerAddress) {
+        require(msg.sender == containerAddress, "Segment: can only be created from a container");
         _;
     }
 
-    constructor(address owner, string memory name, address container) onlyContainer(container) {
+    constructor(address owner, string memory name, address containerAddress) onlyContainer(containerAddress) {
         require(bytes(name).length > 0, "Segment: name is empty");
 
         _transferOwnership(owner);
         _name = name;
-        _container = container;
+        _containerAddress = containerAddress;
     }
 
-    function addToken(address token, uint256 tokenId) external onlyOwner {
-        require(token != address(0), "Segment: token is zero address");
-        require(
-            !_tokenLocationInSegment[token][tokenId].present,
-            "Segment: token and tokenId already exist in segment"
-        );
+    function addToken(address tokenAddress, uint256 tokenId) external onlyOwner {
+        require(tokenAddress != address(0), "Segment: token is zero address");
+        require(!isTokenInSegment(tokenAddress, tokenId), "Segment: token and tokenId already exist in segment");
 
-        _tokenInformation.push(TokenInformation(token, tokenId));
+        _tokenInformation.push(TokenInformation(tokenAddress, tokenId));
 
-        _tokenLocationInSegment[token][tokenId].present = true;
-        _tokenLocationInSegment[token][tokenId].tokenInformationIndex = _tokenInformation.length - 1;
+        emit TokenAdded(msg.sender, tokenAddress, tokenId);
 
-        emit TokenAdded(msg.sender, token, tokenId);
-
-        Token tokenContract = Token(token);
+        Token tokenContract = Token(tokenAddress);
         tokenContract.addTokenToSegment(tokenId, address(this));
     }
 
-    function removeToken(address token, uint256 tokenId) external onlyOwner {
-        require(token != address(0), "Segment: token is zero address");
-        require(_tokenInformation.length > 0, "Segment: no tokens stored in segment");
-        require(_tokenLocationInSegment[token][tokenId].present, "Segment: token and tokenId do not exist in segment");
+    function removeToken(address tokenAddress, uint256 tokenId) external onlyOwner {
+        require(tokenAddress != address(0), "Segment: token is zero address");
+        require(isTokenInSegment(tokenAddress, tokenId), "Segment: token and tokenId do not exist in segment");
 
-        uint256 indexFromElementToBeRemoved = _tokenLocationInSegment[token][tokenId].tokenInformationIndex;
-        delete _tokenLocationInSegment[token][tokenId];
-
-        // Override to be removed element with last element
-        _tokenInformation[indexFromElementToBeRemoved] = _tokenInformation[_tokenInformation.length - 1];
-        _tokenInformation.pop();
-
-        // Update index of moved element, but only if it is not the last (already removed) element
-        if (indexFromElementToBeRemoved < _tokenInformation.length) {
-            address movedToken = _tokenInformation[indexFromElementToBeRemoved].token;
-            uint256 movedTokenId = _tokenInformation[indexFromElementToBeRemoved].tokenId;
-            _tokenLocationInSegment[movedToken][movedTokenId].tokenInformationIndex = indexFromElementToBeRemoved;
+        for (uint256 i = 0; i < _tokenInformation.length; i++) {
+            if (_tokenInformation[i].tokenAddress == tokenAddress && _tokenInformation[i].tokenId == tokenId) {
+                // Override to be removed token with last element
+                _tokenInformation[i] = _tokenInformation[_tokenInformation.length - 1];
+                break;
+            }
         }
 
-        emit TokenRemoved(msg.sender, token, tokenId);
+        _tokenInformation.pop();
+        emit TokenRemoved(msg.sender, tokenAddress, tokenId);
 
-        Token tokenContract = Token(token);
+        Token tokenContract = Token(tokenAddress);
         tokenContract.removeTokenFromSegment(tokenId, address(this));
     }
 
@@ -95,7 +74,11 @@ contract Segment is Ownable {
     }
 
     function getContainer() external view returns (address) {
-        return _container;
+        return _containerAddress;
+    }
+
+    function getTokenInformation() external view returns (TokenInformation[] memory) {
+        return _tokenInformation;
     }
 
     function getTokenInformation(uint256 index) external view returns (TokenInformation memory) {
@@ -103,16 +86,17 @@ contract Segment is Ownable {
         return _tokenInformation[index];
     }
 
-    function getTokenLocationInSegment(
-        address token,
-        uint256 tokenId
-    ) external view returns (TokenLocationInSegment memory) {
-        require(_tokenLocationInSegment[token][tokenId].present, "Segment: token and tokenId do not exist in segment");
-        return _tokenLocationInSegment[token][tokenId];
+    function getNumberOfTokenInformation() external view returns (uint256) {
+        return _tokenInformation.length;
     }
 
-    // TODO-MP: this function also exists in Token.sol
-    function isTokenInSegment(address token, uint256 tokenId) external view returns (bool) {
-        return _tokenLocationInSegment[token][tokenId].present;
+    function isTokenInSegment(address tokenAddress, uint256 tokenId) public view returns (bool) {
+        for (uint256 i = 0; i < _tokenInformation.length; i++) {
+            if (_tokenInformation[i].tokenAddress == tokenAddress && _tokenInformation[i].tokenId == tokenId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

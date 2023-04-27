@@ -23,52 +23,52 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
 
   describe("getAdditionalInformation", function () {
     beforeEach(async () => {
-      this.token = await Token.new("Token", "TKN");
+      this.tokenContract = await Token.new("Token", "TKN");
     });
 
     it("should get additional info", async () => {
-      await this.token.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO_1);
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO_1);
 
-      const additionalInformation = await this.token.getAdditionalInformation(0);
+      const additionalInformation = await this.tokenContract.getAdditionalInformation(0);
       expect(additionalInformation).to.be.equal(ADDITIONAL_INFO_1);
     });
 
     it("should get empty string if additional info not set", async () => {
-      await this.token.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH);
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH);
 
-      const additionalInformation = await this.token.getAdditionalInformation(0);
+      const additionalInformation = await this.tokenContract.getAdditionalInformation(0);
       expect(additionalInformation).to.be.equal("");
     });
 
     it("should get different additional info for different tokens", async () => {
-      await this.token.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO_1);
-      await this.token.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO_2);
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO_1);
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO_2);
 
-      const additionalInformation1 = await this.token.getAdditionalInformation(0);
+      const additionalInformation1 = await this.tokenContract.getAdditionalInformation(0);
       expect(additionalInformation1).to.be.equal(ADDITIONAL_INFO_1);
 
-      const additionalInformation2 = await this.token.getAdditionalInformation(1);
+      const additionalInformation2 = await this.tokenContract.getAdditionalInformation(1);
       expect(additionalInformation2).to.be.equal(ADDITIONAL_INFO_2);
     });
   });
 
   describe("_burn", function () {
     beforeEach(async () => {
-      this.token = await Token.new("Token", "TKN");
+      this.tokenContract = await Token.new("Token", "TKN");
     });
 
     it("should delete additionalInformation on burning", async () => {
-      await this.token.safeMint(ALICE, ASSET_URI, ASSET_HASH, "1", "1", ADDITIONAL_INFO_1);
-      await this.token.safeMint(ALICE, ASSET_URI, ASSET_HASH, "2", "2", ADDITIONAL_INFO_2);
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, "1", "1", ADDITIONAL_INFO_1);
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, "2", "2", ADDITIONAL_INFO_2);
 
-      await this.token.burn(0);
+      await this.tokenContract.burn(0);
 
       // additionalInformation for token with id 1 should still exist
-      const additionalInformation2 = await this.token.getAdditionalInformation(1);
+      const additionalInformation2 = await this.tokenContract.getAdditionalInformation(1);
       expect(additionalInformation2).to.be.equal(ADDITIONAL_INFO_2);
 
       // additionalInformation for token with id 0 should be deleted
-      await expectRevert(this.token.getAdditionalInformation(0), "ERC721: invalid token ID");
+      await expectRevert(this.tokenContract.getAdditionalInformation(0), "ERC721: invalid token ID");
     });
   });
 });

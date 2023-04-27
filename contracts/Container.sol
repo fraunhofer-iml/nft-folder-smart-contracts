@@ -14,10 +14,10 @@ import {Segment} from "./Segment.sol";
 
 contract Container is Ownable {
     string private _name;
-    address[] private _segments;
-    mapping(address => bool) private _segmentInContainer;
+    address[] private _segmentAddresses;
+    mapping(address => bool) private _segmentAddressExists;
 
-    event SegmentAdded(address indexed from, address indexed segment, uint256 index);
+    event SegmentAdded(address indexed from, address indexed segmentAddress);
 
     constructor(address owner, string memory name) {
         require(owner != address(0), "Container: owner is zero address");
@@ -34,28 +34,28 @@ contract Container is Ownable {
         Segment segmentContract = new Segment(owner(), name, address(this));
         address segmentAddress = address(segmentContract);
 
-        _segments.push(segmentAddress);
-        _segmentInContainer[segmentAddress] = true;
+        _segmentAddresses.push(segmentAddress);
+        _segmentAddressExists[segmentAddress] = true;
 
-        emit SegmentAdded(msg.sender, segmentAddress, _segments.length - 1);
+        emit SegmentAdded(msg.sender, segmentAddress);
     }
 
     function getName() external view returns (string memory) {
         return _name;
     }
 
-    function getSegmentCount() external view returns (uint) {
-        return _segments.length;
+    function getSegment(uint256 index) external view returns (address) {
+        require(_segmentAddresses.length > 0, "Container: no segments stored in container");
+        require(index < _segmentAddresses.length, "Container: index is too big");
+
+        return _segmentAddresses[index];
     }
 
-    function getSegmentAtIndex(uint index) external view returns (address) {
-        require(_segments.length > 0, "Container: no segments stored in container");
-        require(index < _segments.length, "Container: index is too big");
-
-        return _segments[index];
+    function getNumberOfSegments() external view returns (uint256) {
+        return _segmentAddresses.length;
     }
 
-    function isSegmentInContainer(address segment) external view returns (bool) {
-        return _segmentInContainer[segment];
+    function isSegmentInContainer(address segmentAddress) external view returns (bool) {
+        return _segmentAddressExists[segmentAddress];
     }
 }
