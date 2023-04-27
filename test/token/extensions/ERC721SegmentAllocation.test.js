@@ -22,13 +22,13 @@ contract("Token - Extension ERC721SegmentAllocation", function (accounts) {
 
   describe("addTokenToSegment", function () {
     beforeEach(async () => {
-      this.token = await Token.new("Token", "TKN");
-      await this.token.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      this.tokenContract = await Token.new("Token", "TKN");
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
     });
 
     it("should not add Segment to Token from Token Contract", async () => {
       await expectRevert(
-        this.token.addTokenToSegment(0, VALID_SEGMENT_ADDRESS1),
+        this.tokenContract.addTokenToSegment(0, VALID_SEGMENT_ADDRESS1),
         "ERC721SegmentAllocation: can only be set from segment."
       );
     });
@@ -36,13 +36,13 @@ contract("Token - Extension ERC721SegmentAllocation", function (accounts) {
 
   describe("removeTokenFromSegment", function () {
     beforeEach(async () => {
-      this.token = await Token.new("Token", "TKN");
-      await this.token.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      this.tokenContract = await Token.new("Token", "TKN");
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
     });
 
     it("should not remove Segment to Token from Token Contract", async () => {
       await expectRevert(
-        this.token.removeTokenFromSegment(0, VALID_SEGMENT_ADDRESS1),
+        this.tokenContract.removeTokenFromSegment(0, VALID_SEGMENT_ADDRESS1),
         "ERC721SegmentAllocation: can only be set from segment."
       );
     });
