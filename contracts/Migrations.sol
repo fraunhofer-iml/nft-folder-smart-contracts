@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.16;
+pragma solidity ^0.8.18;
 
 contract Migrations {
     address public immutable owner = msg.sender;

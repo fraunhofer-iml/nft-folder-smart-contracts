@@ -53,7 +53,7 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: "0.8.16",
+      version: "0.8.18",
     },
   },
   plugins: ["truffle-contract-size", "truffle-plugin-verify"],

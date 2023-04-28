@@ -128,7 +128,7 @@ JavaScript based components: Mocha, Chai
 
 | *O7*
 | *Other tools*
-| Solidity 0.8.16 for smart contract development +
+| Solidity 0.8.18 for smart contract development +
 Truffle 5.5.x as Ethereum development framework +
 Node.js 16.16.x as JavaScript runtime +
 npm 8.11.x for dependency management +
