@@ -8,7 +8,7 @@ variables:
   GIT_DEPTH: 0
   HUSKY: 0
   NPM_CI: npm ci --include dev --cache .npm --prefer-offline
-  SLITHER_ANALYZER_PACKAGE: slither-analyzer==0.9.2
+  SLITHER_ANALYZER_PACKAGE: slither-analyzer==0.9.3
 
 default:
   cache:
@@ -86,8 +86,7 @@ run-slither:
     - pip install --upgrade pip
     - pip install wheel ${SLITHER_ANALYZER_PACKAGE}
   script:
-    # TODO-MP: immutable-states indicates string should be immutable -> will be fixed in Slither 0.9.3
-    - slither . --truffle-ignore-compile --exclude-dependencies --filter-paths openzeppelin --exclude immutable-states
+    - slither . --truffle-ignore-compile --exclude-dependencies --filter-paths openzeppelin
   rules:
     - when: on_success
 
