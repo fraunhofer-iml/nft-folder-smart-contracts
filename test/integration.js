@@ -67,7 +67,7 @@ contract("Container", function (accounts) {
       const metadataHash = await this.tokenContract.getMetadataHash("0");
       expect(metadataHash).to.be.equal(METADATA_HASH);
 
-      const segments = await this.tokenContract.getSegments("0");
+      const segments = await this.tokenContract.getAllSegments("0");
       expect(segments).to.be.empty;
 
       await expectRevert(this.tokenContract.getSegment("0", "0"), "ERC721SegmentAllocation: no segment at given index");
@@ -91,7 +91,7 @@ contract("Container", function (accounts) {
       expect(tokenInSegment_segmentSide).to.be.true;
 
       // token side
-      const segments = await this.tokenContract.getSegments("0");
+      const segments = await this.tokenContract.getAllSegments("0");
       expect(segments).to.be.bignumber.lengthOf("1");
       expect(segments[0]).to.be.equal(this.segmentContract.address);
 
@@ -119,7 +119,7 @@ contract("Container", function (accounts) {
       await expectRevert(this.tokenContract.getAssetInformation("0"), "ERC721: invalid token ID");
       await expectRevert(this.tokenContract.getMetadataHash("0"), "ERC721: invalid token ID");
 
-      const segments = await this.tokenContract.getSegments("0");
+      const segments = await this.tokenContract.getAllSegments("0");
       expect(segments).to.be.empty;
 
       await expectRevert(this.tokenContract.getSegment("0", "0"), "ERC721SegmentAllocation: no segment at given index");

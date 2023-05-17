@@ -50,7 +50,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
         emit SegmentRemovedFromToken(tokenId, segmentAddress);
     }
 
-    function getSegments(uint256 tokenId) external view returns (address[] memory) {
+    function getAllSegments(uint256 tokenId) external view returns (address[] memory) {
         return _tokenIdWithSegmentAddresses[tokenId];
     }
 
