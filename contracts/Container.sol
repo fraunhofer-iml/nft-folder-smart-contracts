@@ -30,6 +30,7 @@ contract Container is Ownable {
     // TODO-MP: maybe a factory contract would be better
     function createSegment(string memory name) external onlyOwner {
         require(bytes(name).length > 0, "Container: name is empty");
+        // TODO-MP: add precondition -> name should not exist
 
         Segment segmentContract = new Segment(owner(), name, address(this));
         address segmentAddress = address(segmentContract);
@@ -44,9 +45,13 @@ contract Container is Ownable {
         return _name;
     }
 
+    function getAllSegments() external view returns (address[] memory) {
+        return _segmentAddresses;
+    }
+
     function getSegment(uint256 index) external view returns (address) {
         require(_segmentAddresses.length > 0, "Container: no segments stored in container");
-        require(index < _segmentAddresses.length, "Container: index is too big");
+        require(index < _segmentAddresses.length, "Container: index is too large");
 
         return _segmentAddresses[index];
     }

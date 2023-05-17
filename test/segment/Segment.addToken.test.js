@@ -44,7 +44,7 @@ contract("Segment", function (accounts) {
     expect(pastEvents[0].returnValues["tokenId"]).to.be.equal(tokenId);
     expect(pastEvents[0].returnValues["segment"]).to.be.equal(segmentAddress);
 
-    const actualTokenInformationArray = await segmentContract.getTokenInformation();
+    const actualTokenInformationArray = await segmentContract.getAllTokenInformation();
     expect(actualTokenInformationArray.length).equal(Number(tokenInformationSize));
 
     const actualTokenInformation = await segmentContract.getTokenInformation(tokenInformationIndex);

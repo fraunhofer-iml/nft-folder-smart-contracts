@@ -18,8 +18,8 @@ contract Segment is Ownable {
         uint256 tokenId;
     }
 
-    string private _name;
     address private immutable _containerAddress;
+    string private _name;
     TokenInformation[] private _tokenInformation;
 
     event TokenAdded(address indexed from, address indexed tokenAddress, uint256 tokenId);
@@ -69,20 +69,20 @@ contract Segment is Ownable {
         tokenContract.removeTokenFromSegment(tokenId, address(this));
     }
 
-    function getName() external view returns (string memory) {
-        return _name;
-    }
-
     function getContainer() external view returns (address) {
         return _containerAddress;
     }
 
-    function getTokenInformation() external view returns (TokenInformation[] memory) {
+    function getName() external view returns (string memory) {
+        return _name;
+    }
+
+    function getAllTokenInformation() external view returns (TokenInformation[] memory) {
         return _tokenInformation;
     }
 
     function getTokenInformation(uint256 index) external view returns (TokenInformation memory) {
-        require(index < _tokenInformation.length, "Segment: index is too big");
+        require(index < _tokenInformation.length, "Segment: index is too large");
         return _tokenInformation[index];
     }
 

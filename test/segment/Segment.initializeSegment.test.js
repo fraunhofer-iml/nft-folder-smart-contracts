@@ -30,18 +30,23 @@ contract("Segment", function (accounts) {
       expect(actualOwner).equals(ALICE);
     });
 
-    it("should get name", async () => {
-      const actualName = await this.segmentContract.getName();
-      expect(actualName).equals(VALID_SEGMENT_NAME);
-    });
-
     it("should get container", async () => {
       const actualContainer = await this.segmentContract.getContainer();
       expect(actualContainer).equals(VALID_CONTAINER_ADDRESS);
     });
 
+    it("should get name", async () => {
+      const actualName = await this.segmentContract.getName();
+      expect(actualName).equals(VALID_SEGMENT_NAME);
+    });
+
+    it("should get all token information", async () => {
+      const actualAllTokenInformation = await this.segmentContract.getAllTokenInformation();
+      expect(actualAllTokenInformation.length).to.be.equal(0);
+    });
+
     it("should revert tokenInformation", async () => {
-      await expectRevert(this.segmentContract.getTokenInformation("0"), "Segment: index is too big");
+      await expectRevert(this.segmentContract.getTokenInformation("0"), "Segment: index is too large");
     });
 
     it("should get number of tokenInformation", async () => {

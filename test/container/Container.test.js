@@ -22,6 +22,9 @@ contract("Container", function (accounts) {
     const actualNumberOfSegments = await container.getNumberOfSegments();
     expect(actualNumberOfSegments).to.be.bignumber.equal(numberOfSegments);
 
+    const allSegmentAddresses = await container.getAllSegments();
+    expect(allSegmentAddresses.length).to.be.equal(Number(numberOfSegments));
+
     const segmentAddress = await container.getSegment(index);
     const segmentInContainer = await container.isSegmentInContainer(segmentAddress);
     expect(segmentInContainer).to.be.true;
@@ -93,6 +96,17 @@ contract("Container", function (accounts) {
     });
   });
 
+  describe("getAllSegments", function () {
+    beforeEach(async () => {
+      this.containerContract = await Container.new(ALICE, VALID_CONTAINER_NAME);
+    });
+
+    it("should return 0 for empty segment", async () => {
+      const allSegmentAddresses = await this.containerContract.getAllSegments();
+      expect(allSegmentAddresses.length).to.be.equal(0);
+    });
+  });
+
   describe("getSegment", function () {
     beforeEach(async () => {
       this.containerContract = await Container.new(ALICE, VALID_CONTAINER_NAME);
@@ -104,7 +118,7 @@ contract("Container", function (accounts) {
 
     it("should reject with invalid index", async () => {
       await this.containerContract.createSegment("Segment");
-      await expectRevert(this.containerContract.getSegment(1), "Container: index is too big");
+      await expectRevert(this.containerContract.getSegment(1), "Container: index is too large");
     });
   });
 

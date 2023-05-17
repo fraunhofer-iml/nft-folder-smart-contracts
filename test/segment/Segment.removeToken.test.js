@@ -68,10 +68,10 @@ contract("Segment", function (accounts) {
         tokenId: "0",
       });
 
-      const actualTokenInformationArray = await this.segmentContract.getTokenInformation();
+      const actualTokenInformationArray = await this.segmentContract.getAllTokenInformation();
       expect(actualTokenInformationArray.length).equal(Number("0"));
 
-      await expectRevert(this.segmentContract.getTokenInformation("0"), "Segment: index is too big");
+      await expectRevert(this.segmentContract.getTokenInformation("0"), "Segment: index is too large");
 
       const actualNumberOfTokenInformation = await this.segmentContract.getNumberOfTokenInformation();
       expect(actualNumberOfTokenInformation).to.be.bignumber.equal("0");
@@ -157,7 +157,7 @@ contract("Segment", function (accounts) {
       expect(actualMovedTokenInSegment2).is.true;
 
       // One element remains in array left
-      await expectRevert(this.segmentContract.getTokenInformation("1"), "Segment: index is too big");
+      await expectRevert(this.segmentContract.getTokenInformation("1"), "Segment: index is too large");
 
       // Remove former third token
       await removeTokenAndAssertRemoval.call(this, this.segmentContract, {
@@ -166,7 +166,7 @@ contract("Segment", function (accounts) {
       });
 
       // Array is empty
-      await expectRevert(this.segmentContract.getTokenInformation("0"), "Segment: index is too big");
+      await expectRevert(this.segmentContract.getTokenInformation("0"), "Segment: index is too large");
     });
   });
 
