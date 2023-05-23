@@ -11,7 +11,7 @@ pragma solidity ^0.8.18;
 
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import "../Segment.sol";
+import {Segment} from "../Segment.sol";
 
 abstract contract ERC721SegmentAllocation is ERC721, Ownable {
     mapping(uint256 => address[]) private _tokenIdWithSegmentAddresses;

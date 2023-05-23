@@ -16,6 +16,7 @@ contract("Token", function (accounts) {
   const ASSET_HASH = "asset_hash";
   const METADATA_URI = "meta_uri";
   const METADATA_HASH = "meta_hash";
+  const REMOTE_ID = "20d62095-4a82-4dec-9d93-5073ebe2b269";
   const ADDITIONAL_INFO = "additional";
 
   describe("is Ownable", function () {
@@ -33,7 +34,15 @@ contract("Token", function (accounts) {
   describe("has all extensions", function () {
     beforeEach(async () => {
       this.tokenContract = await Token.new("Token", "TKN");
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
     });
 
     it("should set all information on token creation", async () => {
@@ -41,6 +50,8 @@ contract("Token", function (accounts) {
       expect(await this.tokenContract.getAssetHash(0)).to.be.equal(ASSET_HASH);
       expect(await this.tokenContract.tokenURI(0)).to.be.equal(METADATA_URI);
       expect(await this.tokenContract.getMetadataHash(0)).to.be.equal(METADATA_HASH);
+      expect(await this.tokenContract.getRemoteId(0)).to.be.equal(REMOTE_ID);
+      expect(await this.tokenContract.getTokenId(REMOTE_ID)).to.be.bignumber.equal("0");
       expect(await this.tokenContract.getAdditionalInformation(0)).to.be.equal(ADDITIONAL_INFO);
     });
 

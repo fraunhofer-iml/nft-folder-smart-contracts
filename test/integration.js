@@ -20,6 +20,7 @@ contract("Container", function (accounts) {
   const ASSET_HASH = "aaa1b2c3";
   const METADATA_URI = "https://bbb.com";
   const METADATA_HASH = "a1bbb2c3";
+  const REMOTE_ID = "20d62095-4a82-4dec-9d93-5073ebe2b269";
   const ADDITIONAL_INFORMATION = "{'name': 'just a syntactically wrong json'}";
 
   describe("integration", function () {
@@ -45,6 +46,7 @@ contract("Container", function (accounts) {
         ASSET_HASH,
         METADATA_URI,
         METADATA_HASH,
+        REMOTE_ID,
         ADDITIONAL_INFORMATION
       );
 
@@ -63,6 +65,12 @@ contract("Container", function (accounts) {
       const assetInformation = await this.tokenContract.getAssetInformation("0");
       expect(assetInformation.assetUri).to.be.equal(ASSET_URI);
       expect(assetInformation.assetHash).to.be.equal(ASSET_HASH);
+
+      const remoteId = await this.tokenContract.getRemoteId("0");
+      expect(remoteId).to.be.equal(REMOTE_ID);
+
+      const tokenId = await this.tokenContract.getTokenId(REMOTE_ID);
+      expect(tokenId).to.be.bignumber.equal("0");
 
       const metadataHash = await this.tokenContract.getMetadataHash("0");
       expect(metadataHash).to.be.equal(METADATA_HASH);
@@ -118,6 +126,8 @@ contract("Container", function (accounts) {
       await expectRevert(this.tokenContract.getAdditionalInformation("0"), "ERC721: invalid token ID");
       await expectRevert(this.tokenContract.getAssetInformation("0"), "ERC721: invalid token ID");
       await expectRevert(this.tokenContract.getMetadataHash("0"), "ERC721: invalid token ID");
+      await expectRevert(this.tokenContract.getRemoteId("0"), "ERC721: invalid token ID");
+      await expectRevert(this.tokenContract.getTokenId(REMOTE_ID), "ERC721: invalid token ID");
 
       const segments = await this.tokenContract.getAllSegments("0");
       expect(segments).to.be.empty;
