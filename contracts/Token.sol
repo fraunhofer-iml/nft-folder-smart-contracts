@@ -16,6 +16,7 @@ import {ERC721Asset} from "./extensions/ERC721Asset.sol";
 import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import {ERC721Metadata} from "./extensions/ERC721Metadata.sol";
 import {ERC721SegmentAllocation} from "./extensions/ERC721SegmentAllocation.sol";
+import {ERC721RemoteId} from "./extensions/ERC721RemoteId.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
 
@@ -26,7 +27,8 @@ contract Token is
     ERC721Asset,
     ERC721Burnable,
     ERC721Metadata,
-    ERC721SegmentAllocation
+    ERC721SegmentAllocation,
+    ERC721RemoteId
 {
     using Counters for Counters.Counter;
 
@@ -40,6 +42,7 @@ contract Token is
         string memory assetHash,
         string memory metadataUri,
         string memory metadataHash,
+        string memory remoteId,
         string memory additionalInformation
     ) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
@@ -47,6 +50,7 @@ contract Token is
         _safeMint(receiver, tokenId);
         _setAssetInformation(tokenId, assetUri, assetHash);
         _setMetadataHash(tokenId, metadataUri, metadataHash);
+        _setRemoteId(tokenId, remoteId);
         _setAdditionalInformation(tokenId, additionalInformation);
     }
 
@@ -55,13 +59,15 @@ contract Token is
         string memory assetUri,
         string memory assetHash,
         string memory metadataUri,
-        string memory metadataHash
+        string memory metadataHash,
+        string memory remoteId
     ) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(receiver, tokenId);
         _setAssetInformation(tokenId, assetUri, assetHash);
         _setMetadataHash(tokenId, metadataUri, metadataHash);
+        _setRemoteId(tokenId, remoteId);
     }
 
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
@@ -70,7 +76,17 @@ contract Token is
 
     function _burn(
         uint256 tokenId
-    ) internal override(ERC721, ERC721AdditionalInformation, ERC721Asset, ERC721Metadata, ERC721SegmentAllocation) {
+    )
+        internal
+        override(
+            ERC721,
+            ERC721AdditionalInformation,
+            ERC721Asset,
+            ERC721Metadata,
+            ERC721SegmentAllocation,
+            ERC721RemoteId
+        )
+    {
         super._burn(tokenId);
     }
 }
