@@ -78,7 +78,10 @@ contract("Container", function (accounts) {
       const segments = await this.tokenContract.getAllSegments("0");
       expect(segments).to.be.empty;
 
-      await expectRevert(this.tokenContract.getSegment("0", "0"), "ERC721SegmentAllocation: no segment at given index");
+      await expectRevert(
+        this.tokenContract.getSegment("0", "0"),
+        "ERC721SegmentAllocation: no segment at specified index"
+      );
 
       const numberOfSegments = await this.tokenContract.getNumberOfSegments("0");
       expect(numberOfSegments).to.be.bignumber.equal("0");

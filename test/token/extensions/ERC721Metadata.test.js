@@ -69,6 +69,10 @@ contract("Token - Extension ERC721Metadata", function (accounts) {
       const tokenURI2 = await this.tokenContract.tokenURI(1);
       expect(tokenURI2).to.be.equal(METADATA_URI_2);
     });
+
+    it("should not get tokenURI", async () => {
+      await expectRevert(this.tokenContract.tokenURI(0), "ERC721: invalid token ID");
+    });
   });
 
   describe("getMetadataHash", function () {
@@ -117,6 +121,10 @@ contract("Token - Extension ERC721Metadata", function (accounts) {
       const metadataHash2 = await this.tokenContract.getMetadataHash(1);
       expect(metadataHash2).to.be.equal(METADATA_HASH_2);
     });
+
+    it("should not get metadataHash", async () => {
+      await expectRevert(this.tokenContract.getMetadataHash(0), "ERC721Metadata: token does not exist");
+    });
   });
 
   describe("_burn", function () {
@@ -155,7 +163,7 @@ contract("Token - Extension ERC721Metadata", function (accounts) {
 
       // uri and hash for token with id 0 should be deleted
       await expectRevert(this.tokenContract.tokenURI(0), "ERC721: invalid token ID");
-      await expectRevert(this.tokenContract.getMetadataHash(0), "ERC721: invalid token ID");
+      await expectRevert(this.tokenContract.getMetadataHash(0), "ERC721Metadata: token does not exist");
     });
   });
 });

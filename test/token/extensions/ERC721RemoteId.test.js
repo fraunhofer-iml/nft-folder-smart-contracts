@@ -70,17 +70,7 @@ contract("Token - Extension ERC721RemoteId", function (accounts) {
     });
 
     it("should not get remote id", async () => {
-      await this.tokenContract.safeMint(
-        ALICE,
-        ASSET_URI,
-        ASSET_HASH,
-        METADATA_URI,
-        METADATA_HASH,
-        REMOTE_ID_1,
-        ADDITIONAL_INFO
-      );
-
-      await expectRevert(this.tokenContract.getRemoteId(1), "ERC721RemoteId: token does not exist");
+      await expectRevert(this.tokenContract.getRemoteId(0), "ERC721RemoteId: token does not exist");
     });
   });
 
@@ -132,17 +122,7 @@ contract("Token - Extension ERC721RemoteId", function (accounts) {
     });
 
     it("should not get token id", async () => {
-      await this.tokenContract.safeMint(
-        ALICE,
-        ASSET_URI,
-        ASSET_HASH,
-        METADATA_URI,
-        METADATA_HASH,
-        REMOTE_ID_1,
-        ADDITIONAL_INFO
-      );
-
-      await expectRevert(this.tokenContract.getTokenId(REMOTE_ID_2), "ERC721RemoteId: remoteId does not exist");
+      await expectRevert(this.tokenContract.getTokenId(REMOTE_ID_1), "ERC721RemoteId: remoteId does not exist");
     });
   });
 

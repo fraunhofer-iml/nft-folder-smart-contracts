@@ -16,7 +16,7 @@ abstract contract ERC721AdditionalInformation is ERC721 {
     mapping(uint256 => string) private _tokenIdWithAdditionalInformation;
 
     function getAdditionalInformation(uint256 tokenId) public view virtual returns (string memory) {
-        _requireMinted(tokenId);
+        require(_exists(tokenId), "ERC721AdditionalInformation: token does not exist");
         return _tokenIdWithAdditionalInformation[tokenId];
     }
 

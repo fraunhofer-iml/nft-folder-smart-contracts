@@ -13,13 +13,15 @@ import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/
 
 abstract contract ERC721Metadata is ERC721URIStorage {
     mapping(uint256 => string) private _tokenIdWithMetadataHash;
+    string private constant ERROR_MESSAGE = "ERC721Metadata: token does not exist";
 
     function getMetadataHash(uint256 tokenId) public view virtual returns (string memory) {
-        _requireMinted(tokenId);
+        require(_exists(tokenId), ERROR_MESSAGE);
         return _tokenIdWithMetadataHash[tokenId];
     }
 
     function _setMetadataHash(uint256 tokenId, string memory metadataUri, string memory metadataHash) internal virtual {
+        require(_exists(tokenId), ERROR_MESSAGE);
         super._setTokenURI(tokenId, metadataUri);
         _tokenIdWithMetadataHash[tokenId] = metadataHash;
     }
