@@ -69,6 +69,13 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
       const additionalInformation2 = await this.tokenContract.getAdditionalInformation(1);
       expect(additionalInformation2).to.be.equal(ADDITIONAL_INFO_2);
     });
+
+    it("should not get additional info", async () => {
+      await expectRevert(
+        this.tokenContract.getAdditionalInformation(0),
+        "ERC721AdditionalInformation: token does not exist"
+      );
+    });
   });
 
   describe("_burn", function () {
@@ -87,7 +94,10 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
       expect(additionalInformation2).to.be.equal(ADDITIONAL_INFO_2);
 
       // additionalInformation for token with id 0 should be deleted
-      await expectRevert(this.tokenContract.getAdditionalInformation(0), "ERC721: invalid token ID");
+      await expectRevert(
+        this.tokenContract.getAdditionalInformation(0),
+        "ERC721AdditionalInformation: token does not exist"
+      );
     });
   });
 });

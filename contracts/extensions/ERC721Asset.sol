@@ -18,24 +18,25 @@ abstract contract ERC721Asset is ERC721 {
     }
 
     mapping(uint256 => AssetInformation) private _tokenIdWithAssetInformation;
+    string private constant ERROR_MESSAGE = "ERC721Asset: token does not exist";
 
     function getAssetInformation(uint256 tokenId) public view virtual returns (AssetInformation memory) {
-        _requireMinted(tokenId);
+        require(_exists(tokenId), ERROR_MESSAGE);
         return _tokenIdWithAssetInformation[tokenId];
     }
 
     function getAssetUri(uint256 tokenId) public view virtual returns (string memory) {
-        _requireMinted(tokenId);
+        require(_exists(tokenId), ERROR_MESSAGE);
         return _tokenIdWithAssetInformation[tokenId].assetUri;
     }
 
     function getAssetHash(uint256 tokenId) public view virtual returns (string memory) {
-        _requireMinted(tokenId);
+        require(_exists(tokenId), ERROR_MESSAGE);
         return _tokenIdWithAssetInformation[tokenId].assetHash;
     }
 
     function _setAssetInformation(uint256 tokenId, string memory assetUri, string memory assetHash) internal virtual {
-        require(_exists(tokenId), "ERC721Asset: token does not exist");
+        require(_exists(tokenId), ERROR_MESSAGE);
         _tokenIdWithAssetInformation[tokenId].assetUri = assetUri;
         _tokenIdWithAssetInformation[tokenId].assetHash = assetHash;
     }

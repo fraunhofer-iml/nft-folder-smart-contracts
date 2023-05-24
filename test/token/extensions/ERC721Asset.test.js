@@ -69,6 +69,10 @@ contract("Token - Extension ERC721Asset", function (accounts) {
       const assetUri2 = await this.tokenContract.getAssetUri(1);
       expect(assetUri2).to.be.equal(ASSET_URI_2);
     });
+
+    it("should not get assetUri", async () => {
+      await expectRevert(this.tokenContract.getAssetUri(0), "ERC721Asset: token does not exist");
+    });
   });
 
   describe("getAssetHash", function () {
@@ -146,6 +150,10 @@ contract("Token - Extension ERC721Asset", function (accounts) {
       expect(assetInformation2.assetUri).to.be.equal(ASSET_URI_2);
       expect(assetInformation2.assetHash).to.be.equal(ASSET_HASH_2);
     });
+
+    it("should not get assetHash", async () => {
+      await expectRevert(this.tokenContract.getAssetHash(0), "ERC721Asset: token does not exist");
+    });
   });
 
   describe("_burn", function () {
@@ -187,8 +195,8 @@ contract("Token - Extension ERC721Asset", function (accounts) {
       expect(assetHash2).to.be.equal(ASSET_HASH_2);
 
       // asset uri and hash for token with id 0 should be deleted
-      await expectRevert(this.tokenContract.getAssetUri(0), "ERC721: invalid token ID");
-      await expectRevert(this.tokenContract.getAssetHash(0), "ERC721: invalid token ID");
+      await expectRevert(this.tokenContract.getAssetUri(0), "ERC721Asset: token does not exist");
+      await expectRevert(this.tokenContract.getAssetHash(0), "ERC721Asset: token does not exist");
     });
   });
 });

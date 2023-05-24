@@ -19,9 +19,10 @@ abstract contract ERC721RemoteId is ERC721 {
 
     mapping(uint256 => string) private _tokenIdWithRemoteId;
     mapping(string => RemoteIdData) private _remoteIdWithData;
+    string private constant ERROR_MESSAGE = "ERC721RemoteId: token does not exist";
 
     function getRemoteId(uint256 tokenId) public view virtual returns (string memory) {
-        require(_exists(tokenId), "ERC721RemoteId: token does not exist");
+        require(_exists(tokenId), ERROR_MESSAGE);
         return _tokenIdWithRemoteId[tokenId];
     }
 
@@ -31,7 +32,7 @@ abstract contract ERC721RemoteId is ERC721 {
     }
 
     function _setRemoteId(uint256 tokenId, string memory remoteId) internal virtual {
-        require(_exists(tokenId), "ERC721RemoteId: token does not exist");
+        require(_exists(tokenId), ERROR_MESSAGE);
         require(!_remoteIdWithData[remoteId].exists, "ERC721RemoteId: remoteId already exists");
 
         _tokenIdWithRemoteId[tokenId] = remoteId;

@@ -15,6 +15,7 @@ import {Segment} from "../Segment.sol";
 
 abstract contract ERC721SegmentAllocation is ERC721, Ownable {
     mapping(uint256 => address[]) private _tokenIdWithSegmentAddresses;
+    string private constant ERROR_MESSAGE = "ERC721SegmentAllocation: token does not exist";
 
     event SegmentAddedToToken(uint256 tokenId, address indexed segment);
     event SegmentRemovedFromToken(uint256 tokenId, address indexed segment);
@@ -25,8 +26,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
     }
 
     function addTokenToSegment(uint256 tokenId, address segmentAddress) external onlySegment(segmentAddress) {
-        _requireMinted(tokenId);
-        require(segmentAddress != address(0), "ERC721SegmentAllocation: segment is zero address");
+        require(_exists(tokenId), ERROR_MESSAGE);
         require(!isTokenInSegment(tokenId, segmentAddress), "ERC721SegmentAllocation: token is already in segment");
 
         _tokenIdWithSegmentAddresses[tokenId].push(segmentAddress);
@@ -35,7 +35,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
     }
 
     function removeTokenFromSegment(uint256 tokenId, address segmentAddress) external onlySegment(segmentAddress) {
-        require(segmentAddress != address(0), "ERC721SegmentAllocation: segment is zero address");
+        require(_exists(tokenId), ERROR_MESSAGE);
         require(isTokenInSegment(tokenId, segmentAddress), "ERC721SegmentAllocation: token is not in segment");
 
         for (uint256 i = 0; i < _tokenIdWithSegmentAddresses[tokenId].length; i++) {
@@ -57,7 +57,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
     function getSegment(uint256 tokenId, uint256 segmentAddressIndex) external view returns (address) {
         require(
             segmentAddressIndex < _tokenIdWithSegmentAddresses[tokenId].length,
-            "ERC721SegmentAllocation: no segment at given index"
+            "ERC721SegmentAllocation: no segment at specified index"
         );
         return _tokenIdWithSegmentAddresses[tokenId][segmentAddressIndex];
     }
