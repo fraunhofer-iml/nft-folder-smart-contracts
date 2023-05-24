@@ -29,7 +29,7 @@ contract("Segment", function (accounts) {
   ) {
     const segmentAddress = segmentContract.address;
     const tokenAddress = tokenContract.address;
-    await tokenContract.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+    await tokenContract.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
 
     const receipt = await segmentContract.addToken(tokenAddress, tokenId);
 
@@ -111,12 +111,12 @@ contract("Segment", function (accounts) {
     });
 
     it("should require a valid contract address", async () => {
-      await this.tokenContract.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+      await this.tokenContract.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
       await expectRevert(this.segmentContract.addToken(INVALID_ADDRESS, "0"), "Segment: token is zero address");
     });
 
     it("should require an absent token", async () => {
-      await this.tokenContract.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+      await this.tokenContract.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
 
       await expectRevert(

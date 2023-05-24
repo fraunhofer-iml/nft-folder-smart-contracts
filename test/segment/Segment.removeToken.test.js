@@ -60,7 +60,7 @@ contract("Segment", function (accounts) {
     });
 
     it("should add 1 token and remove 1 token", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
 
       await removeTokenAndAssertRemoval.call(this, this.segmentContract, {
@@ -78,8 +78,8 @@ contract("Segment", function (accounts) {
     });
 
     it("should add 2 tokens and remove first token", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "1");
 
@@ -98,8 +98,8 @@ contract("Segment", function (accounts) {
     });
 
     it("should add 2 token and remove second token", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "1");
 
@@ -118,9 +118,9 @@ contract("Segment", function (accounts) {
     });
 
     it("should add 3 token and remove 3 token", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
-      await this.tokenContract2.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
+      await this.tokenContract2.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_2, "0");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "1");
@@ -181,12 +181,12 @@ contract("Segment", function (accounts) {
     });
 
     it("should require a valid contract address", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
       await expectRevert(this.segmentContract.removeToken(INVALID_ADDRESS, "0"), "Segment: token is zero address");
     });
 
     it("should require a present token", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
 
       await expectRevert(

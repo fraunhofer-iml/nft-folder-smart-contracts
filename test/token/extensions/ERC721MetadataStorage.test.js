@@ -19,6 +19,7 @@ contract("Token - Extension ERC721Metadata", function (accounts) {
   const METADATA_URI_2 = "meta_uri_2";
   const METADATA_HASH_1 = "meta_hash_1";
   const METADATA_HASH_2 = "meta_hash_2";
+  const REMOTE_ID = "remote_id";
   const ADDITIONAL_INFO = "additional_info";
 
   describe("tokenURI", function () {
@@ -27,15 +28,39 @@ contract("Token - Extension ERC721Metadata", function (accounts) {
     });
 
     it("should get tokenURI", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI_1, METADATA_HASH_1, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI_1,
+        METADATA_HASH_1,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const tokenURI = await this.tokenContract.tokenURI(0);
       expect(tokenURI).to.be.equal(METADATA_URI_1);
     });
 
     it("should get tokenURI for multiple minted token", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI_1, METADATA_HASH_1, ADDITIONAL_INFO);
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI_2, METADATA_HASH_2, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI_1,
+        METADATA_HASH_1,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI_2,
+        METADATA_HASH_2,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const tokenURI1 = await this.tokenContract.tokenURI(0);
       expect(tokenURI1).to.be.equal(METADATA_URI_1);
@@ -51,15 +76,39 @@ contract("Token - Extension ERC721Metadata", function (accounts) {
     });
 
     it("should get tokenHash", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI_1, METADATA_HASH_1, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI_1,
+        METADATA_HASH_1,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const tokenHash = await this.tokenContract.getMetadataHash(0);
       expect(tokenHash).to.be.equal(METADATA_HASH_1);
     });
 
     it("should get tokenHash for multiple minted token", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI_1, METADATA_HASH_1, ADDITIONAL_INFO);
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI_2, METADATA_HASH_2, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI_1,
+        METADATA_HASH_1,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI_2,
+        METADATA_HASH_2,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const metadataHash1 = await this.tokenContract.getMetadataHash(0);
       expect(metadataHash1).to.be.equal(METADATA_HASH_1);
@@ -75,8 +124,24 @@ contract("Token - Extension ERC721Metadata", function (accounts) {
     });
 
     it("should delete tokenURI and hash on burning", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI_1, METADATA_HASH_1, ADDITIONAL_INFO);
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI_2, METADATA_HASH_2, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI_1,
+        METADATA_HASH_1,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI_2,
+        METADATA_HASH_2,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       await this.tokenContract.burn(0);
 

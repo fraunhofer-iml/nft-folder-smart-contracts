@@ -19,6 +19,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
   const ASSET_HASH_2 = "asset_hash_2";
   const METADATA_URI = "meta_uri";
   const METADATA_HASH = "meta_hash";
+  const REMOTE_ID = "remote_id";
   const ADDITIONAL_INFO = "additional_info";
 
   describe("getAssetUri", function () {
@@ -27,15 +28,39 @@ contract("Token - Extension ERC721Asset", function (accounts) {
     });
 
     it("should get assetUri", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_1, ASSET_HASH_1, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const assetUri = await this.tokenContract.getAssetUri(0);
       expect(assetUri).to.be.equal(ASSET_URI_1);
     });
 
     it("should get assetUri for multiple minted token", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_1, ASSET_HASH_1, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_2, ASSET_HASH_2, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_2,
+        ASSET_HASH_2,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const assetUri1 = await this.tokenContract.getAssetUri(0);
       expect(assetUri1).to.be.equal(ASSET_URI_1);
@@ -51,15 +76,39 @@ contract("Token - Extension ERC721Asset", function (accounts) {
     });
 
     it("should get assetHash", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_1, ASSET_HASH_1, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const assetUri = await this.tokenContract.getAssetHash(0);
       expect(assetUri).to.be.equal(ASSET_HASH_1);
     });
 
     it("should get assetHash for multiple minted token", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_1, ASSET_HASH_1, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_1, ASSET_HASH_2, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_2,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const assetHash1 = await this.tokenContract.getAssetHash(0);
       expect(assetHash1).to.be.equal(ASSET_HASH_1);
@@ -69,8 +118,24 @@ contract("Token - Extension ERC721Asset", function (accounts) {
     });
 
     it("should get assetInformation for multiple minted token", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_1, ASSET_HASH_1, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_2, ASSET_HASH_2, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_2,
+        ASSET_HASH_2,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       const assetInformation1 = await this.tokenContract.getAssetInformation(0);
       expect(assetInformation1.assetUri).to.be.equal(ASSET_URI_1);
@@ -88,8 +153,24 @@ contract("Token - Extension ERC721Asset", function (accounts) {
     });
 
     it("should delete assetUri and hash on burning", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_1, ASSET_HASH_1, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
-      await this.tokenContract.safeMint(ALICE, ASSET_URI_2, ASSET_HASH_2, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_2,
+        ASSET_HASH_2,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
 
       await this.tokenContract.burn(0);
 
