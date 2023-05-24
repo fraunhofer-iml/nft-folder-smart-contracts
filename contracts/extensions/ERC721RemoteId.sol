@@ -12,8 +12,13 @@ pragma solidity ^0.8.18;
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 abstract contract ERC721RemoteId is ERC721 {
+    struct RemoteIdData {
+        uint256 tokenId;
+        bool exists;
+    }
+
     mapping(uint256 => string) private _tokenIdWithRemoteId;
-    mapping(string => uint256) private _remoteIdWithTokenId;
+    mapping(string => RemoteIdData) private _remoteIdWithData;
 
     function getRemoteId(uint256 tokenId) public view virtual returns (string memory) {
         require(_exists(tokenId), "ERC721RemoteId: token does not exist");
@@ -21,25 +26,25 @@ abstract contract ERC721RemoteId is ERC721 {
     }
 
     function getTokenId(string memory remoteId) public view virtual returns (uint256) {
-        uint256 tokenId = _remoteIdWithTokenId[remoteId];
-        require(_exists(tokenId), "ERC721RemoteId: token does not exist");
-        return tokenId;
+        require(_remoteIdWithData[remoteId].exists, "ERC721RemoteId: remoteId does not exist");
+        return _remoteIdWithData[remoteId].tokenId;
     }
 
     function _setRemoteId(uint256 tokenId, string memory remoteId) internal virtual {
         require(_exists(tokenId), "ERC721RemoteId: token does not exist");
+        require(!_remoteIdWithData[remoteId].exists, "ERC721RemoteId: remoteId already exists");
+
         _tokenIdWithRemoteId[tokenId] = remoteId;
-        _remoteIdWithTokenId[remoteId] = tokenId;
+        _remoteIdWithData[remoteId] = RemoteIdData(tokenId, true);
     }
 
-    // This function is called by the implementing contract, but slither doesn't recognize this
-    // slither-disable-next-line dead-code
     function _burn(uint256 tokenId) internal virtual override {
         super._burn(tokenId);
 
-        if (bytes(_tokenIdWithRemoteId[tokenId]).length != 0) {
-            string memory remoteId = _tokenIdWithRemoteId[tokenId];
-            delete _remoteIdWithTokenId[remoteId];
+        // Remove the remote ID associated with the burned token
+        string memory remoteId = _tokenIdWithRemoteId[tokenId];
+        if (bytes(remoteId).length != 0) {
+            delete _remoteIdWithData[remoteId];
             delete _tokenIdWithRemoteId[tokenId];
         }
     }

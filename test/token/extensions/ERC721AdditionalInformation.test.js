@@ -18,7 +18,8 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
   const ASSET_HASH = "asset_hash";
   const METADATA_URI = "meta_uri";
   const METADATA_HASH = "meta_hash";
-  const REMOTE_ID = "remote_id";
+  const REMOTE_ID_1 = "remote_id_1";
+  const REMOTE_ID_2 = "remote_id_2";
   const ADDITIONAL_INFO_1 = "additional_info_1";
   const ADDITIONAL_INFO_2 = "additional_info_2";
 
@@ -34,7 +35,7 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
         ASSET_HASH,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO_1
       );
 
@@ -49,7 +50,7 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
         ASSET_HASH,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO_1
       );
       await this.tokenContract.safeMint(
@@ -58,7 +59,7 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
         ASSET_HASH,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_2,
         ADDITIONAL_INFO_2
       );
 
@@ -76,8 +77,8 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
     });
 
     it("should delete additionalInformation on burning", async () => {
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, "1", "1", REMOTE_ID, ADDITIONAL_INFO_1);
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, "2", "2", REMOTE_ID, ADDITIONAL_INFO_2);
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, "1", "1", REMOTE_ID_1, ADDITIONAL_INFO_1);
+      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, "2", "2", REMOTE_ID_2, ADDITIONAL_INFO_2);
 
       await this.tokenContract.burn(0);
 

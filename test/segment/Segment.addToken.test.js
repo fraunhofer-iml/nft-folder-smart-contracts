@@ -25,11 +25,12 @@ contract("Segment", function (accounts) {
     tokenId,
     tokenInformationSize,
     tokenInformationIndex,
-    segmentIndex
+    segmentIndex,
+    remoteId
   ) {
     const segmentAddress = segmentContract.address;
     const tokenAddress = tokenContract.address;
-    await tokenContract.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
+    await tokenContract.safeMint(ALICE, "au", "ah", "mu", "mh", remoteId, "ai");
 
     const receipt = await segmentContract.addToken(tokenAddress, tokenId);
 
@@ -81,23 +82,23 @@ contract("Segment", function (accounts) {
     });
 
     it("should add 1 token", async () => {
-      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "0", "1", "0", "0");
+      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "0", "1", "0", "0", "0");
     });
 
     it("should add 2 tokens from same token address", async () => {
-      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "0", "1", "0", "0");
-      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "1", "2", "1", "0");
+      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "0", "1", "0", "0", "0");
+      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "1", "2", "1", "0", "1");
     });
 
     it("should add 3 tokens from different token addresses", async () => {
-      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "0", "1", "0", "0");
-      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract2, "0", "2", "1", "0");
-      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "1", "3", "2", "0");
+      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "0", "1", "0", "0", "0");
+      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract2, "0", "2", "1", "0", "1");
+      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "1", "3", "2", "0", "2");
     });
 
     it("should add 1 token to multiple segments", async () => {
-      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "0", "1", "0", "0");
-      await addTokenAndAssertValues.call(this, this.segmentContract2, this.tokenContract1, "0", "1", "0", "1");
+      await addTokenAndAssertValues.call(this, this.segmentContract1, this.tokenContract1, "0", "1", "0", "0", "0");
+      await addTokenAndAssertValues.call(this, this.segmentContract2, this.tokenContract1, "0", "1", "0", "1", "1");
     });
   });
 

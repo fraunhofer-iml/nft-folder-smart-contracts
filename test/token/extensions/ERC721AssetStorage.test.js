@@ -19,7 +19,8 @@ contract("Token - Extension ERC721Asset", function (accounts) {
   const ASSET_HASH_2 = "asset_hash_2";
   const METADATA_URI = "meta_uri";
   const METADATA_HASH = "meta_hash";
-  const REMOTE_ID = "remote_id";
+  const REMOTE_ID_1 = "remote_id_1";
+  const REMOTE_ID_2 = "remote_id_2";
   const ADDITIONAL_INFO = "additional_info";
 
   describe("getAssetUri", function () {
@@ -34,7 +35,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_1,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO
       );
 
@@ -49,7 +50,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_1,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO
       );
       await this.tokenContract.safeMint(
@@ -58,7 +59,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_2,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_2,
         ADDITIONAL_INFO
       );
 
@@ -82,7 +83,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_1,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO
       );
 
@@ -97,7 +98,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_1,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO
       );
       await this.tokenContract.safeMint(
@@ -106,7 +107,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_2,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_2,
         ADDITIONAL_INFO
       );
 
@@ -124,7 +125,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_1,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO
       );
       await this.tokenContract.safeMint(
@@ -133,7 +134,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_2,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_2,
         ADDITIONAL_INFO
       );
 
@@ -159,7 +160,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_1,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO
       );
       await this.tokenContract.safeMint(
@@ -168,7 +169,7 @@ contract("Token - Extension ERC721Asset", function (accounts) {
         ASSET_HASH_2,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_2,
         ADDITIONAL_INFO
       );
 
