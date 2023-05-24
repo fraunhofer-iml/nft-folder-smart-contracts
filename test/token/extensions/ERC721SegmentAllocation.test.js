@@ -17,7 +17,7 @@ contract("Token - Extension ERC721SegmentAllocation", function (accounts) {
   const ASSET_HASH = "asset_hash";
   const METADATA_URI = "meta_uri";
   const METADATA_HASH = "meta_hash";
-  const REMOTE_ID = "remote_id";
+  const REMOTE_ID_1 = "remote_id_1";
   const ADDITIONAL_INFO = "additional_info";
   const VALID_SEGMENT_ADDRESS1 = "0x0000000000000000000000000000000000000001";
 
@@ -30,7 +30,7 @@ contract("Token - Extension ERC721SegmentAllocation", function (accounts) {
         ASSET_HASH,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO
       );
     });
@@ -52,7 +52,7 @@ contract("Token - Extension ERC721SegmentAllocation", function (accounts) {
         ASSET_HASH,
         METADATA_URI,
         METADATA_HASH,
-        REMOTE_ID,
+        REMOTE_ID_1,
         ADDITIONAL_INFO
       );
     });

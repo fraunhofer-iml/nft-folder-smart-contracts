@@ -78,8 +78,8 @@ contract("Segment", function (accounts) {
     });
 
     it("should add 2 tokens and remove first token", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri1", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri2", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "1");
 
@@ -98,8 +98,8 @@ contract("Segment", function (accounts) {
     });
 
     it("should add 2 token and remove second token", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri1", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri2", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "1");
 
@@ -118,9 +118,9 @@ contract("Segment", function (accounts) {
     });
 
     it("should add 3 token and remove 3 token", async () => {
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
-      await this.tokenContract2.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
-      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri1", "ai");
+      await this.tokenContract2.safeMint(ALICE, "au", "ah", "mu", "mh", "ri2", "ai");
+      await this.tokenContract1.safeMint(ALICE, "au", "ah", "mu", "mh", "ri3", "ai");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "0");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_2, "0");
       await this.segmentContract.addToken(VALID_TOKEN_ADDRESS_1, "1");

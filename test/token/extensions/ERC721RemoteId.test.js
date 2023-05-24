@@ -68,6 +68,20 @@ contract("Token - Extension ERC721RemoteId", function (accounts) {
       const remoteId2 = await this.tokenContract.getRemoteId(1);
       expect(remoteId2).to.be.equal(REMOTE_ID_2);
     });
+
+    it("should not get remote id", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_1,
+        ADDITIONAL_INFO
+      );
+
+      await expectRevert(this.tokenContract.getRemoteId(1), "ERC721RemoteId: token does not exist");
+    });
   });
 
   describe("getTokenId", function () {
@@ -86,7 +100,7 @@ contract("Token - Extension ERC721RemoteId", function (accounts) {
         ADDITIONAL_INFO
       );
 
-      const tokenId = await this.tokenContract.getTokenId(0);
+      const tokenId = await this.tokenContract.getTokenId(REMOTE_ID_1);
       expect(tokenId).to.be.bignumber.equal("0");
     });
 
@@ -116,6 +130,20 @@ contract("Token - Extension ERC721RemoteId", function (accounts) {
       const tokenId2 = await this.tokenContract.getTokenId(REMOTE_ID_2);
       expect(tokenId2).to.be.bignumber.equal("1");
     });
+
+    it("should not get token id", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_1,
+        ADDITIONAL_INFO
+      );
+
+      await expectRevert(this.tokenContract.getTokenId(REMOTE_ID_2), "ERC721RemoteId: remoteId does not exist");
+    });
   });
 
   describe("_burn", function () {
@@ -137,7 +165,7 @@ contract("Token - Extension ERC721RemoteId", function (accounts) {
 
       // ids for token with id 0 should be deleted
       await expectRevert(this.tokenContract.getRemoteId(0), "ERC721RemoteId: token does not exist");
-      await expectRevert(this.tokenContract.getTokenId(REMOTE_ID_1), "ERC721RemoteId: token does not exist");
+      await expectRevert(this.tokenContract.getTokenId(REMOTE_ID_1), "ERC721RemoteId: remoteId does not exist");
     });
   });
 });
