@@ -54,22 +54,6 @@ contract Token is
         _setAdditionalInformation(tokenId, additionalInformation);
     }
 
-    function safeMint(
-        address receiver,
-        string memory assetUri,
-        string memory assetHash,
-        string memory metadataUri,
-        string memory metadataHash,
-        string memory remoteId
-    ) public onlyOwner {
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-        _safeMint(receiver, tokenId);
-        _setAssetInformation(tokenId, assetUri, assetHash);
-        _setMetadataHash(tokenId, metadataUri, metadataHash);
-        _setRemoteId(tokenId, remoteId);
-    }
-
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }

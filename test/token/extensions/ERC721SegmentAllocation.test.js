@@ -17,13 +17,22 @@ contract("Token - Extension ERC721SegmentAllocation", function (accounts) {
   const ASSET_HASH = "asset_hash";
   const METADATA_URI = "meta_uri";
   const METADATA_HASH = "meta_hash";
+  const REMOTE_ID = "remote_id";
   const ADDITIONAL_INFO = "additional_info";
   const VALID_SEGMENT_ADDRESS1 = "0x0000000000000000000000000000000000000001";
 
   describe("addTokenToSegment", function () {
     beforeEach(async () => {
       this.tokenContract = await Token.new("Token", "TKN");
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
     });
 
     it("should not add Segment to Token from Token Contract", async () => {
@@ -37,7 +46,15 @@ contract("Token - Extension ERC721SegmentAllocation", function (accounts) {
   describe("removeTokenFromSegment", function () {
     beforeEach(async () => {
       this.tokenContract = await Token.new("Token", "TKN");
-      await this.tokenContract.safeMint(ALICE, ASSET_URI, ASSET_HASH, METADATA_URI, METADATA_HASH, ADDITIONAL_INFO);
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
     });
 
     it("should not remove Segment to Token from Token Contract", async () => {
