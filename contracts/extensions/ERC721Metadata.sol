@@ -15,15 +15,24 @@ abstract contract ERC721Metadata is ERC721URIStorage {
     mapping(uint256 => string) private _tokenIdWithMetadataHash;
     string private constant ERROR_MESSAGE = "ERC721Metadata: token does not exist";
 
-    function getMetadataHash(uint256 tokenId) public view virtual returns (string memory) {
-        require(_exists(tokenId), ERROR_MESSAGE);
-        return _tokenIdWithMetadataHash[tokenId];
-    }
-
-    function _setMetadataHash(uint256 tokenId, string memory metadataUri, string memory metadataHash) internal virtual {
+    function setMetadataUri(uint256 tokenId, string memory metadataUri) public {
         require(_exists(tokenId), ERROR_MESSAGE);
         super._setTokenURI(tokenId, metadataUri);
+    }
+
+    function setMetadataHash(uint256 tokenId, string memory metadataHash) public {
+        require(_exists(tokenId), ERROR_MESSAGE);
         _tokenIdWithMetadataHash[tokenId] = metadataHash;
+    }
+
+    function getMetadataUri(uint256 tokenId) public view returns (string memory) {
+        require(_exists(tokenId), ERROR_MESSAGE);
+        return super.tokenURI(tokenId);
+    }
+
+    function getMetadataHash(uint256 tokenId) public view returns (string memory) {
+        require(_exists(tokenId), ERROR_MESSAGE);
+        return _tokenIdWithMetadataHash[tokenId];
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this

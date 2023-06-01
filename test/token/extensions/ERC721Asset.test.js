@@ -14,9 +14,13 @@ const Token = artifacts.require("Token");
 contract("Token - Extension ERC721Asset", function (accounts) {
   const [ALICE] = accounts;
   const ASSET_URI_1 = "asset_uri_1";
+  const ASSET_URI_1_UPDATED = "asset_uri_1_updated";
   const ASSET_URI_2 = "asset_uri_2";
+  const ASSET_URI_2_UPDATED = "asset_uri_2_updated";
   const ASSET_HASH_1 = "asset_hash_1";
+  const ASSET_HASH_1_UPDATED = "asset_hash_1_updated";
   const ASSET_HASH_2 = "asset_hash_2";
+  const ASSET_HASH_2_UPDATED = "asset_hash_2_updated";
   const METADATA_URI = "meta_uri";
   const METADATA_HASH = "meta_hash";
   const REMOTE_ID_1 = "remote_id_1";
@@ -72,6 +76,62 @@ contract("Token - Extension ERC721Asset", function (accounts) {
 
     it("should not get assetUri", async () => {
       await expectRevert(this.tokenContract.getAssetUri(0), "ERC721Asset: token does not exist");
+    });
+  });
+
+  describe("setAssetUri", function () {
+    beforeEach(async () => {
+      this.tokenContract = await Token.new("Token", "TKN");
+    });
+
+    it("should set assetUri", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_1,
+        ADDITIONAL_INFO
+      );
+
+      await this.tokenContract.setAssetUri(0, ASSET_URI_1_UPDATED);
+
+      const assetUri = await this.tokenContract.getAssetUri(0);
+      expect(assetUri).to.be.equal(ASSET_URI_1_UPDATED);
+    });
+
+    it("should set assetUri for multiple minted token", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_1,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_2,
+        ASSET_HASH_2,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_2,
+        ADDITIONAL_INFO
+      );
+
+      await this.tokenContract.setAssetUri(0, ASSET_URI_1_UPDATED);
+      const assetUri1 = await this.tokenContract.getAssetUri(0);
+      expect(assetUri1).to.be.equal(ASSET_URI_1_UPDATED);
+
+      await this.tokenContract.setAssetUri(1, ASSET_URI_2_UPDATED);
+      const assetUri2 = await this.tokenContract.getAssetUri(1);
+      expect(assetUri2).to.be.equal(ASSET_URI_2_UPDATED);
+    });
+
+    it("should not set assetUri", async () => {
+      await expectRevert(this.tokenContract.setAssetUri(0, ASSET_URI_1_UPDATED), "ERC721Asset: token does not exist");
     });
   });
 
@@ -153,6 +213,62 @@ contract("Token - Extension ERC721Asset", function (accounts) {
 
     it("should not get assetHash", async () => {
       await expectRevert(this.tokenContract.getAssetHash(0), "ERC721Asset: token does not exist");
+    });
+  });
+
+  describe("setAssetHash", function () {
+    beforeEach(async () => {
+      this.tokenContract = await Token.new("Token", "TKN");
+    });
+
+    it("should set assetHash", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_1,
+        ADDITIONAL_INFO
+      );
+
+      await this.tokenContract.setAssetHash(0, ASSET_HASH_1_UPDATED);
+
+      const assetUri = await this.tokenContract.getAssetHash(0);
+      expect(assetUri).to.be.equal(ASSET_HASH_1_UPDATED);
+    });
+
+    it("should set assetHash for multiple minted token", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_1,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_1,
+        ADDITIONAL_INFO
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI_1,
+        ASSET_HASH_2,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_2,
+        ADDITIONAL_INFO
+      );
+
+      await this.tokenContract.setAssetHash(0, ASSET_HASH_1_UPDATED);
+      const assetHash1 = await this.tokenContract.getAssetHash(0);
+      expect(assetHash1).to.be.equal(ASSET_HASH_1_UPDATED);
+
+      await this.tokenContract.setAssetHash(1, ASSET_HASH_2_UPDATED);
+      const assetHash2 = await this.tokenContract.getAssetHash(1);
+      expect(assetHash2).to.be.equal(ASSET_HASH_2_UPDATED);
+    });
+
+    it("should not set assetHash", async () => {
+      await expectRevert(this.tokenContract.setAssetHash(0, ASSET_HASH_1_UPDATED), "ERC721Asset: token does not exist");
     });
   });
 

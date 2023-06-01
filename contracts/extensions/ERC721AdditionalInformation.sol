@@ -15,14 +15,14 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 abstract contract ERC721AdditionalInformation is ERC721 {
     mapping(uint256 => string) private _tokenIdWithAdditionalInformation;
 
-    function getAdditionalInformation(uint256 tokenId) public view virtual returns (string memory) {
-        require(_exists(tokenId), "ERC721AdditionalInformation: token does not exist");
-        return _tokenIdWithAdditionalInformation[tokenId];
-    }
-
-    function _setAdditionalInformation(uint256 tokenId, string memory additionalInformation) internal virtual {
+    function setAdditionalInformation(uint256 tokenId, string memory additionalInformation) public {
         require(_exists(tokenId), "ERC721AdditionalInformation: token does not exist");
         _tokenIdWithAdditionalInformation[tokenId] = additionalInformation;
+    }
+
+    function getAdditionalInformation(uint256 tokenId) public view returns (string memory) {
+        require(_exists(tokenId), "ERC721AdditionalInformation: token does not exist");
+        return _tokenIdWithAdditionalInformation[tokenId];
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this
