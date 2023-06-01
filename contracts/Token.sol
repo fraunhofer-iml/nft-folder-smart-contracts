@@ -48,10 +48,12 @@ contract Token is
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(receiver, tokenId);
-        _setAssetInformation(tokenId, assetUri, assetHash);
-        _setMetadataHash(tokenId, metadataUri, metadataHash);
+        setAssetUri(tokenId, assetUri);
+        setAssetHash(tokenId, assetHash);
+        setMetadataUri(tokenId, metadataUri);
+        setMetadataHash(tokenId, metadataHash);
         _setRemoteId(tokenId, remoteId);
-        _setAdditionalInformation(tokenId, additionalInformation);
+        setAdditionalInformation(tokenId, additionalInformation);
     }
 
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {

@@ -5,14 +5,13 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+
 require("dotenv").config();
 const MNEMONIC = process.env.MNEMONIC;
-const TESTNET_PRIVATE_KEY = process.env.TESTNET_PRIVATE_KEY;
-// const PRODUCTION_PRIVATE_KEY = process.env.PRODUCTION_PRIVATE_KEY;
-const INFURA_API_KEY = process.env.INFURA_API_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
-const HDWalletProvider = require("@truffle/hdwallet-provider");
+// TODO-MP: provide a private key instead
 
 module.exports = {
   networks: {
@@ -26,27 +25,16 @@ module.exports = {
       port: 8545,
       network_id: "*",
     },
-    testnet: {
-      provider: () =>
-        new HDWalletProvider({
-          privateKeys: [TESTNET_PRIVATE_KEY],
-          providerOrUrl: `https://polygon-mumbai.infura.io/v3/${INFURA_API_KEY}`,
-        }),
-      network_id: "80001",
-      gas: 4500000,
-      gasPrice: 10e9,
-      skipDryRun: true,
-    },
-    production: {
+    dev: {
       provider: () =>
         new HDWalletProvider({
           mnemonic: MNEMONIC,
-          providerOrUrl: "http://192.44.23.22:8545",
+          providerOrUrl: "http://153.97.12.222:8545",
           derivationPath: "m/44'/60'/0'/0/",
         }),
       type: "quorum",
       network_id: "*",
-      gas: 6000000,
+      gas: 700000000,
       gasPrice: 0,
       networkCheckTimeout: 5000,
     },

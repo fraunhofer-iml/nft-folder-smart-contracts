@@ -20,25 +20,29 @@ abstract contract ERC721Asset is ERC721 {
     mapping(uint256 => AssetInformation) private _tokenIdWithAssetInformation;
     string private constant ERROR_MESSAGE = "ERC721Asset: token does not exist";
 
-    function getAssetInformation(uint256 tokenId) public view virtual returns (AssetInformation memory) {
+    function setAssetUri(uint256 tokenId, string memory assetUri) public {
+        require(_exists(tokenId), ERROR_MESSAGE);
+        _tokenIdWithAssetInformation[tokenId].assetUri = assetUri;
+    }
+
+    function setAssetHash(uint256 tokenId, string memory assetHash) public {
+        require(_exists(tokenId), ERROR_MESSAGE);
+        _tokenIdWithAssetInformation[tokenId].assetHash = assetHash;
+    }
+
+    function getAssetInformation(uint256 tokenId) public view returns (AssetInformation memory) {
         require(_exists(tokenId), ERROR_MESSAGE);
         return _tokenIdWithAssetInformation[tokenId];
     }
 
-    function getAssetUri(uint256 tokenId) public view virtual returns (string memory) {
+    function getAssetUri(uint256 tokenId) public view returns (string memory) {
         require(_exists(tokenId), ERROR_MESSAGE);
         return _tokenIdWithAssetInformation[tokenId].assetUri;
     }
 
-    function getAssetHash(uint256 tokenId) public view virtual returns (string memory) {
+    function getAssetHash(uint256 tokenId) public view returns (string memory) {
         require(_exists(tokenId), ERROR_MESSAGE);
         return _tokenIdWithAssetInformation[tokenId].assetHash;
-    }
-
-    function _setAssetInformation(uint256 tokenId, string memory assetUri, string memory assetHash) internal virtual {
-        require(_exists(tokenId), ERROR_MESSAGE);
-        _tokenIdWithAssetInformation[tokenId].assetUri = assetUri;
-        _tokenIdWithAssetInformation[tokenId].assetHash = assetHash;
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this

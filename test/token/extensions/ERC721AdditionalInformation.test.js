@@ -21,7 +21,9 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
   const REMOTE_ID_1 = "remote_id_1";
   const REMOTE_ID_2 = "remote_id_2";
   const ADDITIONAL_INFO_1 = "additional_info_1";
+  const ADDITIONAL_INFO_1_UPDATE = "additional_info_1_update";
   const ADDITIONAL_INFO_2 = "additional_info_2";
+  const ADDITIONAL_INFO_2_UPDATE = "additional_info_2_update";
 
   describe("getAdditionalInformation", function () {
     beforeEach(async () => {
@@ -73,6 +75,64 @@ contract("Token - Extension ERC721AdditionalInformation", function (accounts) {
     it("should not get additional info", async () => {
       await expectRevert(
         this.tokenContract.getAdditionalInformation(0),
+        "ERC721AdditionalInformation: token does not exist"
+      );
+    });
+  });
+
+  describe("setAdditionalInformation", function () {
+    beforeEach(async () => {
+      this.tokenContract = await Token.new("Token", "TKN");
+    });
+
+    it("should set additional info", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_1,
+        ADDITIONAL_INFO_1
+      );
+
+      await this.tokenContract.setAdditionalInformation(0, ADDITIONAL_INFO_1_UPDATE);
+      const additionalInformation = await this.tokenContract.getAdditionalInformation(0);
+      expect(additionalInformation).to.be.equal(ADDITIONAL_INFO_1_UPDATE);
+    });
+
+    it("should get different additional info for different tokens", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_1,
+        ADDITIONAL_INFO_1
+      );
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID_2,
+        ADDITIONAL_INFO_2
+      );
+
+      await this.tokenContract.setAdditionalInformation(0, ADDITIONAL_INFO_1_UPDATE);
+      const additionalInformation1 = await this.tokenContract.getAdditionalInformation(0);
+      expect(additionalInformation1).to.be.equal(ADDITIONAL_INFO_1_UPDATE);
+
+      await this.tokenContract.setAdditionalInformation(1, ADDITIONAL_INFO_2_UPDATE);
+      const additionalInformation2 = await this.tokenContract.getAdditionalInformation(1);
+      expect(additionalInformation2).to.be.equal(ADDITIONAL_INFO_2_UPDATE);
+    });
+
+    it("should not set additional info", async () => {
+      await expectRevert(
+        this.tokenContract.setAdditionalInformation(0, ADDITIONAL_INFO_1_UPDATE),
         "ERC721AdditionalInformation: token does not exist"
       );
     });
