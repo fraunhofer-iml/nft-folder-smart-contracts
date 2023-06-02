@@ -44,7 +44,7 @@ contract Token is
         string memory metadataHash,
         string memory remoteId,
         string memory additionalInformation
-    ) public onlyOwner {
+    ) public {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(receiver, tokenId);
