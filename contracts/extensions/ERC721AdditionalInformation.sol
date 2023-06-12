@@ -15,9 +15,27 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 abstract contract ERC721AdditionalInformation is ERC721 {
     mapping(uint256 => string) private _tokenIdWithAdditionalInformation;
 
+    event AdditionalInformationSet(
+        string oldAdditionalInformation,
+        string newAdditionalInformation,
+        address indexed from,
+        address indexed tokenAddress,
+        uint256 indexed tokenId
+    );
+
     function setAdditionalInformation(uint256 tokenId, string memory additionalInformation) public {
         require(_exists(tokenId), "ERC721AdditionalInformation: token does not exist");
+
+        string memory oldAdditionalInformation = _tokenIdWithAdditionalInformation[tokenId];
         _tokenIdWithAdditionalInformation[tokenId] = additionalInformation;
+
+        emit AdditionalInformationSet(
+            oldAdditionalInformation,
+            additionalInformation,
+            msg.sender,
+            address(this),
+            tokenId
+        );
     }
 
     function getAdditionalInformation(uint256 tokenId) public view returns (string memory) {

@@ -15,14 +15,37 @@ abstract contract ERC721Metadata is ERC721URIStorage {
     mapping(uint256 => string) private _tokenIdWithMetadataHash;
     string private constant ERROR_MESSAGE = "ERC721Metadata: token does not exist";
 
+    event MetadataUriSet(
+        string oldMetadataUri,
+        string newMetadataUri,
+        address indexed from,
+        address indexed tokenAddress,
+        uint256 indexed tokenId
+    );
+    event MetadataHashSet(
+        string oldMetadataHash,
+        string newMetadataHash,
+        address indexed from,
+        address indexed tokenAddress,
+        uint256 indexed tokenId
+    );
+
     function setMetadataUri(uint256 tokenId, string memory metadataUri) public {
         require(_exists(tokenId), ERROR_MESSAGE);
+
+        string memory oldMetadataUri = super.tokenURI(tokenId);
         super._setTokenURI(tokenId, metadataUri);
+
+        emit MetadataUriSet(oldMetadataUri, metadataUri, msg.sender, address(this), tokenId);
     }
 
     function setMetadataHash(uint256 tokenId, string memory metadataHash) public {
         require(_exists(tokenId), ERROR_MESSAGE);
+
+        string memory oldMetadataHash = _tokenIdWithMetadataHash[tokenId];
         _tokenIdWithMetadataHash[tokenId] = metadataHash;
+
+        emit MetadataHashSet(oldMetadataHash, metadataHash, msg.sender, address(this), tokenId);
     }
 
     function getMetadataUri(uint256 tokenId) public view returns (string memory) {
