@@ -20,14 +20,37 @@ abstract contract ERC721Asset is ERC721 {
     mapping(uint256 => AssetInformation) private _tokenIdWithAssetInformation;
     string private constant ERROR_MESSAGE = "ERC721Asset: token does not exist";
 
+    event AssetUriSet(
+        string oldAssetUri,
+        string newAssetUri,
+        address indexed from,
+        address indexed tokenAddress,
+        uint256 indexed tokenId
+    );
+    event AssetHashSet(
+        string oldAssetHash,
+        string newAssetHash,
+        address indexed from,
+        address indexed tokenAddress,
+        uint256 indexed tokenId
+    );
+
     function setAssetUri(uint256 tokenId, string memory assetUri) public {
         require(_exists(tokenId), ERROR_MESSAGE);
+
+        string memory oldAssetUri = _tokenIdWithAssetInformation[tokenId].assetUri;
         _tokenIdWithAssetInformation[tokenId].assetUri = assetUri;
+
+        emit AssetUriSet(oldAssetUri, assetUri, msg.sender, address(this), tokenId);
     }
 
     function setAssetHash(uint256 tokenId, string memory assetHash) public {
         require(_exists(tokenId), ERROR_MESSAGE);
+
+        string memory oldAssetHash = _tokenIdWithAssetInformation[tokenId].assetHash;
         _tokenIdWithAssetInformation[tokenId].assetHash = assetHash;
+
+        emit AssetHashSet(oldAssetHash, assetHash, msg.sender, address(this), tokenId);
     }
 
     function getAssetInformation(uint256 tokenId) public view returns (AssetInformation memory) {

@@ -1,8 +1,8 @@
 stages:
   - build
   - analyze
-  - license
   - test
+  - license
 
 variables:
   GIT_DEPTH: 0
@@ -119,6 +119,20 @@ run-sonar-scanner:
   rules:
     - when: on_success
 
+############
+### test ###
+############
+
+run-unit-tests:
+  stage: test
+  before_script:
+    - $NPM_CI
+    - npm run ganache:start
+  script:
+    - npm run test --ignore-scripts # executing posttest in a container leads to an error
+  rules:
+    - when: on_success
+
 ###############
 ### license ###
 ###############
@@ -182,17 +196,3 @@ publish-all-licenses-list:
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-############
-### test ###
-############
-
-run-unit-tests:
-  stage: test
-  before_script:
-    - $NPM_CI
-    - npm run ganache:start
-  script:
-    - npm run test --ignore-scripts # executing posttest in a container leads to an error
-  rules:
-    - when: on_success

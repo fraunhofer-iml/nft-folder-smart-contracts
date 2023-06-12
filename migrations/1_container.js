@@ -6,11 +6,8 @@
  */
 
 const Container = artifacts.require("Container");
-const Token = artifacts.require("Token");
 
-const CONTAINER_NAME = "Container A";
-const TOKEN_NAME = "Token A";
-const TOKEN_SYMBOL = "TKNA";
+const CONTAINER_NAME = "eCMR";
 
 module.exports = async (deployer, network, accounts) => {
   if (network !== "test") {
@@ -19,14 +16,7 @@ module.exports = async (deployer, network, accounts) => {
     console.log(`### Deploy '${CONTAINER_NAME}' ###`);
     console.log(`############################\n`);
 
+    console.log(`-> await deployer.deploy(<CONTAINER_CONTRACT>, ${alice}, ${CONTAINER_NAME})\n`);
     await deployer.deploy(Container, alice, CONTAINER_NAME);
-    console.log(`-> deployer.deploy(ContainerContract, ${alice}, ${CONTAINER_NAME})\n`);
-
-    console.log(`\n\n############################`);
-    console.log(`### Deploy '${TOKEN_NAME}' ###`);
-    console.log(`############################\n`);
-
-    await deployer.deploy(Token, TOKEN_NAME, TOKEN_SYMBOL);
-    console.log(`-> deployer.deploy(ContainerContract, ${alice}, ${CONTAINER_NAME})\n`);
   }
 };
