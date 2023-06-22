@@ -32,8 +32,10 @@
     "posttest": "npm run ganache:stop",
     "local:deploy": "npx truffle migrate --network=local",
     "local:console": "npx truffle console --network=local",
-    "dev:deploy": "npx truffle migrate --network=dev",
-    "dev:console": "npx truffle console --network=dev",
+    "ecmr:deploy": "npx truffle migrate --network=ecmr",
+    "ecmr:console": "npx truffle console --network=ecmr",
+    "sfbdc:deploy": "npx truffle migrate --network=sfbdc",
+    "sfbdc:console": "npx truffle console --network=sfbdc",
     "contract-size": "npx truffle run contract-size --contracts Counter",
     "eslint:check": "npx eslint './**/*.js'",
     "eslint:fix": "npx eslint --fix './**/*.js'",
@@ -51,8 +53,7 @@
     ]
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.8.1",
-    "dotenv": "16.0.3"
+    "@openzeppelin/contracts": "^4.8.1"
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "0.5.16",
