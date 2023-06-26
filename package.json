@@ -32,6 +32,8 @@
     "posttest": "npm run ganache:stop",
     "local:deploy": "npx truffle migrate --network=local",
     "local:console": "npx truffle console --network=local",
+    "token:deploy": "npx truffle migrate --network=token",
+    "token:console": "npx truffle console --network=token",
     "ecmr:deploy": "npx truffle migrate --network=ecmr",
     "ecmr:console": "npx truffle console --network=ecmr",
     "sfbdc:deploy": "npx truffle migrate --network=sfbdc",

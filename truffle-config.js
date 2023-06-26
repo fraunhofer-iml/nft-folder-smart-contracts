@@ -11,7 +11,7 @@ require("dotenv").config();
 const MNEMONIC = process.env.MNEMONIC;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
-// TODO-MP: this is ugly, we should not differentiate between projects!
+// TODO-MP: this is ugly, we should not differentiate networks between projects!
 
 module.exports = {
   networks: {
@@ -25,7 +25,7 @@ module.exports = {
       port: 8545,
       network_id: "*",
     },
-    ecmr: {
+    token: {
       provider: () =>
         new HDWalletProvider({
           mnemonic: MNEMONIC,
@@ -40,12 +40,27 @@ module.exports = {
       gasPrice: 0,
       networkCheckTimeout: 5000,
     },
-    sfbdc: {
+    ecmr: {
       provider: () =>
         new HDWalletProvider({
           mnemonic: MNEMONIC,
           providerOrUrl: "http://153.97.12.222:8545",
           addressIndex: 1,
+          numberOfAddresses: 1,
+          derivationPath: "m/44'/60'/0'/0",
+        }),
+      type: "quorum",
+      network_id: "*",
+      gas: 700000000,
+      gasPrice: 0,
+      networkCheckTimeout: 5000,
+    },
+    sfbdc: {
+      provider: () =>
+        new HDWalletProvider({
+          mnemonic: MNEMONIC,
+          providerOrUrl: "http://153.97.12.222:8545",
+          addressIndex: 2,
           numberOfAddresses: 1,
           derivationPath: "m/44'/60'/0'/0",
         }),

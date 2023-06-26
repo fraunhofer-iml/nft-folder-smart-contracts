@@ -6,11 +6,8 @@
  */
 
 const Container = artifacts.require("Container");
-const Token = artifacts.require("Token");
 
 const CONTAINER_NAME = "eCMR Container";
-const TOKEN_NAME = "eCMR Token";
-const TOKEN_SYMBOL = "ECMR";
 
 module.exports = async (deployer, network, accounts) => {
   if (network === "ecmr" || network === "local") {
@@ -18,8 +15,5 @@ module.exports = async (deployer, network, accounts) => {
 
     console.log(`\n\n### Deploy '${CONTAINER_NAME}' ###`);
     await deployer.deploy(Container, account, CONTAINER_NAME);
-
-    console.log(`\n\n### Deploy '${TOKEN_NAME}' ###`);
-    await deployer.deploy(Token, TOKEN_NAME, TOKEN_SYMBOL);
   }
 };
