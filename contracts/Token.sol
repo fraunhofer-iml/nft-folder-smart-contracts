@@ -56,6 +56,22 @@ contract Token is
         setAdditionalInformation(tokenId, additionalInformation);
     }
 
+    // TODO-MP: should we check for empty strings? maybe it's on purpose...
+    function updateToken(
+        uint256 tokenId,
+        string memory assetUri,
+        string memory assetHash,
+        string memory metadataUri,
+        string memory metadataHash,
+        string memory additionalInformation
+    ) public {
+        setAssetUri(tokenId, assetUri);
+        setAssetHash(tokenId, assetHash);
+        setMetadataUri(tokenId, metadataUri);
+        setMetadataHash(tokenId, metadataHash);
+        setAdditionalInformation(tokenId, additionalInformation);
+    }
+
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
