@@ -56,7 +56,6 @@ contract Token is
         setAdditionalInformation(tokenId, additionalInformation);
     }
 
-    // TODO-MP: should we check for empty strings? maybe it's on purpose...
     function updateToken(
         uint256 tokenId,
         string memory assetUri,
@@ -65,11 +64,25 @@ contract Token is
         string memory metadataHash,
         string memory additionalInformation
     ) public {
-        setAssetUri(tokenId, assetUri);
-        setAssetHash(tokenId, assetHash);
-        setMetadataUri(tokenId, metadataUri);
-        setMetadataHash(tokenId, metadataHash);
-        setAdditionalInformation(tokenId, additionalInformation);
+        if (bytes(assetUri).length > 0) {
+            setAssetUri(tokenId, assetUri);
+        }
+
+        if (bytes(assetHash).length > 0) {
+            setAssetHash(tokenId, assetHash);
+        }
+
+        if (bytes(metadataUri).length > 0) {
+            setMetadataUri(tokenId, metadataUri);
+        }
+
+        if (bytes(metadataHash).length > 0) {
+            setMetadataHash(tokenId, metadataHash);
+        }
+
+        if (bytes(additionalInformation).length > 0) {
+            setAdditionalInformation(tokenId, additionalInformation);
+        }
     }
 
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {

@@ -114,5 +114,27 @@ contract("Token", function (accounts) {
       expect(await this.tokenContract.getTokenId(REMOTE_ID)).to.be.bignumber.equal("0");
       expect(await this.tokenContract.getAdditionalInformation(0)).to.be.equal(ADDITIONAL_INFO2);
     });
+
+    it("should not update token, because of empty strings", async () => {
+      await this.tokenContract.safeMint(
+        ALICE,
+        ASSET_URI,
+        ASSET_HASH,
+        METADATA_URI,
+        METADATA_HASH,
+        REMOTE_ID,
+        ADDITIONAL_INFO
+      );
+
+      await this.tokenContract.updateToken(0, "", "", "", "", "");
+
+      expect(await this.tokenContract.getAssetUri(0)).to.be.equal(ASSET_URI);
+      expect(await this.tokenContract.getAssetHash(0)).to.be.equal(ASSET_HASH);
+      expect(await this.tokenContract.tokenURI(0)).to.be.equal(METADATA_URI);
+      expect(await this.tokenContract.getMetadataHash(0)).to.be.equal(METADATA_HASH);
+      expect(await this.tokenContract.getRemoteId(0)).to.be.equal(REMOTE_ID);
+      expect(await this.tokenContract.getTokenId(REMOTE_ID)).to.be.bignumber.equal("0");
+      expect(await this.tokenContract.getAdditionalInformation(0)).to.be.equal(ADDITIONAL_INFO);
+    });
   });
 });
