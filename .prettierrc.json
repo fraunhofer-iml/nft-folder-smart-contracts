@@ -1,11 +1,5 @@
 {
   "printWidth": 120,
-  "overrides": [
-    {
-      "files": "*.properties",
-      "options": {
-        "keySeparator": "="
-      }
-    }
-  ]
+  "singleQuote": true,
+  "plugins": ["prettier-plugin-solidity"]
 }

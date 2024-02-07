@@ -1,24 +1,25 @@
-├─ MIT: 869
-├─ ISC: 99
-├─ Apache-2.0: 43
-├─ BSD-3-Clause: 28
-├─ LGPL-3.0: 21
-├─ BSD-2-Clause: 20
-├─ MPL-2.0: 13
-├─ UNKNOWN: 9
-├─ Unlicense: 5
-├─ CC0-1.0: 2
-├─ (MIT OR Apache-2.0): 2
-├─ 0BSD: 2
-├─ (MIT OR CC0-1.0): 2
+├─ MIT: 600
+├─ ISC: 66
+├─ BSD-3-Clause: 27
+├─ Apache-2.0: 17
+├─ MPL-2.0: 15
+├─ BSD-2-Clause: 15
+├─ (MIT OR CC0-1.0): 4
+├─ BSD: 3
+├─ 0BSD: 3
+├─ Unlicense: 2
+├─ Custom: https://github.com/NomicFoundation/hardhat-ignition/blob/main/CONTRIBUTING.md: 1
+├─ BSD-3-Clause OR MIT: 1
 ├─ Python-2.0: 1
+├─ (MIT OR GPL-3.0-or-later): 1
 ├─ WTFPL: 1
-├─ CC-BY-4.0: 1
-├─ (AFL-2.1 OR BSD-3-Clause): 1
-├─ Public Domain: 1
+├─ PSF: 1
 ├─ UNLICENSED: 1
+├─ (BSD-2-Clause OR MIT OR Apache-2.0): 1
+├─ (MIT OR Apache-2.0): 1
 ├─ (MIT AND BSD-3-Clause): 1
-├─ (WTFPL OR MIT): 1
 ├─ CC-BY-3.0: 1
+├─ CC0-1.0: 1
 ├─ (MIT AND CC-BY-3.0): 1
-└─ Custom: https://secure.travis-ci.org/defunctzombie/node-uuid.png: 1
+├─ WTFPL OR MIT: 1
+└─ LGPL-3.0: 1

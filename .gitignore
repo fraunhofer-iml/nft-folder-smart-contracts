@@ -1,15 +1,15 @@
 # Custom directories
-.idea
-crytic-export
+.idea/
+artifacts/
+cache/
+ignition/deployments/chain-31337/
+typechain-types/
 
 # Custom files
-.openzeppelin/unknown-1337.json
 coverage.json
 
-# Do not exclude package-lock.json !
-
-# Created by https://www.toptal.com/developers/gitignore/api/git,linux,soliditytruffle,node
-# Edit at https://www.toptal.com/developers/gitignore?templates=git,linux,soliditytruffle,node
+# Created by https://www.toptal.com/developers/gitignore/api/git,node,linux
+# Edit at https://www.toptal.com/developers/gitignore?templates=git,node,linux
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
@@ -181,26 +181,4 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-### SolidityTruffle ###
-# depedencies
-node_modules
-
-# testing
-
-# production
-build
-build_webpack
-
-# misc
-.DS_Store
-npm-debug.log
-.truffle-solidity-loader
-.vagrant/**
-blockchain/geth/**
-blockchain/keystore/**
-blockchain/history
-
-#truffle
-yarn.lock
-
-# End of https://www.toptal.com/developers/gitignore/api/git,linux,soliditytruffle,node
+# End of https://www.toptal.com/developers/gitignore/api/git,node,linux

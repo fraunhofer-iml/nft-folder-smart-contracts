@@ -18,7 +18,7 @@ default:
     paths:
       - .npm
     policy: pull
-  image: node:16.17.0-alpine3.16
+  image: node:20-alpine3.19
   timeout: 20 minutes
 
 .pull-push-cache:
@@ -40,13 +40,13 @@ install-dependencies:
 compile-contracts:
   stage: build
   needs:
-    - "install-dependencies"
+    - 'install-dependencies'
   before_script:
     - $NPM_CI
   script:
     - npm run compile
   artifacts:
-    name: "compiled-smart-contracts"
+    name: 'compiled-smart-contracts'
     expose_as: 'Compiled Smart Contracts'
     expire_in: 20 minutes
     paths:
@@ -107,7 +107,8 @@ run-solhint:
   rules:
     - when: on_success
 
-run-sonar-scanner:
+# TODO-MP: reactivate with SE-11105
+.run-sonar-scanner:
   stage: analyze
   image: red6/docker-sonar-scanner:latest
   script:
@@ -127,9 +128,8 @@ run-unit-tests:
   stage: test
   before_script:
     - $NPM_CI
-    - npm run ganache:start
   script:
-    - npm run test --ignore-scripts # executing posttest in a container leads to an error
+    - npm run test
   rules:
     - when: on_success
 
@@ -140,9 +140,9 @@ run-unit-tests:
 create-npm-licenses-list:
   stage: license
   variables:
-    LICENSES_LIST: "npm-licenses-list.csv"
-    LICENSES_OVERRIDES: "third-party-licenses/npm-licenses-overrides.txt"
-    EXCLUDED_PACKAGES: ""
+    LICENSES_LIST: 'npm-licenses-list.csv'
+    LICENSES_OVERRIDES: 'third-party-licenses/npm-licenses-overrides.txt'
+    EXCLUDED_PACKAGES: ''
   before_script:
     - $NPM_CI
     - >
@@ -165,7 +165,7 @@ create-npm-licenses-list:
       fi
     - cat "${LICENSES_LIST}"
   artifacts:
-    name: "npm-licenses-list"
+    name: 'npm-licenses-list'
     expose_as: 'NPM Licenses List'
     expire_in: 1 hour
     paths:
@@ -178,7 +178,7 @@ create-npm-licenses-list:
 publish-all-licenses-list:
   stage: license
   needs:
-    - "create-npm-licenses-list"
+    - 'create-npm-licenses-list'
   before_script:
     - mkdir -p public
   script:
@@ -189,7 +189,7 @@ publish-all-licenses-list:
       done
     - echo "Publishing the lists of dependencies and their licenses on GitLab Pages ..."
   artifacts:
-    name: "all-licenses-list"
+    name: 'all-licenses-list'
     expose_as: 'All Licenses List'
     paths:
       - public
