@@ -9,8 +9,8 @@
 
 pragma solidity ^0.8.18;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {Segment} from "./Segment.sol";
+import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
+import {Segment} from './Segment.sol';
 
 contract Container is Ownable {
     string private _name;
@@ -20,8 +20,8 @@ contract Container is Ownable {
     event SegmentAdded(address indexed from, address indexed segmentAddress);
 
     constructor(address owner, string memory name) {
-        require(owner != address(0), "Container: owner is zero address");
-        require(bytes(name).length > 0, "Container: name must contain characters");
+        require(owner != address(0), 'Container: owner is zero address');
+        require(bytes(name).length > 0, 'Container: name must contain characters');
 
         _transferOwnership(owner);
         _name = name;
@@ -29,7 +29,7 @@ contract Container is Ownable {
 
     // TODO-MP: maybe a factory contract would be better
     function createSegment(string memory name) external onlyOwner {
-        require(bytes(name).length > 0, "Container: name is empty");
+        require(bytes(name).length > 0, 'Container: name is empty');
         // TODO-MP: add precondition -> name should not exist
 
         Segment segmentContract = new Segment(owner(), name, address(this));
@@ -50,8 +50,8 @@ contract Container is Ownable {
     }
 
     function getSegment(uint256 index) external view returns (address) {
-        require(_segmentAddresses.length > 0, "Container: no segments stored in container");
-        require(index < _segmentAddresses.length, "Container: index is too large");
+        require(_segmentAddresses.length > 0, 'Container: no segments stored in container');
+        require(index < _segmentAddresses.length, 'Container: index is too large');
 
         return _segmentAddresses[index];
     }

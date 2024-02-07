@@ -318,7 +318,7 @@ In order to deploy the smart contract to testnet, you have to follow these steps
 1. Make sure the project root folder contains an `.env` file with the following entries:
 
    |        **Key**         |     **Required for**     | 
-               | :--------------------: | :----------------------: |
+                  | :--------------------: | :----------------------: |
    |  TESTNET_PRIVATE_KEY   |  Deployment to testnet   |
    |     INFURA_API_KEY     |  Deployment to testnet   |
    |   ETHERSCAN_API_KEY    |   Verifying on testnet   |

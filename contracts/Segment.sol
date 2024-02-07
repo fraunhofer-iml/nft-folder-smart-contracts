@@ -9,8 +9,8 @@
 
 pragma solidity ^0.8.18;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {Token} from "./Token.sol";
+import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
+import {Token} from './Token.sol';
 
 contract Segment is Ownable {
     struct TokenInformation {
@@ -26,12 +26,12 @@ contract Segment is Ownable {
     event TokenRemoved(address indexed from, address indexed tokenAddress, uint256 tokenId);
 
     modifier onlyContainer(address containerAddress) {
-        require(msg.sender == containerAddress, "Segment: can only be created from a container");
+        require(msg.sender == containerAddress, 'Segment: can only be created from a container');
         _;
     }
 
     constructor(address owner, string memory name, address containerAddress) onlyContainer(containerAddress) {
-        require(bytes(name).length > 0, "Segment: name is empty");
+        require(bytes(name).length > 0, 'Segment: name is empty');
 
         _transferOwnership(owner);
         _name = name;
@@ -39,8 +39,8 @@ contract Segment is Ownable {
     }
 
     function addToken(address tokenAddress, uint256 tokenId) external onlyOwner {
-        require(tokenAddress != address(0), "Segment: token is zero address");
-        require(!isTokenInSegment(tokenAddress, tokenId), "Segment: token and tokenId already exist in segment");
+        require(tokenAddress != address(0), 'Segment: token is zero address');
+        require(!isTokenInSegment(tokenAddress, tokenId), 'Segment: token and tokenId already exist in segment');
 
         _tokenInformation.push(TokenInformation(tokenAddress, tokenId));
 
@@ -51,8 +51,8 @@ contract Segment is Ownable {
     }
 
     function removeToken(address tokenAddress, uint256 tokenId) external onlyOwner {
-        require(tokenAddress != address(0), "Segment: token is zero address");
-        require(isTokenInSegment(tokenAddress, tokenId), "Segment: token and tokenId do not exist in segment");
+        require(tokenAddress != address(0), 'Segment: token is zero address');
+        require(isTokenInSegment(tokenAddress, tokenId), 'Segment: token and tokenId do not exist in segment');
 
         for (uint256 i = 0; i < _tokenInformation.length; i++) {
             if (_tokenInformation[i].tokenAddress == tokenAddress && _tokenInformation[i].tokenId == tokenId) {
@@ -82,7 +82,7 @@ contract Segment is Ownable {
     }
 
     function getTokenInformation(uint256 index) external view returns (TokenInformation memory) {
-        require(index < _tokenInformation.length, "Segment: index is too large");
+        require(index < _tokenInformation.length, 'Segment: index is too large');
         return _tokenInformation[index];
     }
 

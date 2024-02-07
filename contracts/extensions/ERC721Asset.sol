@@ -9,7 +9,7 @@
 
 pragma solidity ^0.8.18;
 
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 
 abstract contract ERC721Asset is ERC721 {
     struct AssetInformation {
@@ -18,7 +18,7 @@ abstract contract ERC721Asset is ERC721 {
     }
 
     mapping(uint256 => AssetInformation) private _tokenIdWithAssetInformation;
-    string private constant ERROR_MESSAGE = "ERC721Asset: token does not exist";
+    string private constant ERROR_MESSAGE = 'ERC721Asset: token does not exist';
 
     event AssetUriSet(
         string oldAssetUri,

@@ -9,11 +9,11 @@
 
 pragma solidity ^0.8.18;
 
-import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
 
 abstract contract ERC721Metadata is ERC721URIStorage {
     mapping(uint256 => string) private _tokenIdWithMetadataHash;
-    string private constant ERROR_MESSAGE = "ERC721Metadata: token does not exist";
+    string private constant ERROR_MESSAGE = 'ERC721Metadata: token does not exist';
 
     event MetadataUriSet(
         string oldMetadataUri,

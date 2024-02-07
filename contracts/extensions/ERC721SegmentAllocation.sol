@@ -9,25 +9,25 @@
 
 pragma solidity ^0.8.18;
 
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {Segment} from "../Segment.sol";
+import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
+import {Segment} from '../Segment.sol';
 
 abstract contract ERC721SegmentAllocation is ERC721, Ownable {
     mapping(uint256 => address[]) private _tokenIdWithSegmentAddresses;
-    string private constant ERROR_MESSAGE = "ERC721SegmentAllocation: token does not exist";
+    string private constant ERROR_MESSAGE = 'ERC721SegmentAllocation: token does not exist';
 
     event SegmentAddedToToken(uint256 tokenId, address indexed segment);
     event SegmentRemovedFromToken(uint256 tokenId, address indexed segment);
 
     modifier onlySegment(address segmentAddress) {
-        require(msg.sender == segmentAddress, "ERC721SegmentAllocation: can only be set from segment");
+        require(msg.sender == segmentAddress, 'ERC721SegmentAllocation: can only be set from segment');
         _;
     }
 
     function addTokenToSegment(uint256 tokenId, address segmentAddress) external onlySegment(segmentAddress) {
         require(_exists(tokenId), ERROR_MESSAGE);
-        require(!isTokenInSegment(tokenId, segmentAddress), "ERC721SegmentAllocation: token is already in segment");
+        require(!isTokenInSegment(tokenId, segmentAddress), 'ERC721SegmentAllocation: token is already in segment');
 
         _tokenIdWithSegmentAddresses[tokenId].push(segmentAddress);
 
@@ -36,7 +36,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
 
     function removeTokenFromSegment(uint256 tokenId, address segmentAddress) external onlySegment(segmentAddress) {
         require(_exists(tokenId), ERROR_MESSAGE);
-        require(isTokenInSegment(tokenId, segmentAddress), "ERC721SegmentAllocation: token is not in segment");
+        require(isTokenInSegment(tokenId, segmentAddress), 'ERC721SegmentAllocation: token is not in segment');
 
         for (uint256 i = 0; i < _tokenIdWithSegmentAddresses[tokenId].length; i++) {
             if (_tokenIdWithSegmentAddresses[tokenId][i] == segmentAddress) {
@@ -57,7 +57,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable {
     function getSegment(uint256 tokenId, uint256 segmentAddressIndex) external view returns (address) {
         require(
             segmentAddressIndex < _tokenIdWithSegmentAddresses[tokenId].length,
-            "ERC721SegmentAllocation: no segment at specified index"
+            'ERC721SegmentAllocation: no segment at specified index'
         );
         return _tokenIdWithSegmentAddresses[tokenId][segmentAddressIndex];
     }

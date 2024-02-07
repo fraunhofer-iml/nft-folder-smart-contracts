@@ -9,16 +9,16 @@
 
 pragma solidity ^0.8.18;
 
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {ERC721AdditionalInformation} from "./extensions/ERC721AdditionalInformation.sol";
-import {ERC721Asset} from "./extensions/ERC721Asset.sol";
-import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import {ERC721Metadata} from "./extensions/ERC721Metadata.sol";
-import {ERC721SegmentAllocation} from "./extensions/ERC721SegmentAllocation.sol";
-import {ERC721RemoteId} from "./extensions/ERC721RemoteId.sol";
-import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
+import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
+import {ERC721AdditionalInformation} from './extensions/ERC721AdditionalInformation.sol';
+import {ERC721Asset} from './extensions/ERC721Asset.sol';
+import {ERC721Burnable} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol';
+import {ERC721Metadata} from './extensions/ERC721Metadata.sol';
+import {ERC721SegmentAllocation} from './extensions/ERC721SegmentAllocation.sol';
+import {ERC721RemoteId} from './extensions/ERC721RemoteId.sol';
+import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
+import {Counters} from '@openzeppelin/contracts/utils/Counters.sol';
 
 contract Token is
     ERC721,
