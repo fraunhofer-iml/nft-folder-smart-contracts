@@ -85,6 +85,28 @@ contract Token is
         }
     }
 
+    function getToken(
+        uint256 tokenId
+    )
+        public
+        view
+        returns (
+            string memory assetUri,
+            string memory assetHash,
+            string memory metadataUri,
+            string memory metadataHash,
+            string memory additionalInformation
+        )
+    {
+        return (
+            getAssetUri(tokenId),
+            getAssetHash(tokenId),
+            getMetadataUri(tokenId),
+            getMetadataHash(tokenId),
+            getAdditionalInformation(tokenId)
+        );
+    }
+
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }

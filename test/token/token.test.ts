@@ -78,6 +78,35 @@ describe('Token', async () => {
     });
   });
 
+  describe('getToken', function () {
+    beforeEach(async () => {
+      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+    });
+
+    it('should get token', async () => {
+      await tokenInstance.safeMint(
+        alice,
+        TOKEN.asset1.uri,
+        TOKEN.asset1.hash,
+        TOKEN.metadata1.uri,
+        TOKEN.metadata1.hash,
+        TOKEN.remoteId1,
+        TOKEN.additionalInformation1.initial,
+      );
+
+      const token = await tokenInstance.getToken(0);
+      expect(token.assetUri).to.be.equal(TOKEN.asset1.uri);
+      expect(token.assetHash).to.be.equal(TOKEN.asset1.hash);
+      expect(token.metadataUri).to.be.equal(TOKEN.metadata1.uri);
+      expect(token.metadataHash).to.be.equal(TOKEN.metadata1.hash);
+      expect(token.additionalInformation).to.be.equal(TOKEN.additionalInformation1.initial);
+    });
+
+    it('should not get token, because tokenId does not exist', async () => {
+      await expect(tokenInstance.getToken(0)).to.be.revertedWith('ERC721Asset: token does not exist');
+    });
+  });
+
   describe('updateToken', function () {
     beforeEach(async () => {
       tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
