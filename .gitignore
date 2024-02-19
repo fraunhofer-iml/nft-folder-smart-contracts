@@ -2,6 +2,7 @@
 .idea/
 artifacts/
 cache/
+ignition/deployments/chain-1337/
 ignition/deployments/chain-31337/
 typechain-types/
 

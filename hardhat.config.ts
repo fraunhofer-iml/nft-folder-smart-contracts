@@ -8,8 +8,7 @@
 import { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
 import '@nomicfoundation/hardhat-ignition-ethers';
-
-import('dotenv').then((dotenv) => dotenv.config());
+import 'dotenv/config';
 
 const DEV_NODE_URL = process.env.DEV_NODE_URL || '';
 const DEV_MNEMONIC = process.env.DEV_MNEMONIC || '';
