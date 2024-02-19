@@ -209,10 +209,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should not get assetHash', async () => {
-      await expect(tokenInstance.getAssetHash(0)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenIdDoesNotExist',
-      );
+      await expect(tokenInstance.getAssetHash(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
     });
   });
 
@@ -315,10 +312,7 @@ describe('Token - Extension ERC721Asset', async () => {
 
       // asset uri and hash for token with id 0 should be deleted
       await expect(tokenInstance.getAssetUri(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
-      await expect(tokenInstance.getAssetHash(0)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenIdDoesNotExist',
-      );
+      await expect(tokenInstance.getAssetHash(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
     });
   });
 });

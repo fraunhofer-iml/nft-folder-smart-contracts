@@ -180,7 +180,10 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should not get metadataHash', async () => {
-      await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
+      await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenIdDoesNotExist',
+      );
     });
   });
 
@@ -280,7 +283,10 @@ describe('Token - Extension ERC721Metadata', async () => {
       // uri and hash for token with id 0 should be deleted
       await expect(tokenInstance.tokenURI(0)).to.be.revertedWith('ERC721: invalid token ID');
 
-      await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
+      await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenIdDoesNotExist',
+      );
     });
   });
 });

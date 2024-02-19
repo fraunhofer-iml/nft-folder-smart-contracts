@@ -531,7 +531,7 @@
 "natural-compare@1.4.0","MIT","https://github.com/litejs/natural-compare-lite"
 "ndjson@2.0.0","BSD-3-Clause","https://github.com/ndjson/ndjson.js"
 "neo-async@2.6.2","MIT","https://github.com/suguru03/neo-async"
-"nft-folder-smart-contracts@1.0.0","UNLICENSED","git+https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder/smart-contracts"
+"nft-folder-smart-contracts@1.0.0","OLFL-1.3","git+https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder/smart-contracts"
 "node-addon-api@2.0.2","MIT","https://github.com/nodejs/node-addon-api"
 "node-emoji@1.11.0","MIT","https://github.com/omnidan/node-emoji"
 "node-gyp-build@4.8.0","MIT","https://github.com/prebuild/node-gyp-build"

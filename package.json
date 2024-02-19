@@ -7,7 +7,7 @@
     "url": "https://www.iml.fraunhofer.de/en.html",
     "email": "maximilian.austerjost@iml.fraunhofer.de"
   },
-  "license": "Open Logistics License 1.3",
+  "license": "OLFL-1.3",
   "homepage": "https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder/smart-contracts/-/blob/main/README.md",
   "bugs": {
     "url": "https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder/smart-contracts/-/issues"
@@ -20,7 +20,6 @@
   "directories": {
     "test": "test"
   },
-  "private": true,
   "scripts": {
     "prepare": "husky",
     "blockchain:start": "npx hardhat node > /dev/null 2>&1 &",
@@ -30,7 +29,7 @@
     "compile": "npx hardhat compile",
     "clean-compile": "npm run clean-install && npm run compile",
     "test": "npx hardhat test",
-    "coverage": "npx hardhat coverage",
+    "test:cov": "npx hardhat coverage",
     "local:deploy-token": "npx hardhat ignition deploy ignition/modules/Token.ts --network hardhat",
     "local:deploy-container": "npx hardhat ignition deploy ignition/modules/Container.ts --network hardhat",
     "local:console": "npx hardhat console --network hardhat",
@@ -55,8 +54,7 @@
     ]
   },
   "dependencies": {
-    "@openzeppelin/contracts": "4.8.1",
-    "dotenv": "16.4.1"
+    "@openzeppelin/contracts": "4.8.1"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition-ethers": "0.13.2",
@@ -66,6 +64,7 @@
     "@types/lodash.isequal": "^4.5.8",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "chai": "4.4.1",
+    "dotenv": "16.4.1",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-license-header": "0.6.0",

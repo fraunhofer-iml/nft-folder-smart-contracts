@@ -1,14 +1,15 @@
 stages:
   - build
-  - analyze
   - test
+  - analyze
   - license
 
 variables:
+  GITLAB_TAG: 'be'
   GIT_DEPTH: 0
   HUSKY: 0
   NPM_CI: npm ci --include dev --cache .npm --prefer-offline
-  SLITHER_ANALYZER_PACKAGE: slither-analyzer==0.9.3
+  SLITHER_ANALYZER_PACKAGE: slither-analyzer==0.10.0
 
 default:
   cache:
@@ -17,13 +18,8 @@ default:
         - package-lock.json
     paths:
       - .npm
-    policy: pull
   image: node:20-alpine3.19
   timeout: 20 minutes
-
-.pull-push-cache:
-  cache:
-    policy: pull-push
 
 #############
 ### build ###
@@ -31,7 +27,6 @@ default:
 
 install-dependencies:
   stage: build
-  extends: .pull-push-cache
   script:
     - $NPM_CI
   rules:
@@ -50,7 +45,26 @@ compile-contracts:
     expose_as: 'Compiled Smart Contracts'
     expire_in: 20 minutes
     paths:
-      - build
+      - artifacts
+      - cache
+      - typechain-types
+  rules:
+    - when: on_success
+
+############
+### test ###
+############
+
+run-unit-tests:
+  stage: test
+  before_script:
+    - $NPM_CI
+  script:
+    - npm run test:cov
+  artifacts:
+    paths:
+      - coverage/
+    expire_in: 1 hour
   rules:
     - when: on_success
 
@@ -86,7 +100,7 @@ run-slither:
     - pip install --upgrade pip
     - pip install wheel ${SLITHER_ANALYZER_PACKAGE}
   script:
-    - slither . --truffle-ignore-compile --exclude-dependencies --filter-paths openzeppelin
+    - slither . --exclude-dependencies --filter-paths openzeppelin
   rules:
     - when: on_success
 
@@ -99,37 +113,16 @@ run-solhint:
   rules:
     - when: on_success
 
-# TODO-MP: https://github.com/sc-forks/solidity-coverage removed all truffle related code, but a new project will be created soon
-.run-solidity-coverage:
+# SonarQube currently doesn't support Solidity files
+run-sonar-scanner:
   stage: analyze
-  script:
-    - npm run solidity-coverage
-  rules:
-    - when: on_success
-
-# TODO-MP: reactivate with SE-11105
-.run-sonar-scanner:
-  stage: analyze
-  image: red6/docker-sonar-scanner:latest
+  image: sonarsource/sonar-scanner-cli
   script:
     - >
       sonar-scanner
       -Dproject.settings=sonar.properties
       -Dsonar.host.url="${SONAR_HOST_URL}"
       -Dsonar.login="${SONAR_TOKEN}"
-  rules:
-    - when: on_success
-
-############
-### test ###
-############
-
-run-unit-tests:
-  stage: test
-  before_script:
-    - $NPM_CI
-  script:
-    - npm run test
   rules:
     - when: on_success
 
@@ -152,10 +145,8 @@ create-npm-licenses-list:
   script:
     - >
       npx license-checker
-      --production
       --unknown
       --csv
-      --excludePrivatePackages
       --excludePackages "${EXCLUDED_PACKAGES}"
       --onlyAllow "${NPM_LICENSE_CHECKER_WHITELIST}"
       --out "${LICENSES_LIST}"
@@ -172,27 +163,4 @@ create-npm-licenses-list:
       - $LICENSES_LIST
   rules:
     - if: $CI_MERGE_REQUEST_IID
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-publish-all-licenses-list:
-  stage: license
-  needs:
-    - 'create-npm-licenses-list'
-  before_script:
-    - mkdir -p public
-  script:
-    - >
-      for file in *licenses-list.csv; do
-        mv "$file" public/
-        echo -e "\n\nGenerated on branch ${CI_COMMIT_BRANCH} for commit ${CI_COMMIT_SHA} @ ${CI_COMMIT_TIMESTAMP}" >> public/"$file"
-      done
-    - echo "Publishing the lists of dependencies and their licenses on GitLab Pages ..."
-  artifacts:
-    name: 'all-licenses-list'
-    expose_as: 'All Licenses List'
-    paths:
-      - public
-  rules:
-    - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

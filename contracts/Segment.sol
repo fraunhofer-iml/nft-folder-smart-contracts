@@ -61,7 +61,9 @@ contract Segment is Ownable {
         if (tokenAddress == address(0)) revert TokenIsZeroAddress();
         if (!isTokenInSegment(tokenAddress, tokenId)) revert TokenDoesNotExist();
 
-        for (uint256 i = 0; i < _tokenInformation.length; i++) {
+        uint256 tokenInformationLength = _tokenInformation.length;
+
+        for (uint256 i = 0; i < tokenInformationLength; i++) {
             if (_tokenInformation[i].tokenAddress == tokenAddress && _tokenInformation[i].tokenId == tokenId) {
                 // Override to be removed token with last element
                 _tokenInformation[i] = _tokenInformation[_tokenInformation.length - 1];
@@ -98,7 +100,9 @@ contract Segment is Ownable {
     }
 
     function isTokenInSegment(address tokenAddress, uint256 tokenId) public view returns (bool) {
-        for (uint256 i = 0; i < _tokenInformation.length; i++) {
+        uint256 tokenInformationLength = _tokenInformation.length;
+
+        for (uint256 i = 0; i < tokenInformationLength; i++) {
             if (_tokenInformation[i].tokenAddress == tokenAddress && _tokenInformation[i].tokenId == tokenId) {
                 return true;
             }

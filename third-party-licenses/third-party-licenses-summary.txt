@@ -14,7 +14,7 @@
 ├─ (MIT OR GPL-3.0-or-later): 1
 ├─ WTFPL: 1
 ├─ PSF: 1
-├─ UNLICENSED: 1
+├─ OLFL-1.3: 1
 ├─ (BSD-2-Clause OR MIT OR Apache-2.0): 1
 ├─ (MIT OR Apache-2.0): 1
 ├─ (MIT AND BSD-3-Clause): 1

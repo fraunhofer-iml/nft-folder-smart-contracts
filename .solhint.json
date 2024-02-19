@@ -5,6 +5,7 @@
     "compiler-version": ["error", "^0.8.16"],
     "func-param-name-mixedcase": "error",
     "func-visibility": ["error", { "ignoreConstructors": true }],
+    "immutable-vars-naming": ["off"],
     "modifier-name-mixedcase": "error",
     "ordering": "error",
     "prettier/prettier": "error",
