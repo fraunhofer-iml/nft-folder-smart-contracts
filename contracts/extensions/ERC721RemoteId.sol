@@ -10,8 +10,9 @@
 pragma solidity ^0.8.18;
 
 import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import {ErrorDefinitions} from './ErrorDefinitions.sol';
 
-abstract contract ERC721RemoteId is ERC721 {
+abstract contract ERC721RemoteId is ERC721, ErrorDefinitions {
     struct RemoteIdData {
         uint256 tokenId;
         bool exists;
@@ -19,21 +20,23 @@ abstract contract ERC721RemoteId is ERC721 {
 
     mapping(uint256 => string) private _tokenIdWithRemoteId;
     mapping(string => RemoteIdData) private _remoteIdWithData;
-    string private constant ERROR_MESSAGE = 'ERC721RemoteId: token does not exist';
+
+    error RemoteIdDoesNotExist();
+    error RemoteIdAlreadyExist();
 
     function getRemoteId(uint256 tokenId) public view returns (string memory) {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
         return _tokenIdWithRemoteId[tokenId];
     }
 
     function getTokenId(string memory remoteId) public view returns (uint256) {
-        require(_remoteIdWithData[remoteId].exists, 'ERC721RemoteId: remoteId does not exist');
+        if (!_remoteIdWithData[remoteId].exists) revert RemoteIdDoesNotExist();
         return _remoteIdWithData[remoteId].tokenId;
     }
 
     function _setRemoteId(uint256 tokenId, string memory remoteId) internal {
-        require(_exists(tokenId), ERROR_MESSAGE);
-        require(!_remoteIdWithData[remoteId].exists, 'ERC721RemoteId: remoteId already exists');
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        if (_remoteIdWithData[remoteId].exists) revert RemoteIdAlreadyExist();
 
         _tokenIdWithRemoteId[tokenId] = remoteId;
         _remoteIdWithData[remoteId] = RemoteIdData(tokenId, true);

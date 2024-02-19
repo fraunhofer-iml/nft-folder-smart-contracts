@@ -25,13 +25,20 @@ contract Segment is Ownable {
     event TokenAdded(address indexed from, address indexed tokenAddress, uint256 tokenId);
     event TokenRemoved(address indexed from, address indexed tokenAddress, uint256 tokenId);
 
+    error SenderIsNotAContainer();
+    error SegmentNameIsEmpty();
+    error TokenIsZeroAddress();
+    error TokenAlreadyExists();
+    error TokenDoesNotExist();
+    error IndexTooLarge();
+
     modifier onlyContainer(address containerAddress) {
-        require(msg.sender == containerAddress, 'Segment: can only be created from a container');
+        if (msg.sender != containerAddress) revert SenderIsNotAContainer();
         _;
     }
 
     constructor(address owner, string memory name, address containerAddress) onlyContainer(containerAddress) {
-        require(bytes(name).length > 0, 'Segment: name is empty');
+        if (bytes(name).length <= 0) revert SegmentNameIsEmpty();
 
         _transferOwnership(owner);
         _name = name;
@@ -39,8 +46,8 @@ contract Segment is Ownable {
     }
 
     function addToken(address tokenAddress, uint256 tokenId) external onlyOwner {
-        require(tokenAddress != address(0), 'Segment: token is zero address');
-        require(!isTokenInSegment(tokenAddress, tokenId), 'Segment: token and tokenId already exist in segment');
+        if (tokenAddress == address(0)) revert TokenIsZeroAddress();
+        if (isTokenInSegment(tokenAddress, tokenId)) revert TokenAlreadyExists();
 
         _tokenInformation.push(TokenInformation(tokenAddress, tokenId));
 
@@ -51,8 +58,8 @@ contract Segment is Ownable {
     }
 
     function removeToken(address tokenAddress, uint256 tokenId) external onlyOwner {
-        require(tokenAddress != address(0), 'Segment: token is zero address');
-        require(isTokenInSegment(tokenAddress, tokenId), 'Segment: token and tokenId do not exist in segment');
+        if (tokenAddress == address(0)) revert TokenIsZeroAddress();
+        if (!isTokenInSegment(tokenAddress, tokenId)) revert TokenDoesNotExist();
 
         for (uint256 i = 0; i < _tokenInformation.length; i++) {
             if (_tokenInformation[i].tokenAddress == tokenAddress && _tokenInformation[i].tokenId == tokenId) {
@@ -82,7 +89,7 @@ contract Segment is Ownable {
     }
 
     function getTokenInformation(uint256 index) external view returns (TokenInformation memory) {
-        require(index < _tokenInformation.length, 'Segment: index is too large');
+        if (index >= _tokenInformation.length) revert IndexTooLarge();
         return _tokenInformation[index];
     }
 

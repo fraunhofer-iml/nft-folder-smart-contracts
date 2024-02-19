@@ -103,7 +103,7 @@ describe('Token', async () => {
     });
 
     it('should not get token, because tokenId does not exist', async () => {
-      await expect(tokenInstance.getToken(0)).to.be.revertedWith('ERC721Asset: token does not exist');
+      await expect(tokenInstance.getToken(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
     });
   });
 

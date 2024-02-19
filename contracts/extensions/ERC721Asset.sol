@@ -10,16 +10,15 @@
 pragma solidity ^0.8.18;
 
 import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import {ErrorDefinitions} from './ErrorDefinitions.sol';
 
-abstract contract ERC721Asset is ERC721 {
+abstract contract ERC721Asset is ERC721, ErrorDefinitions {
     struct AssetInformation {
         string assetUri;
         string assetHash;
     }
 
     mapping(uint256 => AssetInformation) private _tokenIdWithAssetInformation;
-    string private constant ERROR_MESSAGE = 'ERC721Asset: token does not exist';
-
     event AssetUriSet(
         string oldAssetUri,
         string newAssetUri,
@@ -36,7 +35,7 @@ abstract contract ERC721Asset is ERC721 {
     );
 
     function setAssetUri(uint256 tokenId, string memory assetUri) public {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
 
         string memory oldAssetUri = _tokenIdWithAssetInformation[tokenId].assetUri;
         _tokenIdWithAssetInformation[tokenId].assetUri = assetUri;
@@ -45,7 +44,7 @@ abstract contract ERC721Asset is ERC721 {
     }
 
     function setAssetHash(uint256 tokenId, string memory assetHash) public {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
 
         string memory oldAssetHash = _tokenIdWithAssetInformation[tokenId].assetHash;
         _tokenIdWithAssetInformation[tokenId].assetHash = assetHash;
@@ -54,17 +53,17 @@ abstract contract ERC721Asset is ERC721 {
     }
 
     function getAssetInformation(uint256 tokenId) public view returns (AssetInformation memory) {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
         return _tokenIdWithAssetInformation[tokenId];
     }
 
     function getAssetUri(uint256 tokenId) public view returns (string memory) {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
         return _tokenIdWithAssetInformation[tokenId].assetUri;
     }
 
     function getAssetHash(uint256 tokenId) public view returns (string memory) {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
         return _tokenIdWithAssetInformation[tokenId].assetHash;
     }
 

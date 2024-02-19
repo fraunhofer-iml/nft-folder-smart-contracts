@@ -10,10 +10,10 @@
 pragma solidity ^0.8.18;
 
 import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
+import {ErrorDefinitions} from './ErrorDefinitions.sol';
 
-abstract contract ERC721Metadata is ERC721URIStorage {
+abstract contract ERC721Metadata is ERC721URIStorage, ErrorDefinitions {
     mapping(uint256 => string) private _tokenIdWithMetadataHash;
-    string private constant ERROR_MESSAGE = 'ERC721Metadata: token does not exist';
 
     event MetadataUriSet(
         string oldMetadataUri,
@@ -31,7 +31,7 @@ abstract contract ERC721Metadata is ERC721URIStorage {
     );
 
     function setMetadataUri(uint256 tokenId, string memory metadataUri) public {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
 
         string memory oldMetadataUri = super.tokenURI(tokenId);
         super._setTokenURI(tokenId, metadataUri);
@@ -40,7 +40,7 @@ abstract contract ERC721Metadata is ERC721URIStorage {
     }
 
     function setMetadataHash(uint256 tokenId, string memory metadataHash) public {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
 
         string memory oldMetadataHash = _tokenIdWithMetadataHash[tokenId];
         _tokenIdWithMetadataHash[tokenId] = metadataHash;
@@ -49,12 +49,12 @@ abstract contract ERC721Metadata is ERC721URIStorage {
     }
 
     function getMetadataUri(uint256 tokenId) public view returns (string memory) {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
         return super.tokenURI(tokenId);
     }
 
     function getMetadataHash(uint256 tokenId) public view returns (string memory) {
-        require(_exists(tokenId), ERROR_MESSAGE);
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
         return _tokenIdWithMetadataHash[tokenId];
     }
 

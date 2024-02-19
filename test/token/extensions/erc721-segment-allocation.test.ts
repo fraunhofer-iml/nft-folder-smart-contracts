@@ -36,8 +36,9 @@ describe('Token - Extension ERC721SegmentAllocation', async () => {
     });
 
     it('should not add Segment to Token from Token Contract', async () => {
-      await expect(tokenInstance.addTokenToSegment(0, SEGMENT.address)).to.be.revertedWith(
-        'ERC721SegmentAllocation: can only be set from segment',
+      await expect(tokenInstance.addTokenToSegment(0, SEGMENT.address)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'NotASegment',
       );
     });
   });
@@ -57,8 +58,9 @@ describe('Token - Extension ERC721SegmentAllocation', async () => {
     });
 
     it('should not remove Segment to Token from Token Contract', async () => {
-      await expect(tokenInstance.removeTokenFromSegment(0, SEGMENT.address)).to.be.revertedWith(
-        'ERC721SegmentAllocation: can only be set from segment',
+      await expect(tokenInstance.removeTokenFromSegment(0, SEGMENT.address)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'NotASegment',
       );
     });
   });

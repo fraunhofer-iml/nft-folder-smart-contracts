@@ -10,9 +10,10 @@
 pragma solidity ^0.8.18;
 
 import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import {ErrorDefinitions} from './ErrorDefinitions.sol';
 
 // TODO-MP: maybe we should have a maximum number of characters
-abstract contract ERC721AdditionalInformation is ERC721 {
+abstract contract ERC721AdditionalInformation is ERC721, ErrorDefinitions {
     mapping(uint256 => string) private _tokenIdWithAdditionalInformation;
 
     event AdditionalInformationSet(
@@ -24,7 +25,7 @@ abstract contract ERC721AdditionalInformation is ERC721 {
     );
 
     function setAdditionalInformation(uint256 tokenId, string memory additionalInformation) public {
-        require(_exists(tokenId), 'ERC721AdditionalInformation: token does not exist');
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
 
         string memory oldAdditionalInformation = _tokenIdWithAdditionalInformation[tokenId];
         _tokenIdWithAdditionalInformation[tokenId] = additionalInformation;
@@ -39,7 +40,7 @@ abstract contract ERC721AdditionalInformation is ERC721 {
     }
 
     function getAdditionalInformation(uint256 tokenId) public view returns (string memory) {
-        require(_exists(tokenId), 'ERC721AdditionalInformation: token does not exist');
+        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
         return _tokenIdWithAdditionalInformation[tokenId];
     }
 

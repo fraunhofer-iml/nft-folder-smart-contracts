@@ -69,7 +69,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should not get assetUri', async () => {
-      await expect(tokenInstance.getAssetUri(0)).to.be.revertedWith('ERC721Asset: token does not exist');
+      await expect(tokenInstance.getAssetUri(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
     });
   });
 
@@ -125,8 +125,9 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should not set assetUri', async () => {
-      await expect(tokenInstance.setAssetUri(0, TOKEN.asset1.uri)).to.be.revertedWith(
-        'ERC721Asset: token does not exist',
+      await expect(tokenInstance.setAssetUri(0, TOKEN.asset1.uri)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenIdDoesNotExist',
       );
     });
   });
@@ -208,7 +209,10 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should not get assetHash', async () => {
-      await expect(tokenInstance.getAssetHash(0)).to.be.revertedWith('ERC721Asset: token does not exist');
+      await expect(tokenInstance.getAssetHash(0)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenIdDoesNotExist',
+      );
     });
   });
 
@@ -264,8 +268,9 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should not set assetHash', async () => {
-      await expect(tokenInstance.setAssetHash(0, TOKEN.asset1.hash)).to.be.revertedWith(
-        'ERC721Asset: token does not exist',
+      await expect(tokenInstance.setAssetHash(0, TOKEN.asset1.hash)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenIdDoesNotExist',
       );
     });
   });
@@ -309,8 +314,11 @@ describe('Token - Extension ERC721Asset', async () => {
       expect(assetHash2).to.be.equal(TOKEN.asset2.hash);
 
       // asset uri and hash for token with id 0 should be deleted
-      await expect(tokenInstance.getAssetUri(0)).to.be.revertedWith('ERC721Asset: token does not exist');
-      await expect(tokenInstance.getAssetHash(0)).to.be.revertedWith('ERC721Asset: token does not exist');
+      await expect(tokenInstance.getAssetUri(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
+      await expect(tokenInstance.getAssetHash(0)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenIdDoesNotExist',
+      );
     });
   });
 });

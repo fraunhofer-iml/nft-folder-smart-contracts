@@ -19,17 +19,21 @@ contract Container is Ownable {
 
     event SegmentAdded(address indexed from, address indexed segmentAddress);
 
-    constructor(address owner, string memory name) {
-        require(owner != address(0), 'Container: owner is zero address');
-        require(bytes(name).length > 0, 'Container: name must contain characters');
+    error ContainerOwnerIsZeroAddress();
+    error ContainerNameIsEmpty();
+    error NoSegmentsStored();
+    error IndexTooLarge();
 
+    constructor(address owner, string memory name) {
+        if (owner == address(0)) revert ContainerOwnerIsZeroAddress();
+        if (bytes(name).length <= 0) revert ContainerNameIsEmpty();
         _transferOwnership(owner);
         _name = name;
     }
 
     // TODO-MP: maybe a factory contract would be better
     function createSegment(string memory name) external onlyOwner {
-        require(bytes(name).length > 0, 'Container: name is empty');
+        if (bytes(name).length <= 0) revert ContainerNameIsEmpty();
         // TODO-MP: add precondition -> name should not exist
 
         Segment segmentContract = new Segment(owner(), name, address(this));
@@ -50,8 +54,8 @@ contract Container is Ownable {
     }
 
     function getSegment(uint256 index) external view returns (address) {
-        require(_segmentAddresses.length > 0, 'Container: no segments stored in container');
-        require(index < _segmentAddresses.length, 'Container: index is too large');
+        if (_segmentAddresses.length <= 0) revert NoSegmentsStored();
+        if (index >= _segmentAddresses.length) revert IndexTooLarge();
 
         return _segmentAddresses[index];
     }

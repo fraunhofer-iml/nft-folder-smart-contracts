@@ -53,7 +53,10 @@ describe('Segment', async () => {
     });
 
     it('should revert tokenInformation', async () => {
-      await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWith('Segment: index is too large');
+      await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWithCustomError(
+        segmentInstance,
+        'IndexTooLarge',
+      );
     });
 
     it('should get number of tokenInformation', async () => {
@@ -77,7 +80,10 @@ describe('Segment', async () => {
     });
 
     it('should require a valid name string', async () => {
-      await expect(containerInstance.createSegment('')).to.be.revertedWith('Container: name is empty');
+      await expect(containerInstance.createSegment('')).to.be.revertedWithCustomError(
+        containerInstance,
+        'ContainerNameIsEmpty',
+      );
     });
   });
 });

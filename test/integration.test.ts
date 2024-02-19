@@ -76,8 +76,9 @@ describe('Container', async () => {
       const segments = await tokenInstance.getAllSegments('0');
       expect(segments).to.be.empty;
 
-      await expect(tokenInstance.getSegment('0', '0')).to.be.revertedWith(
-        'ERC721SegmentAllocation: no segment at specified index',
+      await expect(tokenInstance.getSegment('0', '0')).to.be.revertedWithCustomError(
+        tokenInstance,
+        'WrongSegmentIndex',
       );
 
       const numberOfSegments = await tokenInstance.getNumberOfSegments('0');

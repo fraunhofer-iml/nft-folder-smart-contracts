@@ -97,7 +97,10 @@ describe('Segment', async () => {
       const actualTokenInformationArray = await segmentInstance.getAllTokenInformation();
       expect(actualTokenInformationArray.length).equal(Number('0'));
 
-      await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWith('Segment: index is too large');
+      await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWithCustomError(
+        segmentInstance,
+        'IndexTooLarge',
+      );
 
       const actualNumberOfTokenInformation = await segmentInstance.getNumberOfTokenInformation();
       expect(actualNumberOfTokenInformation).to.equal('0');
@@ -203,7 +206,10 @@ describe('Segment', async () => {
       expect(actualMovedTokenInSegment2).is.true;
 
       // One element remains in array left
-      await expect(segmentInstance.getTokenInformation('1')).to.be.revertedWith('Segment: index is too large');
+      await expect(segmentInstance.getTokenInformation('1')).to.be.revertedWithCustomError(
+        segmentInstance,
+        'IndexTooLarge',
+      );
 
       // Remove former third token
       await removeTokenAndAssertSegment(segmentInstance, {
@@ -217,7 +223,10 @@ describe('Segment', async () => {
       });
 
       // Array is empty
-      await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWith('Segment: index is too large');
+      await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWithCustomError(
+        segmentInstance,
+        'IndexTooLarge',
+      );
     });
   });
 
@@ -234,8 +243,9 @@ describe('Segment', async () => {
     it('should require a valid contract address', async () => {
       await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
 
-      await expect(segmentInstance.removeToken(ethers.ZeroAddress, '0')).to.be.revertedWith(
-        'Segment: token is zero address',
+      await expect(segmentInstance.removeToken(ethers.ZeroAddress, '0')).to.be.revertedWithCustomError(
+        segmentInstance,
+        'TokenIsZeroAddress',
       );
     });
 
@@ -243,8 +253,9 @@ describe('Segment', async () => {
       await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
       await segmentInstance.addToken(validTokenAddress1, '0');
 
-      await expect(segmentInstance.removeToken(validTokenAddress1, '1')).to.be.revertedWith(
-        'Segment: token and tokenId do not exist in segment',
+      await expect(segmentInstance.removeToken(validTokenAddress1, '1')).to.be.revertedWithCustomError(
+        segmentInstance,
+        'TokenDoesNotExist',
       );
     });
   });

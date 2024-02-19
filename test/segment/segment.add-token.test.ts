@@ -208,8 +208,9 @@ describe('Segment', async () => {
     it('should require a valid contract address', async () => {
       await tokenInstance.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
 
-      await expect(segmentInstance.addToken(ethers.ZeroAddress, '0')).to.be.revertedWith(
-        'Segment: token is zero address',
+      await expect(segmentInstance.addToken(ethers.ZeroAddress, '0')).to.be.revertedWithCustomError(
+        segmentInstance,
+        'TokenIsZeroAddress',
       );
     });
 
@@ -217,8 +218,9 @@ describe('Segment', async () => {
       await tokenInstance.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
       await segmentInstance.addToken(validTokenAddress, '0');
 
-      await expect(segmentInstance.addToken(validTokenAddress, '0')).to.be.revertedWith(
-        'Segment: token and tokenId already exist in segment',
+      await expect(segmentInstance.addToken(validTokenAddress, '0')).to.be.revertedWithCustomError(
+        segmentInstance,
+        'TokenAlreadyExists',
       );
     });
   });
