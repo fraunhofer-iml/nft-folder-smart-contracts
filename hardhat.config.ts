@@ -16,7 +16,7 @@ const DEV_INITIAL_ADDRESS_INDEX = parseInt(process.env.DEV_INITIAL_ADDRESS_INDEX
 
 const config: HardhatUserConfig = {
   networks: {
-    hardhat: {
+    localhost: {
       accounts: {
         mnemonic: 'test test test test test test test test test test test junk',
         path: "m/44'/60'/0'/0",
