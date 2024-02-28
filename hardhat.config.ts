@@ -26,6 +26,8 @@ const config: HardhatUserConfig = {
       },
     },
     dev: {
+      gas: 0x1ffffffffffffe,
+      gasPrice: 0,
       url: DEV_NODE_URL,
       accounts: {
         mnemonic: DEV_MNEMONIC,

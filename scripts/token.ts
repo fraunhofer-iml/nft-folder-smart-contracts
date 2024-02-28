@@ -5,9 +5,9 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-import { buildModule } from '@nomicfoundation/hardhat-ignition/modules';
+import { ethers } from 'hardhat';
 
-export default buildModule('Token', (builder) => {
+async function main() {
   const tokenName = process.env.TOKEN_NAME;
   const tokenSymbol = process.env.TOKEN_SYMBOL;
 
@@ -19,6 +19,13 @@ export default buildModule('Token', (builder) => {
   console.log(`TOKEN_NAME=${tokenName}`);
   console.log(`TOKEN_SYMBOL=${tokenSymbol}`);
 
-  const token = builder.contract('Token', [tokenName, tokenSymbol]);
-  return { token };
+  const token = await ethers.deployContract('Token', [tokenName, tokenSymbol]);
+  await token.waitForDeployment();
+
+  console.log(`Token contract deployed to ${token.target}`);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
 });
