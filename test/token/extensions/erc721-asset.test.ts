@@ -23,7 +23,11 @@ describe('Token - Extension ERC721Asset', async () => {
 
   describe('getAssetUri', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should get assetUri', async () => {
@@ -75,7 +79,11 @@ describe('Token - Extension ERC721Asset', async () => {
 
   describe('setAssetUri', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should set assetUri', async () => {
@@ -134,7 +142,11 @@ describe('Token - Extension ERC721Asset', async () => {
 
   describe('getAssetHash', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should get assetHash', async () => {
@@ -215,7 +227,11 @@ describe('Token - Extension ERC721Asset', async () => {
 
   describe('setAssetHash', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should set assetHash', async () => {
@@ -274,7 +290,11 @@ describe('Token - Extension ERC721Asset', async () => {
 
   describe('_burn', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should delete assetUri and hash on burning', async () => {

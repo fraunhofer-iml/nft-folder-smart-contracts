@@ -28,7 +28,11 @@ describe('Container', async () => {
       containerInstance = await ethers.deployContract('Container', [alice, CONTAINER.name]);
       await containerInstance.createSegment(SEGMENT.name);
       segmentInstance = await ethers.getContractAt('Segment', await containerInstance.getSegment(0));
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should mint, add to segment and burn a token', async () => {

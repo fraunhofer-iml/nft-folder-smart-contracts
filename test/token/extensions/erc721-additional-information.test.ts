@@ -23,7 +23,11 @@ describe('Token - Extension ERC721AdditionalInformation', async () => {
 
   describe('getAdditionalInformation', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should get additional info', async () => {
@@ -78,7 +82,11 @@ describe('Token - Extension ERC721AdditionalInformation', async () => {
 
   describe('setAdditionalInformation', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should set additional info', async () => {
@@ -135,7 +143,11 @@ describe('Token - Extension ERC721AdditionalInformation', async () => {
 
   describe('_burn', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should delete additionalInformation on burning', async () => {

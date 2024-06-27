@@ -8,6 +8,7 @@
 import { ethers } from 'hardhat';
 
 async function main() {
+  const [deployer] = await ethers.getSigners();
   const tokenName = process.env.TOKEN_NAME;
   const tokenSymbol = process.env.TOKEN_SYMBOL;
 
@@ -19,7 +20,7 @@ async function main() {
   console.log(`TOKEN_NAME=${tokenName}`);
   console.log(`TOKEN_SYMBOL=${tokenSymbol}`);
 
-  const token = await ethers.deployContract('Token', [tokenName, tokenSymbol]);
+  const token = await ethers.deployContract('Token', [deployer.address, tokenName, tokenSymbol]);
   await token.waitForDeployment();
 
   console.log(`Token contract deployed to ${token.target}`);

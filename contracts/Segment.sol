@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
 import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
 import {Token} from './Token.sol';
@@ -37,10 +37,13 @@ contract Segment is Ownable {
         _;
     }
 
-    constructor(address owner, string memory name, address containerAddress) onlyContainer(containerAddress) {
+    constructor(
+        address owner,
+        string memory name,
+        address containerAddress
+    ) onlyContainer(containerAddress) Ownable(owner) {
         if (bytes(name).length <= 0) revert SegmentNameIsEmpty();
 
-        _transferOwnership(owner);
         _name = name;
         _containerAddress = containerAddress;
     }

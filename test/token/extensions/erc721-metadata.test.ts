@@ -23,7 +23,11 @@ describe('Token - Extension ERC721Metadata', async () => {
 
   describe('getMetadataUri', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should get metadataUri', async () => {
@@ -75,7 +79,11 @@ describe('Token - Extension ERC721Metadata', async () => {
 
   describe('setMetadataUri', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should set metadataUri', async () => {
@@ -134,7 +142,11 @@ describe('Token - Extension ERC721Metadata', async () => {
 
   describe('getMetadataHash', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should get metadataHash', async () => {
@@ -189,7 +201,11 @@ describe('Token - Extension ERC721Metadata', async () => {
 
   describe('setMetadataHash', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should set metadataHash', async () => {
@@ -248,7 +264,11 @@ describe('Token - Extension ERC721Metadata', async () => {
 
   describe('_burn', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should delete tokenURI and hash on burning', async () => {
@@ -281,7 +301,7 @@ describe('Token - Extension ERC721Metadata', async () => {
       expect(metadataHash).to.be.equal(TOKEN.metadata2.hash);
 
       // uri and hash for token with id 0 should be deleted
-      await expect(tokenInstance.tokenURI(0)).to.be.revertedWith('ERC721: invalid token ID');
+      await expect(tokenInstance.tokenURI(0)).to.be.revertedWithCustomError(tokenInstance, 'ERC721NonexistentToken');
 
       await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(
         tokenInstance,

@@ -7,13 +7,12 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
-import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
-import {ErrorDefinitions} from './ErrorDefinitions.sol';
+import {ERC721Base} from './ERC721Base.sol';
 
 // TODO-MP: maybe we should have a maximum number of characters
-abstract contract ERC721AdditionalInformation is ERC721, ErrorDefinitions {
+abstract contract ERC721AdditionalInformation is ERC721Base {
     mapping(uint256 => string) private _tokenIdWithAdditionalInformation;
 
     event AdditionalInformationSet(
@@ -25,7 +24,7 @@ abstract contract ERC721AdditionalInformation is ERC721, ErrorDefinitions {
     );
 
     function setAdditionalInformation(uint256 tokenId, string memory additionalInformation) public {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
 
         string memory oldAdditionalInformation = _tokenIdWithAdditionalInformation[tokenId];
         _tokenIdWithAdditionalInformation[tokenId] = additionalInformation;
@@ -40,17 +39,16 @@ abstract contract ERC721AdditionalInformation is ERC721, ErrorDefinitions {
     }
 
     function getAdditionalInformation(uint256 tokenId) public view returns (string memory) {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
         return _tokenIdWithAdditionalInformation[tokenId];
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this
     // slither-disable-next-line dead-code
-    function _burn(uint256 tokenId) internal virtual override {
-        super._burn(tokenId);
-
-        if (bytes(_tokenIdWithAdditionalInformation[tokenId]).length != 0) {
+    function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
+        if (to == address(0) && bytes(_tokenIdWithAdditionalInformation[tokenId]).length != 0) {
             delete _tokenIdWithAdditionalInformation[tokenId];
         }
+        return super._update(to, tokenId, auth);
     }
 }

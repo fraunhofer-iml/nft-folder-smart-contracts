@@ -42,7 +42,10 @@ describe('Container', async () => {
       });
 
       it('should not allow execution of onlyOwner function', async () => {
-        await expect(containerInstance.createSegment('Segment')).to.be.revertedWith('Ownable: caller is not the owner');
+        await expect(containerInstance.createSegment('Segment')).to.be.revertedWithCustomError(
+          containerInstance,
+          'OwnableUnauthorizedAccount',
+        );
       });
     });
   });

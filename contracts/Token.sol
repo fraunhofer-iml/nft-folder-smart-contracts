@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
 import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
@@ -18,7 +18,6 @@ import {ERC721Metadata} from './extensions/ERC721Metadata.sol';
 import {ERC721SegmentAllocation} from './extensions/ERC721SegmentAllocation.sol';
 import {ERC721RemoteId} from './extensions/ERC721RemoteId.sol';
 import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
-import {Counters} from '@openzeppelin/contracts/utils/Counters.sol';
 
 contract Token is
     ERC721,
@@ -30,11 +29,9 @@ contract Token is
     ERC721SegmentAllocation,
     ERC721RemoteId
 {
-    using Counters for Counters.Counter;
+    uint256 private _tokenIdCounter;
 
-    Counters.Counter private _tokenIdCounter;
-
-    constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
+    constructor(address owner, string memory name, string memory symbol) ERC721(name, symbol) Ownable(owner) {}
 
     function safeMint(
         address receiver,
@@ -45,8 +42,8 @@ contract Token is
         string memory remoteId,
         string memory additionalInformation
     ) public {
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
+        uint256 tokenId = _tokenIdCounter;
+        _tokenIdCounter = _tokenIdCounter + 1;
         _safeMint(receiver, tokenId);
         setAssetUri(tokenId, assetUri);
         setAssetHash(tokenId, assetHash);
@@ -85,6 +82,12 @@ contract Token is
         }
     }
 
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC721, ERC721URIStorage) returns (bool) {
+        return super.supportsInterface(interfaceId);
+    }
+
     function getToken(
         uint256 tokenId
     )
@@ -111,8 +114,10 @@ contract Token is
         return super.tokenURI(tokenId);
     }
 
-    function _burn(
-        uint256 tokenId
+    function _update(
+        address to,
+        uint256 tokenId,
+        address auth
     )
         internal
         override(
@@ -123,7 +128,8 @@ contract Token is
             ERC721SegmentAllocation,
             ERC721RemoteId
         )
+        returns (address)
     {
-        super._burn(tokenId);
+        return super._update(to, tokenId, auth);
     }
 }

@@ -36,8 +36,12 @@ describe('Segment', async () => {
       segmentInstance1 = await ethers.getContractAt('Segment', await containerInstance.getSegment(0));
       segmentInstance2 = await ethers.getContractAt('Segment', await containerInstance.getSegment(1));
 
-      tokenInstance1 = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
-      tokenInstance2 = await ethers.deployContract('Token', ['Token2', 'TKZ']);
+      tokenInstance1 = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
+      tokenInstance2 = await ethers.deployContract('Token', [await alice.getAddress(), 'Token2', 'TKZ']);
     });
 
     async function assertSegment(
@@ -201,7 +205,11 @@ describe('Segment', async () => {
       await containerInstance.createSegment(SEGMENT.name);
       segmentInstance = await ethers.getContractAt('Segment', await containerInstance.getSegment(0));
 
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
       validTokenAddress = await tokenInstance.getAddress();
     });
 

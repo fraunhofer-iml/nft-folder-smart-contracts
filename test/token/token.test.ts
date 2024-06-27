@@ -23,7 +23,11 @@ describe('Token', async () => {
 
   describe('is Ownable', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should have a owner', async () => {
@@ -35,7 +39,11 @@ describe('Token', async () => {
 
   describe('has all extensions', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
       await tokenInstance.safeMint(
         alice,
         TOKEN.asset1.uri,
@@ -66,7 +74,11 @@ describe('Token', async () => {
 
   describe('name is setable', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should have given name and symbol', async () => {
@@ -80,7 +92,11 @@ describe('Token', async () => {
 
   describe('getToken', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should get token', async () => {
@@ -109,7 +125,11 @@ describe('Token', async () => {
 
   describe('updateToken', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
     });
 
     it('should update token', async () => {

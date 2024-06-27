@@ -7,12 +7,11 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
-import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
-import {ErrorDefinitions} from './ErrorDefinitions.sol';
+import {ERC721Base} from './ERC721Base.sol';
 
-abstract contract ERC721RemoteId is ERC721, ErrorDefinitions {
+abstract contract ERC721RemoteId is ERC721Base {
     struct RemoteIdData {
         uint256 tokenId;
         bool exists;
@@ -25,7 +24,7 @@ abstract contract ERC721RemoteId is ERC721, ErrorDefinitions {
     error RemoteIdAlreadyExist();
 
     function getRemoteId(uint256 tokenId) public view returns (string memory) {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
         return _tokenIdWithRemoteId[tokenId];
     }
 
@@ -35,21 +34,22 @@ abstract contract ERC721RemoteId is ERC721, ErrorDefinitions {
     }
 
     function _setRemoteId(uint256 tokenId, string memory remoteId) internal {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
         if (_remoteIdWithData[remoteId].exists) revert RemoteIdAlreadyExist();
 
         _tokenIdWithRemoteId[tokenId] = remoteId;
         _remoteIdWithData[remoteId] = RemoteIdData(tokenId, true);
     }
 
-    function _burn(uint256 tokenId) internal virtual override {
-        super._burn(tokenId);
-
-        // Remove the remote ID associated with the burned token
-        string memory remoteId = _tokenIdWithRemoteId[tokenId];
-        if (bytes(remoteId).length != 0) {
-            delete _remoteIdWithData[remoteId];
-            delete _tokenIdWithRemoteId[tokenId];
+    function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
+        if (to == address(0)) {
+            // Remove the remote ID associated with the burned token
+            string memory remoteId = _tokenIdWithRemoteId[tokenId];
+            if (bytes(remoteId).length != 0) {
+                delete _remoteIdWithData[remoteId];
+                delete _tokenIdWithRemoteId[tokenId];
+            }
         }
+        return super._update(to, tokenId, auth);
     }
 }

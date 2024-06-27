@@ -7,14 +7,12 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
-import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
-import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
+import {ERC721Base} from './ERC721Base.sol';
 import {Segment} from '../Segment.sol';
-import {ErrorDefinitions} from './ErrorDefinitions.sol';
 
-abstract contract ERC721SegmentAllocation is ERC721, Ownable, ErrorDefinitions {
+abstract contract ERC721SegmentAllocation is ERC721Base {
     mapping(uint256 => address[]) private _tokenIdWithSegmentAddresses;
     string private constant ERROR_MESSAGE = 'ERC721SegmentAllocation: token does not exist';
 
@@ -32,7 +30,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable, ErrorDefinitions {
     }
 
     function addTokenToSegment(uint256 tokenId, address segmentAddress) external onlySegment(segmentAddress) {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
         if (isTokenInSegment(tokenId, segmentAddress)) revert TokenAlreadyInSegment();
 
         _tokenIdWithSegmentAddresses[tokenId].push(segmentAddress);
@@ -41,7 +39,7 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable, ErrorDefinitions {
     }
 
     function removeTokenFromSegment(uint256 tokenId, address segmentAddress) external onlySegment(segmentAddress) {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
         if (!isTokenInSegment(tokenId, segmentAddress)) revert TokenDoesNotExistInSegment();
 
         for (uint256 i = 0; i < _tokenIdWithSegmentAddresses[tokenId].length; i++) {
@@ -80,14 +78,15 @@ abstract contract ERC721SegmentAllocation is ERC721, Ownable, ErrorDefinitions {
 
     // This function is called by the implementing contract, but slither doesn't recognize this
     // slither-disable-next-line dead-code
-    function _burn(uint256 tokenId) internal virtual override {
-        super._burn(tokenId);
+    function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
+        if (to == address(0)) {
+            address[] memory segmentAddresses = _tokenIdWithSegmentAddresses[tokenId];
 
-        address[] memory segmentAddresses = _tokenIdWithSegmentAddresses[tokenId];
-
-        for (uint256 i = 0; i < segmentAddresses.length; i++) {
-            Segment segmentContract = Segment(segmentAddresses[i]);
-            segmentContract.removeToken(address(this), tokenId);
+            for (uint256 i = 0; i < segmentAddresses.length; i++) {
+                Segment segmentContract = Segment(segmentAddresses[i]);
+                segmentContract.removeToken(address(this), tokenId);
+            }
         }
+        return super._update(to, tokenId, auth);
     }
 }

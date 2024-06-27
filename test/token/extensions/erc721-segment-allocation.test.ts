@@ -23,7 +23,11 @@ describe('Token - Extension ERC721SegmentAllocation', async () => {
 
   describe('addTokenToSegment', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
       await tokenInstance.safeMint(
         alice,
         TOKEN.asset1.uri,
@@ -45,7 +49,11 @@ describe('Token - Extension ERC721SegmentAllocation', async () => {
 
   describe('removeTokenFromSegment', function () {
     beforeEach(async () => {
-      tokenInstance = await ethers.deployContract('Token', [TOKEN.token1.name, TOKEN.token1.symbol]);
+      tokenInstance = await ethers.deployContract('Token', [
+        await alice.getAddress(),
+        TOKEN.token1.name,
+        TOKEN.token1.symbol,
+      ]);
       await tokenInstance.safeMint(
         alice,
         TOKEN.asset1.uri,

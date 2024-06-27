@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
 import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
 import {Segment} from './Segment.sol';
@@ -19,15 +19,12 @@ contract Container is Ownable {
 
     event SegmentAdded(address indexed from, address indexed segmentAddress);
 
-    error ContainerOwnerIsZeroAddress();
     error ContainerNameIsEmpty();
     error NoSegmentsStored();
     error IndexTooLarge();
 
-    constructor(address owner, string memory name) {
-        if (owner == address(0)) revert ContainerOwnerIsZeroAddress();
+    constructor(address owner, string memory name) Ownable(owner) {
         if (bytes(name).length <= 0) revert ContainerNameIsEmpty();
-        _transferOwnership(owner);
         _name = name;
     }
 

@@ -7,12 +7,11 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
-import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
-import {ErrorDefinitions} from './ErrorDefinitions.sol';
+import {ERC721Base} from './ERC721Base.sol';
 
-abstract contract ERC721Metadata is ERC721URIStorage, ErrorDefinitions {
+abstract contract ERC721Metadata is ERC721Base {
     mapping(uint256 => string) private _tokenIdWithMetadataHash;
 
     event MetadataUriSet(
@@ -31,7 +30,7 @@ abstract contract ERC721Metadata is ERC721URIStorage, ErrorDefinitions {
     );
 
     function setMetadataUri(uint256 tokenId, string memory metadataUri) public {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
 
         string memory oldMetadataUri = super.tokenURI(tokenId);
         super._setTokenURI(tokenId, metadataUri);
@@ -40,7 +39,7 @@ abstract contract ERC721Metadata is ERC721URIStorage, ErrorDefinitions {
     }
 
     function setMetadataHash(uint256 tokenId, string memory metadataHash) public {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
 
         string memory oldMetadataHash = _tokenIdWithMetadataHash[tokenId];
         _tokenIdWithMetadataHash[tokenId] = metadataHash;
@@ -49,22 +48,21 @@ abstract contract ERC721Metadata is ERC721URIStorage, ErrorDefinitions {
     }
 
     function getMetadataUri(uint256 tokenId) public view returns (string memory) {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
         return super.tokenURI(tokenId);
     }
 
     function getMetadataHash(uint256 tokenId) public view returns (string memory) {
-        if (!_exists(tokenId)) revert TokenIdDoesNotExist();
+        ensureTokenExists(tokenId);
         return _tokenIdWithMetadataHash[tokenId];
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this
     // slither-disable-next-line dead-code
-    function _burn(uint256 tokenId) internal virtual override {
-        super._burn(tokenId);
-
-        if (bytes(_tokenIdWithMetadataHash[tokenId]).length != 0) {
+    function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
+        if (to == address(0) && bytes(_tokenIdWithMetadataHash[tokenId]).length != 0) {
             delete _tokenIdWithMetadataHash[tokenId];
         }
+        return super._update(to, tokenId, auth);
     }
 }
