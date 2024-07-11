@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.25;
 
 import {ERC721Base} from './ERC721Base.sol';
 

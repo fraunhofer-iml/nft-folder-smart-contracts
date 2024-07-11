@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.25;
 
 import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
 import {Token} from './Token.sol';
