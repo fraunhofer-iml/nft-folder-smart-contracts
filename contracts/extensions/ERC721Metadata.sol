@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.24;
 
 import {ERC721Base} from './ERC721Base.sol';
 
@@ -49,11 +49,13 @@ abstract contract ERC721Metadata is ERC721Base {
 
     function getMetadataUri(uint256 tokenId) public view returns (string memory) {
         ensureTokenExists(tokenId);
+
         return super.tokenURI(tokenId);
     }
 
     function getMetadataHash(uint256 tokenId) public view returns (string memory) {
         ensureTokenExists(tokenId);
+
         return _tokenIdWithMetadataHash[tokenId];
     }
 
@@ -63,6 +65,7 @@ abstract contract ERC721Metadata is ERC721Base {
         if (to == address(0) && bytes(_tokenIdWithMetadataHash[tokenId]).length != 0) {
             delete _tokenIdWithMetadataHash[tokenId];
         }
+
         return super._update(to, tokenId, auth);
     }
 }

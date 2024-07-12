@@ -75,7 +75,7 @@ describe('Token - Extension ERC721AdditionalInformation', async () => {
     it('should not get additional info', async () => {
       await expect(tokenInstance.getAdditionalInformation(0)).to.be.revertedWithCustomError(
         tokenInstance,
-        'TokenIdDoesNotExist',
+        'TokenDoesNotExist',
       );
     });
   });
@@ -137,7 +137,7 @@ describe('Token - Extension ERC721AdditionalInformation', async () => {
     it('should not set additional info', async () => {
       await expect(
         tokenInstance.setAdditionalInformation(0, TOKEN.additionalInformation1.initial),
-      ).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
+      ).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
@@ -179,7 +179,7 @@ describe('Token - Extension ERC721AdditionalInformation', async () => {
       // additionalInformation for token with id 0 should be deleted
       await expect(tokenInstance.getAdditionalInformation(0)).to.be.revertedWithCustomError(
         tokenInstance,
-        'TokenIdDoesNotExist',
+        'TokenDoesNotExist',
       );
     });
   });

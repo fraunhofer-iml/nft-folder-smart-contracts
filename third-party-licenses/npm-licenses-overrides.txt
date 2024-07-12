@@ -1,1 +1,1 @@
-@nomicfoundation/ignition-ui@0.13.2;argparse@2.0.1;difflib@0.2.4;estraverse@1.9.3;parse-cache-control@1.0.1;source-map@0.2.0;
+@nomicfoundation/ignition-ui@0.15.5;argparse@2.0.1;difflib@0.2.4;estraverse@1.9.3;parse-cache-control@1.0.1;source-map@0.2.0;

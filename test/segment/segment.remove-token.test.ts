@@ -107,7 +107,7 @@ describe('Segment', async () => {
 
       await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWithCustomError(
         segmentInstance,
-        'IndexTooLarge',
+        'IndexExceedsTokenInformationLength',
       );
 
       const actualNumberOfTokenInformation = await segmentInstance.getNumberOfTokenInformation();
@@ -216,7 +216,7 @@ describe('Segment', async () => {
       // One element remains in array left
       await expect(segmentInstance.getTokenInformation('1')).to.be.revertedWithCustomError(
         segmentInstance,
-        'IndexTooLarge',
+        'IndexExceedsTokenInformationLength',
       );
 
       // Remove former third token
@@ -233,7 +233,7 @@ describe('Segment', async () => {
       // Array is empty
       await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWithCustomError(
         segmentInstance,
-        'IndexTooLarge',
+        'IndexExceedsTokenInformationLength',
       );
     });
   });
@@ -257,7 +257,7 @@ describe('Segment', async () => {
 
       await expect(segmentInstance.removeToken(ethers.ZeroAddress, '0')).to.be.revertedWithCustomError(
         segmentInstance,
-        'TokenIsZeroAddress',
+        'TokenAddressIsZero',
       );
     });
 
@@ -267,7 +267,7 @@ describe('Segment', async () => {
 
       await expect(segmentInstance.removeToken(validTokenAddress1, '1')).to.be.revertedWithCustomError(
         segmentInstance,
-        'TokenDoesNotExist',
+        'TokenDoesNotExistInSegment',
       );
     });
   });

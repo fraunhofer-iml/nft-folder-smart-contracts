@@ -55,7 +55,7 @@ describe('Segment', async () => {
     it('should revert tokenInformation', async () => {
       await expect(segmentInstance.getTokenInformation('0')).to.be.revertedWithCustomError(
         segmentInstance,
-        'IndexTooLarge',
+        'IndexExceedsTokenInformationLength',
       );
     });
 

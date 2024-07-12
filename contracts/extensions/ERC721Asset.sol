@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.24;
 
 import {ERC721Base} from './ERC721Base.sol';
 
@@ -76,6 +76,7 @@ abstract contract ERC721Asset is ERC721Base {
         ) {
             delete _tokenIdWithAssetInformation[tokenId];
         }
+
         return super._update(to, tokenId, auth);
     }
 }

@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.24;
 
 import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
 import {Token} from './Token.sol';
@@ -25,15 +25,17 @@ contract Segment is Ownable {
     event TokenAdded(address indexed from, address indexed tokenAddress, uint256 tokenId);
     event TokenRemoved(address indexed from, address indexed tokenAddress, uint256 tokenId);
 
-    error SenderIsNotAContainer();
+    error SenderIsNotContainer();
     error SegmentNameIsEmpty();
-    error TokenIsZeroAddress();
-    error TokenAlreadyExists();
-    error TokenDoesNotExist();
-    error IndexTooLarge();
+    error TokenAddressIsZero();
+    error TokenExistsInSegment();
+    error TokenDoesNotExistInSegment();
+    error IndexExceedsTokenInformationLength();
 
     modifier onlyContainer(address containerAddress) {
-        if (msg.sender != containerAddress) revert SenderIsNotAContainer();
+        if (msg.sender != containerAddress) {
+            revert SenderIsNotContainer();
+        }
         _;
     }
 
@@ -42,15 +44,22 @@ contract Segment is Ownable {
         string memory name,
         address containerAddress
     ) onlyContainer(containerAddress) Ownable(owner) {
-        if (bytes(name).length <= 0) revert SegmentNameIsEmpty();
+        if (bytes(name).length <= 0) {
+            revert SegmentNameIsEmpty();
+        }
 
         _name = name;
         _containerAddress = containerAddress;
     }
 
     function addToken(address tokenAddress, uint256 tokenId) external onlyOwner {
-        if (tokenAddress == address(0)) revert TokenIsZeroAddress();
-        if (isTokenInSegment(tokenAddress, tokenId)) revert TokenAlreadyExists();
+        if (tokenAddress == address(0)) {
+            revert TokenAddressIsZero();
+        }
+
+        if (isTokenInSegment(tokenAddress, tokenId)) {
+            revert TokenExistsInSegment();
+        }
 
         _tokenInformation.push(TokenInformation(tokenAddress, tokenId));
 
@@ -61,8 +70,13 @@ contract Segment is Ownable {
     }
 
     function removeToken(address tokenAddress, uint256 tokenId) external onlyOwner {
-        if (tokenAddress == address(0)) revert TokenIsZeroAddress();
-        if (!isTokenInSegment(tokenAddress, tokenId)) revert TokenDoesNotExist();
+        if (tokenAddress == address(0)) {
+            revert TokenAddressIsZero();
+        }
+
+        if (!isTokenInSegment(tokenAddress, tokenId)) {
+            revert TokenDoesNotExistInSegment();
+        }
 
         uint256 tokenInformationLength = _tokenInformation.length;
 
@@ -94,7 +108,10 @@ contract Segment is Ownable {
     }
 
     function getTokenInformation(uint256 index) external view returns (TokenInformation memory) {
-        if (index >= _tokenInformation.length) revert IndexTooLarge();
+        if (index >= _tokenInformation.length) {
+            revert IndexExceedsTokenInformationLength();
+        }
+
         return _tokenInformation[index];
     }
 

@@ -134,13 +134,16 @@ describe('Container', async () => {
     it('should reject with 0 segments', async () => {
       await expect(containerInstance.getSegment(0)).to.be.revertedWithCustomError(
         containerInstance,
-        'NoSegmentsStored',
+        'NoSegmentsAvailable',
       );
     });
 
     it('should reject with invalid index', async () => {
       await containerInstance.createSegment('Segment');
-      await expect(containerInstance.getSegment(1)).to.be.revertedWithCustomError(containerInstance, 'IndexTooLarge');
+      await expect(containerInstance.getSegment(1)).to.be.revertedWithCustomError(
+        containerInstance,
+        'IndexExceedsSegmentLength',
+      );
     });
   });
 

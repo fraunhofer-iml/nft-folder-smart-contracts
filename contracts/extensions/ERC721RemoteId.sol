@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.24;
 
 import {ERC721Base} from './ERC721Base.sol';
 
@@ -21,21 +21,28 @@ abstract contract ERC721RemoteId is ERC721Base {
     mapping(string => RemoteIdData) private _remoteIdWithData;
 
     error RemoteIdDoesNotExist();
-    error RemoteIdAlreadyExist();
+    error RemoteIdExists();
 
     function getRemoteId(uint256 tokenId) public view returns (string memory) {
         ensureTokenExists(tokenId);
+
         return _tokenIdWithRemoteId[tokenId];
     }
 
     function getTokenId(string memory remoteId) public view returns (uint256) {
-        if (!_remoteIdWithData[remoteId].exists) revert RemoteIdDoesNotExist();
+        if (!_remoteIdWithData[remoteId].exists) {
+            revert RemoteIdDoesNotExist();
+        }
+
         return _remoteIdWithData[remoteId].tokenId;
     }
 
     function _setRemoteId(uint256 tokenId, string memory remoteId) internal {
         ensureTokenExists(tokenId);
-        if (_remoteIdWithData[remoteId].exists) revert RemoteIdAlreadyExist();
+
+        if (_remoteIdWithData[remoteId].exists) {
+            revert RemoteIdExists();
+        }
 
         _tokenIdWithRemoteId[tokenId] = remoteId;
         _remoteIdWithData[remoteId] = RemoteIdData(tokenId, true);
@@ -45,11 +52,13 @@ abstract contract ERC721RemoteId is ERC721Base {
         if (to == address(0)) {
             // Remove the remote ID associated with the burned token
             string memory remoteId = _tokenIdWithRemoteId[tokenId];
+
             if (bytes(remoteId).length != 0) {
                 delete _remoteIdWithData[remoteId];
                 delete _tokenIdWithRemoteId[tokenId];
             }
         }
+
         return super._update(to, tokenId, auth);
     }
 }

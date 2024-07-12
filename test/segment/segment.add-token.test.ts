@@ -218,7 +218,7 @@ describe('Segment', async () => {
 
       await expect(segmentInstance.addToken(ethers.ZeroAddress, '0')).to.be.revertedWithCustomError(
         segmentInstance,
-        'TokenIsZeroAddress',
+        'TokenAddressIsZero',
       );
     });
 
@@ -228,7 +228,7 @@ describe('Segment', async () => {
 
       await expect(segmentInstance.addToken(validTokenAddress, '0')).to.be.revertedWithCustomError(
         segmentInstance,
-        'TokenAlreadyExists',
+        'TokenExistsInSegment',
       );
     });
   });

@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.24;
 
 import {ERC721Base} from './ERC721Base.sol';
 import {Segment} from '../Segment.sol';
@@ -19,19 +19,24 @@ abstract contract ERC721SegmentAllocation is ERC721Base {
     event SegmentAddedToToken(uint256 tokenId, address indexed segment);
     event SegmentRemovedFromToken(uint256 tokenId, address indexed segment);
 
-    error NotASegment();
-    error TokenAlreadyInSegment();
+    error SenderIsNotSegment();
+    error TokenExistsInSegment();
     error TokenDoesNotExistInSegment();
-    error WrongSegmentIndex();
+    error IndexExceedsSegmentLengthForToken();
 
     modifier onlySegment(address segmentAddress) {
-        if (msg.sender != segmentAddress) revert NotASegment();
+        if (msg.sender != segmentAddress) {
+            revert SenderIsNotSegment();
+        }
         _;
     }
 
     function addTokenToSegment(uint256 tokenId, address segmentAddress) external onlySegment(segmentAddress) {
         ensureTokenExists(tokenId);
-        if (isTokenInSegment(tokenId, segmentAddress)) revert TokenAlreadyInSegment();
+
+        if (isTokenInSegment(tokenId, segmentAddress)) {
+            revert TokenExistsInSegment();
+        }
 
         _tokenIdWithSegmentAddresses[tokenId].push(segmentAddress);
 
@@ -40,7 +45,10 @@ abstract contract ERC721SegmentAllocation is ERC721Base {
 
     function removeTokenFromSegment(uint256 tokenId, address segmentAddress) external onlySegment(segmentAddress) {
         ensureTokenExists(tokenId);
-        if (!isTokenInSegment(tokenId, segmentAddress)) revert TokenDoesNotExistInSegment();
+
+        if (!isTokenInSegment(tokenId, segmentAddress)) {
+            revert TokenDoesNotExistInSegment();
+        }
 
         for (uint256 i = 0; i < _tokenIdWithSegmentAddresses[tokenId].length; i++) {
             if (_tokenIdWithSegmentAddresses[tokenId][i] == segmentAddress) {
@@ -59,7 +67,10 @@ abstract contract ERC721SegmentAllocation is ERC721Base {
     }
 
     function getSegment(uint256 tokenId, uint256 segmentAddressIndex) external view returns (address) {
-        if (segmentAddressIndex >= _tokenIdWithSegmentAddresses[tokenId].length) revert WrongSegmentIndex();
+        if (segmentAddressIndex >= _tokenIdWithSegmentAddresses[tokenId].length) {
+            revert IndexExceedsSegmentLengthForToken();
+        }
+
         return _tokenIdWithSegmentAddresses[tokenId][segmentAddressIndex];
     }
 
@@ -73,6 +84,7 @@ abstract contract ERC721SegmentAllocation is ERC721Base {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -87,6 +99,7 @@ abstract contract ERC721SegmentAllocation is ERC721Base {
                 segmentContract.removeToken(address(this), tokenId);
             }
         }
+
         return super._update(to, tokenId, auth);
     }
 }

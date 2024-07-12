@@ -73,7 +73,7 @@ describe('Token - Extension ERC721RemoteId', async () => {
     });
 
     it('should not get remote id', async () => {
-      await expect(tokenInstance.getRemoteId(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
+      await expect(tokenInstance.getRemoteId(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
@@ -174,7 +174,7 @@ describe('Token - Extension ERC721RemoteId', async () => {
       expect(tokenId2).to.be.equal('1');
 
       // ids for token with id 0 should be deleted
-      await expect(tokenInstance.getRemoteId(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
+      await expect(tokenInstance.getRemoteId(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
       await expect(tokenInstance.getTokenId(TOKEN.remoteId1)).to.be.revertedWithCustomError(
         tokenInstance,
         'RemoteIdDoesNotExist',

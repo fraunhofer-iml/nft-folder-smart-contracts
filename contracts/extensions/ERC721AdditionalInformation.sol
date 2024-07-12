@@ -7,7 +7,7 @@
  * For details on the licensing terms, see the LICENSE file.
  */
 
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.24;
 
 import {ERC721Base} from './ERC721Base.sol';
 
@@ -40,6 +40,7 @@ abstract contract ERC721AdditionalInformation is ERC721Base {
 
     function getAdditionalInformation(uint256 tokenId) public view returns (string memory) {
         ensureTokenExists(tokenId);
+
         return _tokenIdWithAdditionalInformation[tokenId];
     }
 
@@ -49,6 +50,7 @@ abstract contract ERC721AdditionalInformation is ERC721Base {
         if (to == address(0) && bytes(_tokenIdWithAdditionalInformation[tokenId]).length != 0) {
             delete _tokenIdWithAdditionalInformation[tokenId];
         }
+
         return super._update(to, tokenId, auth);
     }
 }

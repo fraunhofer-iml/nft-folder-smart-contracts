@@ -82,7 +82,7 @@ describe('Container', async () => {
 
       await expect(tokenInstance.getSegment('0', '0')).to.be.revertedWithCustomError(
         tokenInstance,
-        'WrongSegmentIndex',
+        'IndexExceedsSegmentLengthForToken',
       );
 
       const numberOfSegments = await tokenInstance.getNumberOfSegments('0');

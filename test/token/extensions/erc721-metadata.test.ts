@@ -73,7 +73,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should not get metadataUri', async () => {
-      await expect(tokenInstance.getMetadataUri(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenIdDoesNotExist');
+      await expect(tokenInstance.getMetadataUri(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
@@ -135,7 +135,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     it('should not set metadataUri', async () => {
       await expect(tokenInstance.setMetadataUri(0, TOKEN.metadata1.uri)).to.be.revertedWithCustomError(
         tokenInstance,
-        'TokenIdDoesNotExist',
+        'TokenDoesNotExist',
       );
     });
   });
@@ -192,10 +192,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should not get metadataHash', async () => {
-      await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenIdDoesNotExist',
-      );
+      await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
@@ -257,7 +254,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     it('should not set metadataHash', async () => {
       await expect(tokenInstance.setMetadataHash(0, TOKEN.metadata1.hash)).to.be.revertedWithCustomError(
         tokenInstance,
-        'TokenIdDoesNotExist',
+        'TokenDoesNotExist',
       );
     });
   });
@@ -303,10 +300,7 @@ describe('Token - Extension ERC721Metadata', async () => {
       // uri and hash for token with id 0 should be deleted
       await expect(tokenInstance.tokenURI(0)).to.be.revertedWithCustomError(tokenInstance, 'ERC721NonexistentToken');
 
-      await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenIdDoesNotExist',
-      );
+      await expect(tokenInstance.getMetadataHash(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 });
