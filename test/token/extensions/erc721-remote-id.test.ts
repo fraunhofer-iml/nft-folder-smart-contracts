@@ -41,7 +41,7 @@ describe('Token - Extension ERC721RemoteId', async () => {
         TOKEN.additionalInformation1.initial,
       );
 
-      const remoteId = await tokenInstance.getRemoteId(0);
+      const remoteId = await tokenInstance.getRemoteIdByTokenId(0);
       expect(remoteId).to.be.equal(TOKEN.remoteId1);
     });
 
@@ -65,15 +65,18 @@ describe('Token - Extension ERC721RemoteId', async () => {
         TOKEN.additionalInformation1.initial,
       );
 
-      const remoteId1 = await tokenInstance.getRemoteId(0);
+      const remoteId1 = await tokenInstance.getRemoteIdByTokenId(0);
       expect(remoteId1).to.be.equal(TOKEN.remoteId1);
 
-      const remoteId2 = await tokenInstance.getRemoteId(1);
+      const remoteId2 = await tokenInstance.getRemoteIdByTokenId(1);
       expect(remoteId2).to.be.equal(TOKEN.remoteId2);
     });
 
     it('should not get remote id', async () => {
-      await expect(tokenInstance.getRemoteId(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
+      await expect(tokenInstance.getRemoteIdByTokenId(0)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenDoesNotExist',
+      );
     });
   });
 
@@ -97,8 +100,11 @@ describe('Token - Extension ERC721RemoteId', async () => {
         TOKEN.additionalInformation1.initial,
       );
 
-      const tokenId = await tokenInstance.getTokenId(TOKEN.remoteId1);
-      expect(tokenId).to.be.equal('0');
+      const tokenIdForRemoteId: bigint = (await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0];
+      expect(tokenIdForRemoteId).to.be.equal(0n);
+
+      const tokenIdForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
+      expect(tokenIdForOwner).to.be.equal(0n);
     });
 
     it('should get different token ids for different tokens', async () => {
@@ -121,18 +127,25 @@ describe('Token - Extension ERC721RemoteId', async () => {
         TOKEN.additionalInformation1.initial,
       );
 
-      const tokenId1 = await tokenInstance.getTokenId(TOKEN.remoteId1);
-      expect(tokenId1).to.be.equal('0');
+      const tokenId1ForRemoteId: bigint = (await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0];
+      expect(tokenId1ForRemoteId).to.be.equal(0n);
 
-      const tokenId2 = await tokenInstance.getTokenId(TOKEN.remoteId2);
-      expect(tokenId2).to.be.equal('1');
+      const tokenId2ForRemoteId: bigint = (await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId2))[0];
+      expect(tokenId2ForRemoteId).to.be.equal(1n);
+
+      const tokenId1ForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
+      expect(tokenId1ForOwner).to.be.equal(0n);
+
+      const tokenId2ForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
+      expect(tokenId2ForOwner).to.be.equal(0n);
     });
 
-    it('should not get token id', async () => {
-      await expect(tokenInstance.getTokenId(TOKEN.remoteId1)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'RemoteIdDoesNotExist',
-      );
+    it('should not get token id for remote id', async () => {
+      expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1)).length).to.be.equal(0);
+    });
+
+    it('should not get token id for owner', async () => {
+      expect((await tokenInstance.getTokenIdsByOwner(alice)).length).to.be.equal(0);
     });
   });
 
@@ -168,17 +181,19 @@ describe('Token - Extension ERC721RemoteId', async () => {
       await tokenInstance.burn(0);
 
       // ids for token with id 1 should still exist
-      const remoteId2 = await tokenInstance.getRemoteId(1);
+      const remoteId2 = await tokenInstance.getRemoteIdByTokenId(1);
       expect(remoteId2).to.be.equal(TOKEN.remoteId2);
-      const tokenId2 = await tokenInstance.getTokenId(TOKEN.remoteId2);
-      expect(tokenId2).to.be.equal('1');
+      const tokenId2ForRemoteId: bigint = (await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId2))[0];
+      expect(tokenId2ForRemoteId).to.be.equal(1n);
+      const tokenId2ForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
+      expect(tokenId2ForOwner).to.be.equal(1n);
 
       // ids for token with id 0 should be deleted
-      await expect(tokenInstance.getRemoteId(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
-      await expect(tokenInstance.getTokenId(TOKEN.remoteId1)).to.be.revertedWithCustomError(
+      await expect(tokenInstance.getRemoteIdByTokenId(0)).to.be.revertedWithCustomError(
         tokenInstance,
-        'RemoteIdDoesNotExist',
+        'TokenDoesNotExist',
       );
+      await expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1)).length).to.be.equal(0);
     });
   });
 });

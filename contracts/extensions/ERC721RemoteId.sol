@@ -12,53 +12,81 @@ pragma solidity ^0.8.24;
 import {ERC721Base} from './ERC721Base.sol';
 
 abstract contract ERC721RemoteId is ERC721Base {
-    struct RemoteIdData {
-        uint256 tokenId;
-        bool exists;
-    }
-
     mapping(uint256 => string) private _tokenIdWithRemoteId;
-    mapping(string => RemoteIdData) private _remoteIdWithData;
+    mapping(string => uint256[]) private _remoteIdWithTokenIds;
+    mapping(address => uint256[]) private _ownerWithTokenIds;
 
     error RemoteIdDoesNotExist();
-    error RemoteIdExists();
 
-    function getRemoteId(uint256 tokenId) public view returns (string memory) {
+    function getRemoteIdByTokenId(uint256 tokenId) public view returns (string memory) {
         ensureTokenExists(tokenId);
 
         return _tokenIdWithRemoteId[tokenId];
     }
 
-    function getTokenId(string memory remoteId) public view returns (uint256) {
-        if (!_remoteIdWithData[remoteId].exists) {
-            revert RemoteIdDoesNotExist();
-        }
-
-        return _remoteIdWithData[remoteId].tokenId;
+    function getTokenIdsByRemoteId(string memory remoteId) public view returns (uint256[] memory) {
+        return _remoteIdWithTokenIds[remoteId];
     }
 
-    function _setRemoteId(uint256 tokenId, string memory remoteId) internal {
-        ensureTokenExists(tokenId);
-
-        if (_remoteIdWithData[remoteId].exists) {
-            revert RemoteIdExists();
-        }
-
-        _tokenIdWithRemoteId[tokenId] = remoteId;
-        _remoteIdWithData[remoteId] = RemoteIdData(tokenId, true);
+    function getTokenIdsByOwner(address owner) public view returns (uint256[] memory) {
+        return _ownerWithTokenIds[owner];
     }
 
     function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
+        // burn token
         if (to == address(0)) {
             // Remove the remote ID associated with the burned token
             string memory remoteId = _tokenIdWithRemoteId[tokenId];
 
             if (bytes(remoteId).length != 0) {
-                delete _remoteIdWithData[remoteId];
-                delete _tokenIdWithRemoteId[tokenId];
+                _dissociateRemoteIdFromTokenId(tokenId, remoteId);
+                _dissociateOwnerFromToken(tokenId, auth);
             }
+            // transfer token
+        } else {
+            _dissociateOwnerFromToken(tokenId, auth);
+            _ownerWithTokenIds[to].push(tokenId);
         }
 
         return super._update(to, tokenId, auth);
+    }
+
+    function _associateRemoteIdWithTokenId(uint256 tokenId, string memory remoteId) internal {
+        ensureTokenExists(tokenId);
+
+        _tokenIdWithRemoteId[tokenId] = remoteId;
+        _remoteIdWithTokenIds[remoteId].push(tokenId);
+    }
+
+    function _dissociateRemoteIdFromTokenId(uint256 tokenId, string memory remoteId) internal {
+        uint256[] memory tokenIds = _remoteIdWithTokenIds[remoteId];
+
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            if (tokenIds[i] == tokenId) {
+                _remoteIdWithTokenIds[remoteId][i] = tokenIds[tokenIds.length - 1];
+                _remoteIdWithTokenIds[remoteId].pop();
+                break;
+            }
+        }
+
+        delete _tokenIdWithRemoteId[tokenId];
+    }
+
+    function _associateOwnerWithToken(uint256 tokenId, address owner) internal {
+        ensureTokenExists(tokenId);
+
+        _ownerWithTokenIds[owner].push(tokenId);
+    }
+
+    function _dissociateOwnerFromToken(uint256 tokenId, address owner) internal {
+        uint256[] memory tokenIds = _ownerWithTokenIds[owner];
+
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            if (tokenIds[i] == tokenId) {
+                _ownerWithTokenIds[owner][i] = tokenIds[tokenIds.length - 1];
+                _ownerWithTokenIds[owner].pop();
+                break;
+            }
+        }
     }
 }

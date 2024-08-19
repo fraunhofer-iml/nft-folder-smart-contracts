@@ -49,7 +49,8 @@ contract Token is
         setAssetHash(tokenId, assetHash);
         setMetadataUri(tokenId, metadataUri);
         setMetadataHash(tokenId, metadataHash);
-        _setRemoteId(tokenId, remoteId);
+        _associateRemoteIdWithTokenId(tokenId, remoteId);
+        _associateOwnerWithToken(tokenId, receiver);
         setAdditionalInformation(tokenId, additionalInformation);
     }
 

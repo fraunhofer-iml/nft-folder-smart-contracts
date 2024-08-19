@@ -60,8 +60,9 @@ describe('Token', async () => {
       expect(await tokenInstance.getAssetHash(0)).to.be.equal(TOKEN.asset1.hash);
       expect(await tokenInstance.tokenURI(0)).to.be.equal(TOKEN.metadata1.uri);
       expect(await tokenInstance.getMetadataHash(0)).to.be.equal(TOKEN.metadata1.hash);
-      expect(await tokenInstance.getRemoteId(0)).to.be.equal(TOKEN.remoteId1);
-      expect(await tokenInstance.getTokenId(TOKEN.remoteId1)).to.be.equal('0');
+      expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
+      expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
+      expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
       expect(await tokenInstance.getAdditionalInformation(0)).to.be.equal(TOKEN.additionalInformation1.initial);
     });
 
@@ -156,8 +157,9 @@ describe('Token', async () => {
       expect(await tokenInstance.getAssetHash(0)).to.be.equal(TOKEN.asset2.hash);
       expect(await tokenInstance.tokenURI(0)).to.be.equal(TOKEN.metadata2.uri);
       expect(await tokenInstance.getMetadataHash(0)).to.be.equal(TOKEN.metadata2.hash);
-      expect(await tokenInstance.getRemoteId(0)).to.be.equal(TOKEN.remoteId1);
-      expect(await tokenInstance.getTokenId(TOKEN.remoteId1)).to.be.equal('0');
+      expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
+      expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
+      expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
       expect(await tokenInstance.getAdditionalInformation(0)).to.be.equal(TOKEN.additionalInformation2.initial);
     });
 
@@ -178,8 +180,9 @@ describe('Token', async () => {
       expect(await tokenInstance.getAssetHash(0)).to.be.equal(TOKEN.asset1.hash);
       expect(await tokenInstance.tokenURI(0)).to.be.equal(TOKEN.metadata1.uri);
       expect(await tokenInstance.getMetadataHash(0)).to.be.equal(TOKEN.metadata1.hash);
-      expect(await tokenInstance.getRemoteId(0)).to.be.equal(TOKEN.remoteId1);
-      expect(await tokenInstance.getTokenId(TOKEN.remoteId1)).to.be.equal('0');
+      expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
+      expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
+      expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
       expect(await tokenInstance.getAdditionalInformation(0)).to.be.equal(TOKEN.additionalInformation1.initial);
     });
   });
