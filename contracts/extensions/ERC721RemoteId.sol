@@ -33,17 +33,16 @@ abstract contract ERC721RemoteId is ERC721Base {
     }
 
     function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
-        // burn token
         if (to == address(0)) {
-            // Remove the remote ID associated with the burned token
+            // burn token
             string memory remoteId = _tokenIdWithRemoteId[tokenId];
 
             if (bytes(remoteId).length != 0) {
                 _dissociateRemoteIdFromTokenId(tokenId, remoteId);
                 _dissociateOwnerFromToken(tokenId, auth);
             }
-            // transfer token
         } else {
+            // mint or transfer token
             _dissociateOwnerFromToken(tokenId, auth);
             _ownerWithTokenIds[to].push(tokenId);
         }
@@ -70,12 +69,6 @@ abstract contract ERC721RemoteId is ERC721Base {
         }
 
         delete _tokenIdWithRemoteId[tokenId];
-    }
-
-    function _associateOwnerWithToken(uint256 tokenId, address owner) internal {
-        ensureTokenExists(tokenId);
-
-        _ownerWithTokenIds[owner].push(tokenId);
     }
 
     function _dissociateOwnerFromToken(uint256 tokenId, address owner) internal {

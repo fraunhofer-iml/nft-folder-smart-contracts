@@ -50,7 +50,6 @@ contract Token is
         setMetadataUri(tokenId, metadataUri);
         setMetadataHash(tokenId, metadataHash);
         _associateRemoteIdWithTokenId(tokenId, remoteId);
-        _associateOwnerWithToken(tokenId, receiver);
         setAdditionalInformation(tokenId, additionalInformation);
     }
 
