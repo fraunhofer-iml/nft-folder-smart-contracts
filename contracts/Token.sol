@@ -31,6 +31,17 @@ contract Token is
 {
     uint256 private _tokenIdCounter;
 
+    event TokenMinted(
+        address indexed receiver,
+        uint256 indexed tokenId,
+        string remoteId,
+        string assetUri,
+        string assetHash,
+        string metadataUri,
+        string metadataHash,
+        string additionalInformation
+    );
+
     constructor(address owner, string memory name, string memory symbol) ERC721(name, symbol) Ownable(owner) {}
 
     function safeMint(
@@ -51,6 +62,17 @@ contract Token is
         setMetadataHash(tokenId, metadataHash);
         _associateRemoteIdWithTokenId(tokenId, remoteId);
         setAdditionalInformation(tokenId, additionalInformation);
+
+        emit TokenMinted(
+            receiver,
+            tokenId,
+            remoteId,
+            assetUri,
+            assetHash,
+            metadataUri,
+            metadataHash,
+            additionalInformation
+        );
     }
 
     function updateToken(

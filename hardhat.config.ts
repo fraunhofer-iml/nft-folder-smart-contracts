@@ -38,7 +38,12 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  solidity: '0.8.24',
+  solidity: {
+    version: '0.8.24',
+    settings: {
+      evmVersion: 'paris',
+    },
+  },
 };
 
 export default config;
