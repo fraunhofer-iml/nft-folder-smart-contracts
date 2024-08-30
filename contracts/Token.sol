@@ -18,6 +18,7 @@ import {ERC721Metadata} from './extensions/ERC721Metadata.sol';
 import {ERC721SegmentAllocation} from './extensions/ERC721SegmentAllocation.sol';
 import {ERC721RemoteId} from './extensions/ERC721RemoteId.sol';
 import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
+import {HierarchicalStructure} from './extensions/HierarchicalStructure.sol';
 
 contract Token is
     ERC721,
@@ -27,7 +28,8 @@ contract Token is
     ERC721Burnable,
     ERC721Metadata,
     ERC721SegmentAllocation,
-    ERC721RemoteId
+    ERC721RemoteId,
+    HierarchicalStructure
 {
     uint256 private _tokenIdCounter;
 
@@ -120,7 +122,8 @@ contract Token is
             string memory assetHash,
             string memory metadataUri,
             string memory metadataHash,
-            string memory additionalInformation
+            string memory additionalInformation,
+            Node memory node
         )
     {
         return (
@@ -128,7 +131,8 @@ contract Token is
             getAssetHash(tokenId),
             getMetadataUri(tokenId),
             getMetadataHash(tokenId),
-            getAdditionalInformation(tokenId)
+            getAdditionalInformation(tokenId),
+            getNode(tokenId)
         );
     }
 
