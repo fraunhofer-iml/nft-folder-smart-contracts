@@ -60,7 +60,7 @@ run-unit-tests:
   before_script:
     - $NPM_CI
   script:
-    - npm run test:cov
+    - npm run test-cov
   artifacts:
     paths:
       - coverage/
@@ -77,7 +77,7 @@ run-eslint:
   before_script:
     - $NPM_CI
   script:
-    - npm run eslint:check
+    - npm run eslint-check
   rules:
     - when: on_success
 
@@ -86,7 +86,7 @@ run-prettier:
   before_script:
     - $NPM_CI
   script:
-    - npm run prettier:check
+    - npm run prettier-check
   rules:
     - when: on_success
 

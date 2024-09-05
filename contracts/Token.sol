@@ -18,7 +18,7 @@ import {ERC721Metadata} from './extensions/ERC721Metadata.sol';
 import {ERC721SegmentAllocation} from './extensions/ERC721SegmentAllocation.sol';
 import {ERC721RemoteId} from './extensions/ERC721RemoteId.sol';
 import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
-import {HierarchicalStructure} from './extensions/HierarchicalStructure.sol';
+import {Hierarchy} from './extensions/Hierarchy.sol';
 
 contract Token is
     ERC721,
@@ -29,7 +29,7 @@ contract Token is
     ERC721Metadata,
     ERC721SegmentAllocation,
     ERC721RemoteId,
-    HierarchicalStructure
+    Hierarchy
 {
     uint256 private _tokenIdCounter;
 
@@ -46,7 +46,7 @@ contract Token is
 
     constructor(address owner, string memory name, string memory symbol) ERC721(name, symbol) Ownable(owner) {}
 
-    function safeMint(
+    function mintToken(
         address receiver,
         string memory assetUri,
         string memory assetHash,
@@ -54,15 +54,18 @@ contract Token is
         string memory metadataHash,
         string memory remoteId,
         string memory additionalInformation
-    ) public {
-        uint256 tokenId = _tokenIdCounter;
+    ) public returns (uint256 tokenId) {
+        tokenId = _tokenIdCounter;
         _tokenIdCounter = _tokenIdCounter + 1;
+
         _safeMint(receiver, tokenId);
+
+        _associateRemoteIdWithTokenId(tokenId, remoteId);
+
         setAssetUri(tokenId, assetUri);
         setAssetHash(tokenId, assetHash);
         setMetadataUri(tokenId, metadataUri);
         setMetadataHash(tokenId, metadataHash);
-        _associateRemoteIdWithTokenId(tokenId, remoteId);
         setAdditionalInformation(tokenId, additionalInformation);
 
         emit TokenMinted(
@@ -75,6 +78,31 @@ contract Token is
             metadataHash,
             additionalInformation
         );
+
+        return tokenId;
+    }
+
+    function mintTokenAndAppendToHierarchy(
+        address receiver,
+        string memory assetUri,
+        string memory assetHash,
+        string memory metadataUri,
+        string memory metadataHash,
+        string memory remoteId,
+        string memory additionalInformation,
+        uint256[] memory parentIds
+    ) public {
+        uint256 tokenId = mintToken(
+            receiver,
+            assetUri,
+            assetHash,
+            metadataUri,
+            metadataHash,
+            remoteId,
+            additionalInformation
+        );
+
+        _appendTokenToHierarchy(tokenId, parentIds);
     }
 
     function updateToken(
@@ -152,7 +180,7 @@ contract Token is
             ERC721Asset,
             ERC721Metadata,
             ERC721SegmentAllocation,
-            ERC721RemoteId
+            ERC721RemoteId // TODO-MP: add Hierarchy
         )
         returns (address)
     {

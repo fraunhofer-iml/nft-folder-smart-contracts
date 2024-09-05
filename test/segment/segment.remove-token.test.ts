@@ -89,7 +89,7 @@ describe('Segment', async () => {
     });
 
     it('should add 1 token and remove 1 token', async () => {
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
       await segmentInstance.addToken(validTokenAddress1, '0');
 
       await removeTokenAndAssertSegment(segmentInstance, {
@@ -115,8 +115,8 @@ describe('Segment', async () => {
     });
 
     it('should add 2 tokens and remove first token', async () => {
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri1', 'ai');
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri2', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri1', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri2', 'ai');
       await segmentInstance.addToken(validTokenAddress1, '0');
       await segmentInstance.addToken(validTokenAddress1, '1');
 
@@ -140,8 +140,8 @@ describe('Segment', async () => {
     });
 
     it('should add 2 token and remove second token', async () => {
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri1', 'ai');
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri2', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri1', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri2', 'ai');
       await segmentInstance.addToken(validTokenAddress1, '0');
       await segmentInstance.addToken(validTokenAddress1, '1');
 
@@ -165,9 +165,9 @@ describe('Segment', async () => {
     });
 
     it('should add 3 token and remove 3 token', async () => {
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri1', 'ai');
-      await tokenInstance2.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri2', 'ai');
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri3', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri1', 'ai');
+      await tokenInstance2.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri2', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri3', 'ai');
       await segmentInstance.addToken(validTokenAddress1, '0');
       await segmentInstance.addToken(validTokenAddress2, '0');
       await segmentInstance.addToken(validTokenAddress1, '1');
@@ -253,7 +253,7 @@ describe('Segment', async () => {
     });
 
     it('should require a valid contract address', async () => {
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
 
       await expect(segmentInstance.removeToken(ethers.ZeroAddress, '0')).to.be.revertedWithCustomError(
         segmentInstance,
@@ -262,7 +262,7 @@ describe('Segment', async () => {
     });
 
     it('should require a present token', async () => {
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
       await segmentInstance.addToken(validTokenAddress1, '0');
 
       await expect(segmentInstance.removeToken(validTokenAddress1, '1')).to.be.revertedWithCustomError(

@@ -28,7 +28,7 @@ describe('Token - Extension ERC721SegmentAllocation', async () => {
         TOKEN.token1.name,
         TOKEN.token1.symbol,
       ]);
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -54,7 +54,7 @@ describe('Token - Extension ERC721SegmentAllocation', async () => {
         TOKEN.token1.name,
         TOKEN.token1.symbol,
       ]);
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,

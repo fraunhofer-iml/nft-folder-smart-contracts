@@ -44,7 +44,7 @@ describe('Token', async () => {
         TOKEN.token1.name,
         TOKEN.token1.symbol,
       ]);
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -101,7 +101,7 @@ describe('Token', async () => {
     });
 
     it('should get token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -134,7 +134,7 @@ describe('Token', async () => {
     });
 
     it('should update token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -164,7 +164,7 @@ describe('Token', async () => {
     });
 
     it('should not update token, because of empty strings', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,

@@ -31,7 +31,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should get metadataUri', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -46,7 +46,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should get metadataUri for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -55,7 +55,7 @@ describe('Token - Extension ERC721Metadata', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -87,7 +87,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should set metadataUri', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -104,7 +104,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should set metadataUri for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -113,7 +113,7 @@ describe('Token - Extension ERC721Metadata', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -150,7 +150,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should get metadataHash', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -165,7 +165,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should get metadataHash for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -174,7 +174,7 @@ describe('Token - Extension ERC721Metadata', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -206,7 +206,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should set metadataHash', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -223,7 +223,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should set metadataHash for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -232,7 +232,7 @@ describe('Token - Extension ERC721Metadata', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -269,7 +269,7 @@ describe('Token - Extension ERC721Metadata', async () => {
     });
 
     it('should delete tokenURI and hash on burning', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -278,7 +278,7 @@ describe('Token - Extension ERC721Metadata', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,

@@ -11,8 +11,9 @@ pragma solidity ^0.8.24;
 
 import {ERC721Base} from './ERC721Base.sol';
 
-abstract contract HierarchicalStructure is ERC721Base {
+abstract contract Hierarchy is ERC721Base {
     struct Node {
+        bool exists;
         bool active;
         uint256 predecessorId; // The previous token in the replacement chain that this token replaces
         uint256 successorId; // The next token in the replacement chain that replaces this token
@@ -22,6 +23,11 @@ abstract contract HierarchicalStructure is ERC721Base {
 
     mapping(uint256 tokenId => Node node) private _nodes;
     mapping(uint256 tokenId => mapping(uint256 parentId => bool confirmed)) private _parentConfirmations; // The parent token confirmations for each token
+
+    event TokenAppendedToHierarchy(uint256 indexed tokenId, uint256[] parentIds);
+
+    error TokenIsItsOwnParent(uint256 tokenId);
+    error TokenIsNotInHierarchy(uint256 tokenId);
 
     function getNode(uint256 tokenId) public view returns (Node memory node) {
         ensureTokenExists(tokenId);
@@ -39,6 +45,33 @@ abstract contract HierarchicalStructure is ERC721Base {
         ensureTokenExists(tokenId);
 
         return _filterParentIds(tokenId, false);
+    }
+
+    // Append only during minting
+    function _appendTokenToHierarchy(uint256 tokenId, uint256[] memory parentIds) internal {
+        _nodes[tokenId].exists = true;
+        _nodes[tokenId].active = true;
+        _nodes[tokenId].predecessorId = type(uint256).max;
+        _nodes[tokenId].successorId = type(uint256).max;
+        _nodes[tokenId].parentIds = parentIds; // if empty, the token is a root token
+
+        for (uint256 i = 0; i < parentIds.length; i++) {
+            uint256 parentId = parentIds[i];
+
+            ensureTokenExists(parentId);
+
+            if (parentId == tokenId) {
+                revert TokenIsItsOwnParent(parentId);
+            }
+
+            if (!_nodes[parentId].exists) {
+                revert TokenIsNotInHierarchy(parentId);
+            }
+
+            _nodes[parentId].childIds.push(tokenId);
+        }
+
+        emit TokenAppendedToHierarchy(tokenId, parentIds);
     }
 
     function _filterParentIds(uint256 tokenId, bool confirmed) private view returns (uint256[] memory) {

@@ -12,11 +12,11 @@ pragma solidity ^0.8.24;
 import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
 
 abstract contract ERC721Base is ERC721URIStorage {
-    error TokenDoesNotExist();
+    error TokenDoesNotExist(uint256 tokenId);
 
     function ensureTokenExists(uint256 tokenId) internal view {
         if (_ownerOf(tokenId) == address(0)) {
-            revert TokenDoesNotExist();
+            revert TokenDoesNotExist(tokenId);
         }
     }
 }

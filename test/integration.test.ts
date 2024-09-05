@@ -42,7 +42,7 @@ describe('Container', async () => {
     });
 
     async function mintToken() {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,

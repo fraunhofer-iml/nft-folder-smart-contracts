@@ -87,7 +87,7 @@ describe('Segment', async () => {
       const tokenAddress1 = await tokenInstance1.getAddress();
 
       // ### Token #1: segmentInstance1, tokenInstance1 ###
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', '0', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', '0', 'ai');
 
       await expect(segmentInstance1.addToken(tokenAddress1, '0'))
         .to.emit(segmentInstance1, 'TokenAdded')
@@ -103,7 +103,7 @@ describe('Segment', async () => {
       const tokenAddress = await tokenInstance1.getAddress();
 
       // ### Token #1: segmentInstance1, tokenInstance1 ###
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', '0', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', '0', 'ai');
 
       await expect(segmentInstance1.addToken(tokenAddress, '0'))
         .to.emit(segmentInstance1, 'TokenAdded')
@@ -114,7 +114,7 @@ describe('Segment', async () => {
       await assertToken(tokenInstance1, segmentAddress, 0, 0, 1);
 
       // ### Token #2: segmentInstance1, tokenInstance1 ###
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', '1', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', '1', 'ai');
 
       await expect(segmentInstance1.addToken(tokenAddress, '1'))
         .to.emit(segmentInstance1, 'TokenAdded')
@@ -131,7 +131,7 @@ describe('Segment', async () => {
       const tokenAddress2 = await tokenInstance2.getAddress();
 
       // ### Token #1: segmentInstance1, tokenInstance1 ###
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', '0', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', '0', 'ai');
 
       await expect(segmentInstance1.addToken(tokenAddress1, '0'))
         .to.emit(segmentInstance1, 'TokenAdded')
@@ -142,7 +142,7 @@ describe('Segment', async () => {
       await assertToken(tokenInstance1, segmentAddress1, 0, 0, 1);
 
       // ### Token #2: segmentInstance1, tokenInstance2 ###
-      await tokenInstance2.safeMint(alice, 'au', 'ah', 'mu', 'mh', '1', 'ai');
+      await tokenInstance2.mintToken(alice, 'au', 'ah', 'mu', 'mh', '1', 'ai');
 
       await expect(segmentInstance1.addToken(tokenAddress2, '0'))
         .to.emit(segmentInstance1, 'TokenAdded')
@@ -153,7 +153,7 @@ describe('Segment', async () => {
       await assertToken(tokenInstance2, segmentAddress1, 0, 0, 1);
 
       // ### Token #3: segmentInstance1, tokenInstance1 ###
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', '2', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', '2', 'ai');
 
       await expect(segmentInstance1.addToken(tokenAddress1, '1'))
         .to.emit(segmentInstance1, 'TokenAdded')
@@ -170,7 +170,7 @@ describe('Segment', async () => {
       const tokenAddress1 = await tokenInstance1.getAddress();
 
       // ### Token #1: segmentInstance1, tokenInstance1 ### '0', '1', '0', '0', '0'
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', '0', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', '0', 'ai');
 
       await expect(segmentInstance1.addToken(tokenAddress1, '0'))
         .to.emit(segmentInstance1, 'TokenAdded')
@@ -181,7 +181,7 @@ describe('Segment', async () => {
       await assertToken(tokenInstance1, segmentAddress1, 0, 0, 1);
 
       // ### Token #2: segmentInstance2, tokenInstance1 ### '0', '1', '0', '1', '1'
-      await tokenInstance1.safeMint(alice, 'au', 'ah', 'mu', 'mh', '1', 'ai');
+      await tokenInstance1.mintToken(alice, 'au', 'ah', 'mu', 'mh', '1', 'ai');
 
       await expect(segmentInstance2.addToken(tokenAddress1, '1'))
         .to.emit(segmentInstance2, 'TokenAdded')
@@ -214,7 +214,7 @@ describe('Segment', async () => {
     });
 
     it('should require a valid contract address', async () => {
-      await tokenInstance.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
+      await tokenInstance.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
 
       await expect(segmentInstance.addToken(ethers.ZeroAddress, '0')).to.be.revertedWithCustomError(
         segmentInstance,
@@ -223,7 +223,7 @@ describe('Segment', async () => {
     });
 
     it('should require an absent token', async () => {
-      await tokenInstance.safeMint(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
+      await tokenInstance.mintToken(alice, 'au', 'ah', 'mu', 'mh', 'ri', 'ai');
       await segmentInstance.addToken(validTokenAddress, '0');
 
       await expect(segmentInstance.addToken(validTokenAddress, '0')).to.be.revertedWithCustomError(

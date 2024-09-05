@@ -31,7 +31,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should get assetUri', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -46,7 +46,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should get assetUri for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -55,7 +55,7 @@ describe('Token - Extension ERC721Asset', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset2.uri,
         TOKEN.asset2.hash,
@@ -87,7 +87,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should set assetUri', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -104,7 +104,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should set assetUri for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -113,7 +113,7 @@ describe('Token - Extension ERC721Asset', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset2.uri,
         TOKEN.asset2.hash,
@@ -150,7 +150,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should get assetHash', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -165,7 +165,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should get assetHash for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -174,7 +174,7 @@ describe('Token - Extension ERC721Asset', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset2.hash,
@@ -192,7 +192,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should get assetInformation for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -201,7 +201,7 @@ describe('Token - Extension ERC721Asset', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset2.uri,
         TOKEN.asset2.hash,
@@ -235,7 +235,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should set assetHash', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -252,7 +252,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should set assetHash for multiple minted token', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -261,7 +261,7 @@ describe('Token - Extension ERC721Asset', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset2.hash,
@@ -298,7 +298,7 @@ describe('Token - Extension ERC721Asset', async () => {
     });
 
     it('should delete assetUri and hash on burning', async () => {
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uri,
         TOKEN.asset1.hash,
@@ -307,7 +307,7 @@ describe('Token - Extension ERC721Asset', async () => {
         TOKEN.remoteId1,
         TOKEN.additionalInformation1.initial,
       );
-      await tokenInstance.safeMint(
+      await tokenInstance.mintToken(
         alice,
         TOKEN.asset2.uri,
         TOKEN.asset2.hash,
