@@ -9,7 +9,7 @@ variables:
   GIT_DEPTH: 0
   HUSKY: 0
   NPM_CI: npm ci --include dev --cache .npm --prefer-offline
-  SLITHER_ANALYZER_PACKAGE: slither-analyzer==0.10.0
+  SLITHER_ANALYZER_PACKAGE: slither-analyzer==0.10.4
 
 default:
   cache:

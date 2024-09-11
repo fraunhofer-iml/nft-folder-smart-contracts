@@ -21,17 +21,21 @@ describe('Token - Extension Hierarchy', async () => {
     [alice] = await ethers.getSigners();
   });
 
-  async function mintToken(parentIds: number[]) {
-    await tokenInstance.mintTokenAndAppendToHierarchy(
-      alice,
-      TOKEN.asset1.uri,
-      TOKEN.asset1.hash,
-      TOKEN.metadata1.uri,
-      TOKEN.metadata1.hash,
-      TOKEN.remoteId1,
-      TOKEN.additionalInformation1.initial,
-      parentIds,
-    );
+  async function mintTokenAndAppendToHierarchy(parentIds: number[], expectedTokenId: number) {
+    await expect(
+      tokenInstance.mintTokenAndAppendToHierarchy(
+        alice,
+        TOKEN.asset1.uri,
+        TOKEN.asset1.hash,
+        TOKEN.metadata1.uri,
+        TOKEN.metadata1.hash,
+        TOKEN.remoteId1,
+        TOKEN.additionalInformation1.initial,
+        parentIds,
+      ),
+    )
+      .to.emit(tokenInstance, 'TokenAppendedToHierarchy')
+      .withArgs(expectedTokenId, parentIds);
   }
 
   describe('mintTokenAndAppendToHierarchy - 1 hierarchy', function () {
@@ -46,7 +50,7 @@ describe('Token - Extension Hierarchy', async () => {
     it('should mint 1 root token', async () => {
       const rootId = 0;
 
-      await mintToken([]);
+      await mintTokenAndAppendToHierarchy([], rootId);
 
       const node = await tokenInstance.getNode(rootId);
       expect(node.exists).to.be.true;
@@ -56,10 +60,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(node.childIds).to.be.empty;
       expect(node.parentIds).to.be.empty;
 
-      const confirmedParentIds = await tokenInstance.getConfirmedParentIds(rootId);
+      const confirmedParentIds = await tokenInstance.getParentIds(rootId, true);
       expect(confirmedParentIds).to.be.empty;
 
-      const unconfirmedParentIds = await tokenInstance.getUnconfirmedParentIds(rootId);
+      const unconfirmedParentIds = await tokenInstance.getParentIds(rootId, false);
       expect(unconfirmedParentIds).to.be.empty;
     });
 
@@ -67,18 +71,18 @@ describe('Token - Extension Hierarchy', async () => {
       const rootId = 0;
       const leafId = 1;
 
-      await mintToken([]);
-      await mintToken([rootId]);
+      await mintTokenAndAppendToHierarchy([], rootId);
+      await mintTokenAndAppendToHierarchy([rootId], leafId);
 
       // Test root
       const root = await tokenInstance.getNode(rootId);
       expect(root.childIds).to.be.deep.equal([leafId]);
       expect(root.parentIds).to.be.empty;
 
-      const confirmedParentIdsOfRoot = await tokenInstance.getConfirmedParentIds(rootId);
+      const confirmedParentIdsOfRoot = await tokenInstance.getParentIds(rootId, true);
       expect(confirmedParentIdsOfRoot).to.be.empty;
 
-      const unconfirmedParentIdsOfRoot = await tokenInstance.getUnconfirmedParentIds(rootId);
+      const unconfirmedParentIdsOfRoot = await tokenInstance.getParentIds(rootId, false);
       expect(unconfirmedParentIdsOfRoot).to.be.empty;
 
       // Test leaf
@@ -86,10 +90,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(leaf.childIds).to.be.empty;
       expect(leaf.parentIds).to.be.deep.equal([rootId]);
 
-      const confirmedParentIdsOfLeaf = await tokenInstance.getConfirmedParentIds(leafId);
+      const confirmedParentIdsOfLeaf = await tokenInstance.getParentIds(leafId, true);
       expect(confirmedParentIdsOfLeaf).to.be.empty;
 
-      const unconfirmedParentIdsOfLeaf = await tokenInstance.getUnconfirmedParentIds(leafId);
+      const unconfirmedParentIdsOfLeaf = await tokenInstance.getParentIds(leafId, false);
       expect(unconfirmedParentIdsOfLeaf).to.be.deep.equal([rootId]);
     });
 
@@ -98,19 +102,19 @@ describe('Token - Extension Hierarchy', async () => {
       const leaf1Id = 1;
       const leaf2Id = 2;
 
-      await mintToken([]);
-      await mintToken([rootId]);
-      await mintToken([rootId]);
+      await mintTokenAndAppendToHierarchy([], rootId);
+      await mintTokenAndAppendToHierarchy([rootId], leaf1Id);
+      await mintTokenAndAppendToHierarchy([rootId], leaf2Id);
 
       // Test root
       const root = await tokenInstance.getNode(rootId);
       expect(root.childIds).to.be.deep.equal([leaf1Id, leaf2Id]);
       expect(root.parentIds).to.be.empty;
 
-      const confirmedParentIdsOfRoot = await tokenInstance.getConfirmedParentIds(rootId);
+      const confirmedParentIdsOfRoot = await tokenInstance.getParentIds(rootId, true);
       expect(confirmedParentIdsOfRoot).to.be.empty;
 
-      const unconfirmedParentIdsOfRoot = await tokenInstance.getUnconfirmedParentIds(rootId);
+      const unconfirmedParentIdsOfRoot = await tokenInstance.getParentIds(rootId, false);
       expect(unconfirmedParentIdsOfRoot).to.be.empty;
 
       // Test leaf1
@@ -118,10 +122,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(leaf1.childIds).to.be.empty;
       expect(leaf1.parentIds).to.be.deep.equal([rootId]);
 
-      const confirmedParentIdsOfLeaf1 = await tokenInstance.getConfirmedParentIds(leaf1Id);
+      const confirmedParentIdsOfLeaf1 = await tokenInstance.getParentIds(leaf1Id, true);
       expect(confirmedParentIdsOfLeaf1).to.be.empty;
 
-      const unconfirmedParentIdsOfLeaf1 = await tokenInstance.getUnconfirmedParentIds(leaf1Id);
+      const unconfirmedParentIdsOfLeaf1 = await tokenInstance.getParentIds(leaf1Id, false);
       expect(unconfirmedParentIdsOfLeaf1).to.be.deep.equal([rootId]);
 
       // Test leaf2
@@ -129,10 +133,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(leaf2.childIds).to.be.empty;
       expect(leaf2.parentIds).to.be.deep.equal([rootId]);
 
-      const confirmedParentIdsOfLeaf2 = await tokenInstance.getConfirmedParentIds(leaf2Id);
+      const confirmedParentIdsOfLeaf2 = await tokenInstance.getParentIds(leaf2Id, true);
       expect(confirmedParentIdsOfLeaf2).to.be.empty;
 
-      const unconfirmedParentIdsOfLeaf2 = await tokenInstance.getUnconfirmedParentIds(leaf2Id);
+      const unconfirmedParentIdsOfLeaf2 = await tokenInstance.getParentIds(leaf2Id, false);
       expect(unconfirmedParentIdsOfLeaf2).to.be.deep.equal([rootId]);
     });
 
@@ -141,19 +145,19 @@ describe('Token - Extension Hierarchy', async () => {
       const intermediateId = 1;
       const leafId = 2;
 
-      await mintToken([]);
-      await mintToken([rootId]);
-      await mintToken([intermediateId]);
+      await mintTokenAndAppendToHierarchy([], rootId);
+      await mintTokenAndAppendToHierarchy([rootId], intermediateId);
+      await mintTokenAndAppendToHierarchy([intermediateId], leafId);
 
       // Test root
       const root = await tokenInstance.getNode(rootId);
       expect(root.childIds).to.be.deep.equal([intermediateId]);
       expect(root.parentIds).to.be.empty;
 
-      const confirmedParentIdsOfRoot = await tokenInstance.getConfirmedParentIds(rootId);
+      const confirmedParentIdsOfRoot = await tokenInstance.getParentIds(rootId, true);
       expect(confirmedParentIdsOfRoot).to.be.empty;
 
-      const unconfirmedParentIdsOfRoot = await tokenInstance.getUnconfirmedParentIds(rootId);
+      const unconfirmedParentIdsOfRoot = await tokenInstance.getParentIds(rootId, false);
       expect(unconfirmedParentIdsOfRoot).to.be.empty;
 
       // Test intermediate
@@ -161,10 +165,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(intermediate.childIds).to.be.deep.equal([leafId]);
       expect(intermediate.parentIds).to.be.deep.equal([rootId]);
 
-      const confirmedParentIdsOfIntermediate = await tokenInstance.getConfirmedParentIds(intermediateId);
+      const confirmedParentIdsOfIntermediate = await tokenInstance.getParentIds(intermediateId, true);
       expect(confirmedParentIdsOfIntermediate).to.be.empty;
 
-      const unconfirmedParentIdsOfIntermediate = await tokenInstance.getUnconfirmedParentIds(intermediateId);
+      const unconfirmedParentIdsOfIntermediate = await tokenInstance.getParentIds(intermediateId, false);
       expect(unconfirmedParentIdsOfIntermediate).to.be.deep.equal([rootId]);
 
       // Test leaf
@@ -172,10 +176,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(leaf.childIds).to.be.empty;
       expect(leaf.parentIds).to.be.deep.equal([intermediateId]);
 
-      const confirmedParentIdsOfLeaf = await tokenInstance.getConfirmedParentIds(leafId);
+      const confirmedParentIdsOfLeaf = await tokenInstance.getParentIds(leafId, true);
       expect(confirmedParentIdsOfLeaf).to.be.empty;
 
-      const unconfirmedParentIdsOfLeaf = await tokenInstance.getUnconfirmedParentIds(leafId);
+      const unconfirmedParentIdsOfLeaf = await tokenInstance.getParentIds(leafId, false);
       expect(unconfirmedParentIdsOfLeaf).to.be.deep.equal([intermediateId]);
     });
   });
@@ -193,18 +197,18 @@ describe('Token - Extension Hierarchy', async () => {
       const root1Id = 0;
       const root2Id = 1;
 
-      await mintToken([]);
-      await mintToken([]);
+      await mintTokenAndAppendToHierarchy([], root1Id);
+      await mintTokenAndAppendToHierarchy([], root2Id);
 
       // Test root1
       const root1 = await tokenInstance.getNode(root1Id);
       expect(root1.childIds).to.be.empty;
       expect(root1.parentIds).to.be.empty;
 
-      const confirmedParentIdsOfRoot1 = await tokenInstance.getConfirmedParentIds(root1Id);
+      const confirmedParentIdsOfRoot1 = await tokenInstance.getParentIds(root1Id, true);
       expect(confirmedParentIdsOfRoot1).to.be.empty;
 
-      const unconfirmedParentIdsOfRoot1 = await tokenInstance.getUnconfirmedParentIds(root1Id);
+      const unconfirmedParentIdsOfRoot1 = await tokenInstance.getParentIds(root1Id, false);
       expect(unconfirmedParentIdsOfRoot1).to.be.empty;
 
       // Test root2
@@ -212,10 +216,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(root2.childIds).to.be.empty;
       expect(root2.parentIds).to.be.empty;
 
-      const confirmedParentIdsOfRoot2 = await tokenInstance.getConfirmedParentIds(root2Id);
+      const confirmedParentIdsOfRoot2 = await tokenInstance.getParentIds(root2Id, true);
       expect(confirmedParentIdsOfRoot2).to.be.empty;
 
-      const unconfirmedParentIdsOfRoot2 = await tokenInstance.getUnconfirmedParentIds(root2Id);
+      const unconfirmedParentIdsOfRoot2 = await tokenInstance.getParentIds(root2Id, false);
       expect(unconfirmedParentIdsOfRoot2).to.be.empty;
     });
 
@@ -225,20 +229,20 @@ describe('Token - Extension Hierarchy', async () => {
       const root2Id = 2;
       const leaf2Id = 3;
 
-      await mintToken([]);
-      await mintToken([root1Id]);
-      await mintToken([]);
-      await mintToken([root2Id]);
+      await mintTokenAndAppendToHierarchy([], root1Id);
+      await mintTokenAndAppendToHierarchy([root1Id], leaf1Id);
+      await mintTokenAndAppendToHierarchy([], root2Id);
+      await mintTokenAndAppendToHierarchy([root2Id], leaf2Id);
 
       // Test root1 (hierarchy1)
       const root1 = await tokenInstance.getNode(root1Id);
       expect(root1.childIds).to.be.deep.equal([leaf1Id]);
       expect(root1.parentIds).to.be.empty;
 
-      const confirmedParentIdsOfRoot1 = await tokenInstance.getConfirmedParentIds(root1Id);
+      const confirmedParentIdsOfRoot1 = await tokenInstance.getParentIds(root1Id, true);
       expect(confirmedParentIdsOfRoot1).to.be.empty;
 
-      const unconfirmedParentIdsOfRoot1 = await tokenInstance.getUnconfirmedParentIds(root1Id);
+      const unconfirmedParentIdsOfRoot1 = await tokenInstance.getParentIds(root1Id, false);
       expect(unconfirmedParentIdsOfRoot1).to.be.empty;
 
       // Test leaf1 (hierarchy1)
@@ -246,10 +250,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(leaf1.childIds).to.be.empty;
       expect(leaf1.parentIds).to.be.deep.equal([root1Id]);
 
-      const confirmedParentIdsOfLeaf1 = await tokenInstance.getConfirmedParentIds(leaf1Id);
+      const confirmedParentIdsOfLeaf1 = await tokenInstance.getParentIds(leaf1Id, true);
       expect(confirmedParentIdsOfLeaf1).to.be.empty;
 
-      const unconfirmedParentIdsOfLeaf1 = await tokenInstance.getUnconfirmedParentIds(leaf1Id);
+      const unconfirmedParentIdsOfLeaf1 = await tokenInstance.getParentIds(leaf1Id, false);
       expect(unconfirmedParentIdsOfLeaf1).to.be.deep.equal([root1Id]);
 
       // Test root2 (hierarchy2)
@@ -257,10 +261,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(root2.childIds).to.be.deep.equal([leaf2Id]);
       expect(root2.parentIds).to.be.empty;
 
-      const confirmedParentIdsOfRoot2 = await tokenInstance.getConfirmedParentIds(root2Id);
+      const confirmedParentIdsOfRoot2 = await tokenInstance.getParentIds(root2Id, true);
       expect(confirmedParentIdsOfRoot2).to.be.empty;
 
-      const unconfirmedParentIdsOfRoot2 = await tokenInstance.getUnconfirmedParentIds(root2Id);
+      const unconfirmedParentIdsOfRoot2 = await tokenInstance.getParentIds(root2Id, false);
       expect(unconfirmedParentIdsOfRoot2).to.be.empty;
 
       // Test leaf2 (hierarchy2)
@@ -268,10 +272,10 @@ describe('Token - Extension Hierarchy', async () => {
       expect(leaf2.childIds).to.be.empty;
       expect(leaf2.parentIds).to.be.deep.equal([root2Id]);
 
-      const confirmedParentIdsOfLeaf2 = await tokenInstance.getConfirmedParentIds(leaf2Id);
+      const confirmedParentIdsOfLeaf2 = await tokenInstance.getParentIds(leaf2Id, true);
       expect(confirmedParentIdsOfLeaf2).to.be.empty;
 
-      const unconfirmedParentIdsOfLeaf2 = await tokenInstance.getUnconfirmedParentIds(leaf2Id);
+      const unconfirmedParentIdsOfLeaf2 = await tokenInstance.getParentIds(leaf2Id, false);
       expect(unconfirmedParentIdsOfLeaf2).to.be.deep.equal([root2Id]);
     });
   });

@@ -25,9 +25,31 @@ abstract contract Hierarchy is ERC721Base {
     mapping(uint256 tokenId => mapping(uint256 parentId => bool confirmed)) private _parentConfirmations; // The parent token confirmations for each token
 
     event TokenAppendedToHierarchy(uint256 indexed tokenId, uint256[] parentIds);
+    event ChildConfirmed(address indexed from, uint256 indexed tokenId, uint256 indexed childId);
 
-    error TokenIsItsOwnParent(uint256 tokenId);
-    error TokenIsNotInHierarchy(uint256 tokenId);
+    error UnauthorizedAccess();
+    error ChildNotFound();
+    error ChildAlreadyConfirmed();
+    error TokenIsItsOwnParent();
+    error TokenIsNotInHierarchy();
+
+    function confirmChild(uint256 tokenId, uint256 childId) public {
+        if (_ownerOf(tokenId) != _msgSender()) {
+            revert UnauthorizedAccess();
+        }
+
+        if (!_isChildOfToken(tokenId, childId)) {
+            revert ChildNotFound();
+        }
+
+        if (_parentConfirmations[childId][tokenId]) {
+            revert ChildAlreadyConfirmed();
+        }
+
+        _parentConfirmations[childId][tokenId] = true;
+
+        emit ChildConfirmed(_msgSender(), tokenId, childId);
+    }
 
     function getNode(uint256 tokenId) public view returns (Node memory node) {
         ensureTokenExists(tokenId);
@@ -35,16 +57,14 @@ abstract contract Hierarchy is ERC721Base {
         return _nodes[tokenId];
     }
 
-    function getConfirmedParentIds(uint256 tokenId) public view returns (uint256[] memory) {
+    function getParentIds(uint256 tokenId, bool confirmed) public view returns (uint256[] memory) {
         ensureTokenExists(tokenId);
-
-        return _filterParentIds(tokenId, true);
+        return _filterParentOrChildIds(tokenId, _nodes[tokenId].parentIds, confirmed, _compareParent);
     }
 
-    function getUnconfirmedParentIds(uint256 tokenId) public view returns (uint256[] memory) {
+    function getChildIds(uint256 tokenId, bool confirmed) public view returns (uint256[] memory) {
         ensureTokenExists(tokenId);
-
-        return _filterParentIds(tokenId, false);
+        return _filterParentOrChildIds(tokenId, _nodes[tokenId].childIds, confirmed, _compareChild);
     }
 
     // Append only during minting
@@ -61,11 +81,11 @@ abstract contract Hierarchy is ERC721Base {
             ensureTokenExists(parentId);
 
             if (parentId == tokenId) {
-                revert TokenIsItsOwnParent(parentId);
+                revert TokenIsItsOwnParent();
             }
 
             if (!_nodes[parentId].exists) {
-                revert TokenIsNotInHierarchy(parentId);
+                revert TokenIsNotInHierarchy();
             }
 
             _nodes[parentId].childIds.push(tokenId);
@@ -74,29 +94,55 @@ abstract contract Hierarchy is ERC721Base {
         emit TokenAppendedToHierarchy(tokenId, parentIds);
     }
 
-    function _filterParentIds(uint256 tokenId, bool confirmed) private view returns (uint256[] memory) {
-        uint256 numberOfAllParentIds = _nodes[tokenId].parentIds.length;
+    function _isChildOfToken(uint256 tokenId, uint256 childId) private view returns (bool) {
+        uint256[] memory childIds = _nodes[tokenId].childIds;
 
-        uint256[] memory filteredParentIds = new uint256[](numberOfAllParentIds); // We cannot know the exact number of parentIds that will be filtered
-        uint256 numberOfFilteredParentIds = 0;
-
-        // Filter the parentIds based on the confirmed status
-        for (uint256 i = 0; i < numberOfAllParentIds; i++) {
-            uint256 currentParentId = _nodes[tokenId].parentIds[i];
-
-            if (_parentConfirmations[tokenId][currentParentId] == confirmed) {
-                filteredParentIds[numberOfFilteredParentIds] = currentParentId;
-                numberOfFilteredParentIds++;
+        for (uint256 i = 0; i < childIds.length; i++) {
+            if (childIds[i] == childId) {
+                return true;
             }
         }
 
-        // Create a new array based on the actual number of filtered parentIds
-        uint256[] memory finalFilteredParentIds = new uint256[](numberOfFilteredParentIds);
+        return false;
+    }
 
-        for (uint256 i = 0; i < numberOfFilteredParentIds; i++) {
-            finalFilteredParentIds[i] = filteredParentIds[i];
+    // This function is called as a function pointer in the _filterParentOrChildIds function
+    // slither-disable-next-line dead-code
+    function _compareParent(uint256 tokenId, uint256 currentId, bool confirmed) private view returns (bool) {
+        return _parentConfirmations[tokenId][currentId] == confirmed;
+    }
+
+    // This function is called as a function pointer in the _filterParentOrChildIds function
+    // slither-disable-next-line dead-code
+    function _compareChild(uint256 tokenId, uint256 currentId, bool confirmed) private view returns (bool) {
+        return _parentConfirmations[currentId][tokenId] == confirmed;
+    }
+
+    function _filterParentOrChildIds(
+        uint256 tokenId,
+        uint256[] memory ids,
+        bool confirmed,
+        function(uint256, uint256, bool) view returns (bool) compare
+    ) private view returns (uint256[] memory) {
+        uint256[] memory filteredIds = new uint256[](ids.length);
+        uint256 filteredIdsCounter = 0;
+
+        // Filter the parentIds or childIds based on the confirmed status
+        for (uint256 i = 0; i < ids.length; i++) {
+            uint256 currentId = ids[i];
+
+            if (compare(tokenId, currentId, confirmed)) {
+                filteredIds[filteredIdsCounter] = currentId;
+                filteredIdsCounter++;
+            }
         }
 
-        return finalFilteredParentIds;
+        // Create a new array based on the actual number of filtered parentIds or childIds
+        uint256[] memory result = new uint256[](filteredIdsCounter);
+        for (uint256 i = 0; i < filteredIdsCounter; i++) {
+            result[i] = filteredIds[i];
+        }
+
+        return result;
     }
 }

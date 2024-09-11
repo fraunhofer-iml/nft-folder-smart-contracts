@@ -32,6 +32,7 @@
     "test": "npx hardhat test",
     "test-cov": "npx hardhat coverage",
     "token-export": "jq '.abi' artifacts/contracts/Token.sol/Token.json | xclip -selection clipboard",
+    "token-size": "jq -r '.bytecode' artifacts/contracts/Token.sol/Token.json | wc -c",
     "token-deploy-local": "npx hardhat run --network localhost scripts/token.ts",
     "token-deploy-dev": "npx hardhat run --network dev scripts/token.ts",
     "container-deploy-local": "npx hardhat run --network localhost scripts/container.ts",
