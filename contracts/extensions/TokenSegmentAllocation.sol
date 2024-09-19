@@ -9,10 +9,10 @@
 
 pragma solidity ^0.8.24;
 
-import {ERC721Base} from './ERC721Base.sol';
+import {TokenExtensionBase} from './TokenExtensionBase.sol';
 import {Segment} from '../Segment.sol';
 
-abstract contract ERC721SegmentAllocation is ERC721Base {
+abstract contract TokenSegmentAllocation is TokenExtensionBase {
     mapping(uint256 => address[]) private _tokenIdWithSegmentAddresses;
     string private constant ERROR_MESSAGE = 'ERC721SegmentAllocation: token does not exist';
 

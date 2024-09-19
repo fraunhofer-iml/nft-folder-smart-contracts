@@ -9,9 +9,9 @@
 
 pragma solidity ^0.8.24;
 
-import {ERC721Base} from './ERC721Base.sol';
+import {TokenExtensionBase} from './TokenExtensionBase.sol';
 
-abstract contract ERC721Asset is ERC721Base {
+abstract contract TokenAsset is TokenExtensionBase {
     struct AssetInformation {
         string assetUri;
         string assetHash;

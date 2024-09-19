@@ -9,9 +9,9 @@
 
 pragma solidity ^0.8.24;
 
-import {ERC721Base} from './ERC721Base.sol';
+import {TokenExtensionBase} from './TokenExtensionBase.sol';
 
-abstract contract ERC721RemoteId is ERC721Base {
+abstract contract TokenRemoteId is TokenExtensionBase {
     mapping(uint256 => string) private _tokenIdWithRemoteId;
     mapping(string => uint256[]) private _remoteIdWithTokenIds;
     mapping(address => uint256[]) private _ownerWithTokenIds;

@@ -9,9 +9,9 @@
 
 pragma solidity ^0.8.24;
 
-import {ERC721Base} from './ERC721Base.sol';
+import {TokenExtensionBase} from './TokenExtensionBase.sol';
 
-abstract contract ERC721Metadata is ERC721Base {
+abstract contract TokenMetadata is TokenExtensionBase {
     mapping(uint256 => string) private _tokenIdWithMetadataHash;
 
     event MetadataUriSet(

@@ -9,9 +9,9 @@
 
 pragma solidity ^0.8.24;
 
-import {ERC721Base} from './ERC721Base.sol';
+import {TokenExtensionBase} from './TokenExtensionBase.sol';
 
-abstract contract Hierarchy is ERC721Base {
+abstract contract TokenHierarchy is TokenExtensionBase {
     struct Node {
         bool exists;
         bool active;

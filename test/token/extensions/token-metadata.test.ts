@@ -12,7 +12,7 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/src/si
 import { Token } from '../../../typechain-types';
 import { TOKEN } from '../../constants';
 
-describe('Token - Extension ERC721Metadata', async () => {
+describe('Token - TokenMetadata', async () => {
   let alice: HardhatEthersSigner;
   let tokenInstance: Token;
 

@@ -9,10 +9,10 @@
 
 pragma solidity ^0.8.24;
 
-import {ERC721Base} from './ERC721Base.sol';
+import {TokenExtensionBase} from './TokenExtensionBase.sol';
 
 // TODO-MP: maybe we should have a maximum number of characters
-abstract contract ERC721AdditionalInformation is ERC721Base {
+abstract contract TokenAdditionalInformation is TokenExtensionBase {
     mapping(uint256 => string) private _tokenIdWithAdditionalInformation;
 
     event AdditionalInformationSet(

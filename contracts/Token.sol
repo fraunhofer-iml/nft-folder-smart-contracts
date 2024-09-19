@@ -11,25 +11,25 @@ pragma solidity ^0.8.24;
 
 import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
-import {ERC721AdditionalInformation} from './extensions/ERC721AdditionalInformation.sol';
-import {ERC721Asset} from './extensions/ERC721Asset.sol';
+import {TokenAdditionalInformation} from './extensions/TokenAdditionalInformation.sol';
+import {TokenAsset} from './extensions/TokenAsset.sol';
 import {ERC721Burnable} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol';
-import {ERC721Metadata} from './extensions/ERC721Metadata.sol';
-import {ERC721SegmentAllocation} from './extensions/ERC721SegmentAllocation.sol';
-import {ERC721RemoteId} from './extensions/ERC721RemoteId.sol';
+import {TokenMetadata} from './extensions/TokenMetadata.sol';
+import {TokenSegmentAllocation} from './extensions/TokenSegmentAllocation.sol';
+import {TokenRemoteId} from './extensions/TokenRemoteId.sol';
 import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
-import {Hierarchy} from './extensions/Hierarchy.sol';
+import {TokenHierarchy} from './extensions/TokenHierarchy.sol';
 
 contract Token is
     ERC721,
     Ownable,
-    ERC721AdditionalInformation,
-    ERC721Asset,
+    TokenAdditionalInformation,
+    TokenAsset,
     ERC721Burnable,
-    ERC721Metadata,
-    ERC721SegmentAllocation,
-    ERC721RemoteId,
-    Hierarchy
+    TokenMetadata,
+    TokenSegmentAllocation,
+    TokenRemoteId,
+    TokenHierarchy
 {
     uint256 private _tokenIdCounter;
 
@@ -176,11 +176,11 @@ contract Token is
         internal
         override(
             ERC721,
-            ERC721AdditionalInformation,
-            ERC721Asset,
-            ERC721Metadata,
-            ERC721SegmentAllocation,
-            ERC721RemoteId // TODO-MP: add Hierarchy
+            TokenAdditionalInformation,
+            TokenAsset,
+            TokenMetadata,
+            TokenSegmentAllocation,
+            TokenRemoteId // TODO-MP: add Hierarchy
         )
         returns (address)
     {

@@ -12,7 +12,7 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/src/si
 import { Token } from '../../../../typechain-types';
 import { TOKEN } from '../../../constants';
 
-describe('Token - Extension Hierarchy', async () => {
+describe('Token - TokenHierarchy - Confirm', async () => {
   let alice: HardhatEthersSigner;
   let bob: HardhatEthersSigner;
   let tokenInstance: Token;
