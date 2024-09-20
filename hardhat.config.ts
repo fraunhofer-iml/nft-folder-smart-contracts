@@ -9,6 +9,8 @@ import { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
 import '@nomicfoundation/hardhat-ignition-ethers';
 import 'dotenv/config';
+import 'hardhat-contract-sizer';
+import 'hardhat-tracer';
 
 const DEV_NODE_URL = process.env.DEV_NODE_URL || '';
 const DEV_MNEMONIC = process.env.DEV_MNEMONIC || '';
@@ -43,6 +45,15 @@ const config: HardhatUserConfig = {
     settings: {
       evmVersion: 'paris',
     },
+  },
+  contractSizer: {
+    alphaSort: true,
+    disambiguatePaths: false,
+    runOnCompile: true,
+    strict: false,
+  },
+  tracer: {
+    enabled: true,
   },
 };
 

@@ -12,25 +12,27 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/src/si
 import { Token } from '../../../typechain-types';
 import { TOKEN } from '../../constants';
 
-describe('Token - TokenRemoteId', async () => {
+describe('Token - TokenAdditionalData', async () => {
   let alice: HardhatEthersSigner;
   let tokenInstance: Token;
+  let tokenAddress: string;
 
   before(async () => {
     // @ts-expect-error: library version compatibility issue
     [alice] = await ethers.getSigners();
   });
 
-  describe('getRemoteId after mintToken', function () {
+  describe('getAdditionalData after minToken', function () {
     beforeEach(async () => {
       tokenInstance = await ethers.deployContract('Token', [
         await alice.getAddress(),
         TOKEN.token1.name,
         TOKEN.token1.symbol,
       ]);
+      tokenAddress = await tokenInstance.getAddress();
     });
 
-    it('should get remote id', async () => {
+    it('should get additional data', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -41,11 +43,11 @@ describe('Token - TokenRemoteId', async () => {
         TOKEN.additionalData1.initial,
       );
 
-      const remoteId = await tokenInstance.getRemoteIdByTokenId(0);
-      expect(remoteId).to.be.equal(TOKEN.remoteId1);
+      const additionalData = await tokenInstance.getAdditionalData(0);
+      expect(additionalData).to.be.equal(TOKEN.additionalData1.initial);
     });
 
-    it('should get different remote ids for different tokens', async () => {
+    it('should get different additional data for different tokens', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -65,31 +67,32 @@ describe('Token - TokenRemoteId', async () => {
         TOKEN.additionalData2.initial,
       );
 
-      const remoteId1 = await tokenInstance.getRemoteIdByTokenId(0);
-      expect(remoteId1).to.be.equal(TOKEN.remoteId1);
+      const additionalData1 = await tokenInstance.getAdditionalData(0);
+      expect(additionalData1).to.be.equal(TOKEN.additionalData1.initial);
 
-      const remoteId2 = await tokenInstance.getRemoteIdByTokenId(1);
-      expect(remoteId2).to.be.equal(TOKEN.remoteId2);
+      const additionalData2 = await tokenInstance.getAdditionalData(1);
+      expect(additionalData2).to.be.equal(TOKEN.additionalData2.initial);
     });
 
-    it('should not get remote id', async () => {
-      await expect(tokenInstance.getRemoteIdByTokenId(0)).to.be.revertedWithCustomError(
+    it('should not get additional data', async () => {
+      await expect(tokenInstance.getAdditionalData(0)).to.be.revertedWithCustomError(
         tokenInstance,
         'TokenDoesNotExist',
       );
     });
   });
 
-  describe('getTokenId after mintToken', function () {
+  describe('setAdditionalData', function () {
     beforeEach(async () => {
       tokenInstance = await ethers.deployContract('Token', [
         await alice.getAddress(),
         TOKEN.token1.name,
         TOKEN.token1.symbol,
       ]);
+      tokenAddress = await tokenInstance.getAddress();
     });
 
-    it('should get token id', async () => {
+    it('should set additional data', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -100,14 +103,15 @@ describe('Token - TokenRemoteId', async () => {
         TOKEN.additionalData1.initial,
       );
 
-      const tokenIdForRemoteId: bigint = (await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0];
-      expect(tokenIdForRemoteId).to.be.equal(0n);
+      await expect(tokenInstance.setAdditionalData(0, TOKEN.additionalData1.updated))
+        .to.emit(tokenInstance, 'AdditionalDataSet')
+        .withArgs(TOKEN.additionalData1.initial, TOKEN.additionalData1.updated, alice, tokenAddress, 0);
 
-      const tokenIdForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
-      expect(tokenIdForOwner).to.be.equal(0n);
+      const additionalData = await tokenInstance.getAdditionalData(0);
+      expect(additionalData).to.be.equal(TOKEN.additionalData1.updated);
     });
 
-    it('should get different token ids for different tokens', async () => {
+    it('should get different additional data for different tokens', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -127,25 +131,26 @@ describe('Token - TokenRemoteId', async () => {
         TOKEN.additionalData2.initial,
       );
 
-      const tokenId1ForRemoteId: bigint = (await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0];
-      expect(tokenId1ForRemoteId).to.be.equal(0n);
+      await expect(tokenInstance.setAdditionalData(0, TOKEN.additionalData1.updated))
+        .to.emit(tokenInstance, 'AdditionalDataSet')
+        .withArgs(TOKEN.additionalData1.initial, TOKEN.additionalData1.updated, alice, tokenAddress, 0);
 
-      const tokenId2ForRemoteId: bigint = (await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId2))[0];
-      expect(tokenId2ForRemoteId).to.be.equal(1n);
+      const additionalData1 = await tokenInstance.getAdditionalData(0);
+      expect(additionalData1).to.be.equal(TOKEN.additionalData1.updated);
 
-      const tokenId1ForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
-      expect(tokenId1ForOwner).to.be.equal(0n);
+      await expect(tokenInstance.setAdditionalData(1, TOKEN.additionalData2.updated))
+        .to.emit(tokenInstance, 'AdditionalDataSet')
+        .withArgs(TOKEN.additionalData2.initial, TOKEN.additionalData2.updated, alice, tokenAddress, 1);
 
-      const tokenId2ForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
-      expect(tokenId2ForOwner).to.be.equal(0n);
+      const additionalData2 = await tokenInstance.getAdditionalData(1);
+      expect(additionalData2).to.be.equal(TOKEN.additionalData2.updated);
     });
 
-    it('should not get token id for remote id', async () => {
-      expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1)).length).to.be.equal(0);
-    });
-
-    it('should not get token id for owner', async () => {
-      expect((await tokenInstance.getTokenIdsByOwner(alice)).length).to.be.equal(0);
+    it('should not set additional data', async () => {
+      await expect(tokenInstance.setAdditionalData(0, TOKEN.additionalData1.initial)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenDoesNotExist',
+      );
     });
   });
 
@@ -156,9 +161,10 @@ describe('Token - TokenRemoteId', async () => {
         TOKEN.token1.name,
         TOKEN.token1.symbol,
       ]);
+      tokenAddress = await tokenInstance.getAddress();
     });
 
-    it('should delete ids on burning', async () => {
+    it('should delete additionalData on burning', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -180,20 +186,15 @@ describe('Token - TokenRemoteId', async () => {
 
       await tokenInstance.burn(0);
 
-      // ids for token with id 1 should still exist
-      const remoteId2 = await tokenInstance.getRemoteIdByTokenId(1);
-      expect(remoteId2).to.be.equal(TOKEN.remoteId2);
-      const tokenId2ForRemoteId: bigint = (await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId2))[0];
-      expect(tokenId2ForRemoteId).to.be.equal(1n);
-      const tokenId2ForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
-      expect(tokenId2ForOwner).to.be.equal(1n);
+      // additionalData for token with id 1 should still exist
+      const additionalData2 = await tokenInstance.getAdditionalData(1);
+      expect(additionalData2).to.be.equal(TOKEN.additionalData2.initial);
 
-      // ids for token with id 0 should be deleted
-      await expect(tokenInstance.getRemoteIdByTokenId(0)).to.be.revertedWithCustomError(
+      // additionalData for token with id 0 should be deleted
+      await expect(tokenInstance.getAdditionalData(0)).to.be.revertedWithCustomError(
         tokenInstance,
         'TokenDoesNotExist',
       );
-      expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1)).length).to.be.equal(0);
     });
   });
 });

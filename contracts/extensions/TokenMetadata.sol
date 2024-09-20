@@ -12,51 +12,50 @@ pragma solidity ^0.8.24;
 import {TokenExtensionBase} from './TokenExtensionBase.sol';
 
 abstract contract TokenMetadata is TokenExtensionBase {
-    mapping(uint256 => string) private _tokenIdWithMetadataHash;
+    struct Metadata {
+        string uri;
+        string hash;
+    }
+
+    mapping(uint256 => string) private _tokenIdWithMetadataHash; // The uri is stored in the base ERC721 contract
 
     event MetadataUriSet(
-        string oldMetadataUri,
-        string newMetadataUri,
+        string oldUri,
+        string newUri,
         address indexed from,
         address indexed tokenAddress,
         uint256 indexed tokenId
     );
     event MetadataHashSet(
-        string oldMetadataHash,
-        string newMetadataHash,
+        string oldHash,
+        string newHash,
         address indexed from,
         address indexed tokenAddress,
         uint256 indexed tokenId
     );
 
-    function setMetadataUri(uint256 tokenId, string memory metadataUri) public {
+    function setMetadataUri(uint256 tokenId, string memory uri) public {
         ensureTokenExists(tokenId);
 
-        string memory oldMetadataUri = super.tokenURI(tokenId);
-        super._setTokenURI(tokenId, metadataUri);
+        string memory oldUri = super.tokenURI(tokenId);
+        super._setTokenURI(tokenId, uri);
 
-        emit MetadataUriSet(oldMetadataUri, metadataUri, msg.sender, address(this), tokenId);
+        emit MetadataUriSet(oldUri, uri, msg.sender, address(this), tokenId);
     }
 
-    function setMetadataHash(uint256 tokenId, string memory metadataHash) public {
+    function setMetadataHash(uint256 tokenId, string memory hash) public {
         ensureTokenExists(tokenId);
 
-        string memory oldMetadataHash = _tokenIdWithMetadataHash[tokenId];
-        _tokenIdWithMetadataHash[tokenId] = metadataHash;
+        string memory oldHash = _tokenIdWithMetadataHash[tokenId];
+        _tokenIdWithMetadataHash[tokenId] = hash;
 
-        emit MetadataHashSet(oldMetadataHash, metadataHash, msg.sender, address(this), tokenId);
+        emit MetadataHashSet(oldHash, hash, msg.sender, address(this), tokenId);
     }
 
-    function getMetadataUri(uint256 tokenId) public view returns (string memory) {
+    function getMetadata(uint256 tokenId) public view returns (Metadata memory) {
         ensureTokenExists(tokenId);
 
-        return super.tokenURI(tokenId);
-    }
-
-    function getMetadataHash(uint256 tokenId) public view returns (string memory) {
-        ensureTokenExists(tokenId);
-
-        return _tokenIdWithMetadataHash[tokenId];
+        return Metadata({uri: super.tokenURI(tokenId), hash: _tokenIdWithMetadataHash[tokenId]});
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this

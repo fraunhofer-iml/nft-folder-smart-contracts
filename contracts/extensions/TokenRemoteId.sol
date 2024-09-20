@@ -32,6 +32,8 @@ abstract contract TokenRemoteId is TokenExtensionBase {
         return _ownerWithTokenIds[owner];
     }
 
+    // This function is called inside this contract, but slither doesn't recognize this
+    // slither-disable-next-line dead-code
     function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
         if (to == address(0)) {
             // burn token
@@ -57,6 +59,8 @@ abstract contract TokenRemoteId is TokenExtensionBase {
         _remoteIdWithTokenIds[remoteId].push(tokenId);
     }
 
+    // This function is called inside this contract, but slither doesn't recognize this
+    // slither-disable-next-line dead-code
     function _dissociateRemoteIdFromTokenId(uint256 tokenId, string memory remoteId) internal {
         uint256[] memory tokenIds = _remoteIdWithTokenIds[remoteId];
 
@@ -71,6 +75,8 @@ abstract contract TokenRemoteId is TokenExtensionBase {
         delete _tokenIdWithRemoteId[tokenId];
     }
 
+    // This function is called inside this contract, but slither doesn't recognize this
+    // slither-disable-next-line dead-code
     function _dissociateOwnerFromToken(uint256 tokenId, address owner) internal {
         uint256[] memory tokenIds = _ownerWithTokenIds[owner];
 

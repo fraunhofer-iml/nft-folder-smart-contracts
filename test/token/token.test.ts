@@ -46,24 +46,24 @@ describe('Token', async () => {
       ]);
       await tokenInstance.mintToken(
         alice,
-        TOKEN.asset1.uri,
-        TOKEN.asset1.hash,
-        TOKEN.metadata1.uri,
-        TOKEN.metadata1.hash,
+        TOKEN.asset1.uriInitial,
+        TOKEN.asset1.hashInitial,
+        TOKEN.metadata1.uriInitial,
+        TOKEN.metadata1.hashInitial,
         TOKEN.remoteId1,
-        TOKEN.additionalInformation1.initial,
+        TOKEN.additionalData1.initial,
       );
     });
 
     it('should set all information on token creation', async () => {
-      expect(await tokenInstance.getAssetUri(0)).to.be.equal(TOKEN.asset1.uri);
-      expect(await tokenInstance.getAssetHash(0)).to.be.equal(TOKEN.asset1.hash);
-      expect(await tokenInstance.tokenURI(0)).to.be.equal(TOKEN.metadata1.uri);
-      expect(await tokenInstance.getMetadataHash(0)).to.be.equal(TOKEN.metadata1.hash);
+      expect((await tokenInstance.getAsset(0)).uri).to.be.equal(TOKEN.asset1.uriInitial);
+      expect((await tokenInstance.getAsset(0)).hash).to.be.equal(TOKEN.asset1.hashInitial);
+      expect((await tokenInstance.getMetadata(0)).uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect((await tokenInstance.getMetadata(0)).hash).to.be.equal(TOKEN.metadata1.hashInitial);
       expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
       expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
       expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
-      expect(await tokenInstance.getAdditionalInformation(0)).to.be.equal(TOKEN.additionalInformation1.initial);
+      expect(await tokenInstance.getAdditionalData(0)).to.be.equal(TOKEN.additionalData1.initial);
     });
 
     it('should be burnable', async () => {
@@ -103,20 +103,21 @@ describe('Token', async () => {
     it('should get token', async () => {
       await tokenInstance.mintToken(
         alice,
-        TOKEN.asset1.uri,
-        TOKEN.asset1.hash,
-        TOKEN.metadata1.uri,
-        TOKEN.metadata1.hash,
+        TOKEN.asset1.uriInitial,
+        TOKEN.asset1.hashInitial,
+        TOKEN.metadata1.uriInitial,
+        TOKEN.metadata1.hashInitial,
         TOKEN.remoteId1,
-        TOKEN.additionalInformation1.initial,
+        TOKEN.additionalData1.initial,
       );
 
       const token = await tokenInstance.getToken(0);
-      expect(token.assetUri).to.be.equal(TOKEN.asset1.uri);
-      expect(token.assetHash).to.be.equal(TOKEN.asset1.hash);
-      expect(token.metadataUri).to.be.equal(TOKEN.metadata1.uri);
-      expect(token.metadataHash).to.be.equal(TOKEN.metadata1.hash);
-      expect(token.additionalInformation).to.be.equal(TOKEN.additionalInformation1.initial);
+      expect(token.remoteId).to.be.equal(TOKEN.remoteId1);
+      expect(token.asset.uri).to.be.equal(TOKEN.asset1.uriInitial);
+      expect(token.asset.hash).to.be.equal(TOKEN.asset1.hashInitial);
+      expect(token.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect(token.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      expect(token.additionalData).to.be.equal(TOKEN.additionalData1.initial);
     });
 
     it('should not get token, because tokenId does not exist', async () => {
@@ -136,54 +137,54 @@ describe('Token', async () => {
     it('should update token', async () => {
       await tokenInstance.mintToken(
         alice,
-        TOKEN.asset1.uri,
-        TOKEN.asset1.hash,
-        TOKEN.metadata1.uri,
-        TOKEN.metadata1.hash,
+        TOKEN.asset1.uriInitial,
+        TOKEN.asset1.hashInitial,
+        TOKEN.metadata1.uriInitial,
+        TOKEN.metadata1.hashInitial,
         TOKEN.remoteId1,
-        TOKEN.additionalInformation1.initial,
+        TOKEN.additionalData1.initial,
       );
 
       await tokenInstance.updateToken(
         0,
-        TOKEN.asset2.uri,
-        TOKEN.asset2.hash,
-        TOKEN.metadata2.uri,
-        TOKEN.metadata2.hash,
-        TOKEN.additionalInformation2.initial,
+        TOKEN.asset2.uriInitial,
+        TOKEN.asset2.hashInitial,
+        TOKEN.metadata2.uriInitial,
+        TOKEN.metadata2.hashInitial,
+        TOKEN.additionalData2.initial,
       );
 
-      expect(await tokenInstance.getAssetUri(0)).to.be.equal(TOKEN.asset2.uri);
-      expect(await tokenInstance.getAssetHash(0)).to.be.equal(TOKEN.asset2.hash);
-      expect(await tokenInstance.tokenURI(0)).to.be.equal(TOKEN.metadata2.uri);
-      expect(await tokenInstance.getMetadataHash(0)).to.be.equal(TOKEN.metadata2.hash);
+      expect((await tokenInstance.getAsset(0)).uri).to.be.equal(TOKEN.asset2.uriInitial);
+      expect((await tokenInstance.getAsset(0)).hash).to.be.equal(TOKEN.asset2.hashInitial);
+      expect((await tokenInstance.getMetadata(0)).uri).to.be.equal(TOKEN.metadata2.uriInitial);
+      expect((await tokenInstance.getMetadata(0)).hash).to.be.equal(TOKEN.metadata2.hashInitial);
       expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
       expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
       expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
-      expect(await tokenInstance.getAdditionalInformation(0)).to.be.equal(TOKEN.additionalInformation2.initial);
+      expect(await tokenInstance.getAdditionalData(0)).to.be.equal(TOKEN.additionalData2.initial);
     });
 
     it('should not update token, because of empty strings', async () => {
       await tokenInstance.mintToken(
         alice,
-        TOKEN.asset1.uri,
-        TOKEN.asset1.hash,
-        TOKEN.metadata1.uri,
-        TOKEN.metadata1.hash,
+        TOKEN.asset1.uriInitial,
+        TOKEN.asset1.hashInitial,
+        TOKEN.metadata1.uriInitial,
+        TOKEN.metadata1.hashInitial,
         TOKEN.remoteId1,
-        TOKEN.additionalInformation1.initial,
+        TOKEN.additionalData1.initial,
       );
 
       await tokenInstance.updateToken(0, '', '', '', '', '');
 
-      expect(await tokenInstance.getAssetUri(0)).to.be.equal(TOKEN.asset1.uri);
-      expect(await tokenInstance.getAssetHash(0)).to.be.equal(TOKEN.asset1.hash);
-      expect(await tokenInstance.tokenURI(0)).to.be.equal(TOKEN.metadata1.uri);
-      expect(await tokenInstance.getMetadataHash(0)).to.be.equal(TOKEN.metadata1.hash);
+      expect((await tokenInstance.getAsset(0)).uri).to.be.equal(TOKEN.asset1.uriInitial);
+      expect((await tokenInstance.getAsset(0)).hash).to.be.equal(TOKEN.asset1.hashInitial);
+      expect((await tokenInstance.getMetadata(0)).uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect((await tokenInstance.getMetadata(0)).hash).to.be.equal(TOKEN.metadata1.hashInitial);
       expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
       expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
       expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
-      expect(await tokenInstance.getAdditionalInformation(0)).to.be.equal(TOKEN.additionalInformation1.initial);
+      expect(await tokenInstance.getAdditionalData(0)).to.be.equal(TOKEN.additionalData1.initial);
     });
   });
 });

@@ -34,6 +34,9 @@ abstract contract TokenHierarchy is TokenExtensionBase {
     error TokenIsNotInHierarchy();
 
     function confirmChild(uint256 tokenId, uint256 childId) public {
+        ensureTokenExists(tokenId);
+        ensureTokenExists(childId);
+
         if (_ownerOf(tokenId) != _msgSender()) {
             revert UnauthorizedAccess();
         }
@@ -92,6 +95,13 @@ abstract contract TokenHierarchy is TokenExtensionBase {
         }
 
         emit TokenAppendedToHierarchy(tokenId, parentIds);
+    }
+
+    // This function is called by the implementing contract, but slither doesn't recognize this
+    // slither-disable-next-line dead-code
+    function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
+        // TODO-MP: will be implemented in the future
+        return super._update(to, tokenId, auth);
     }
 
     function _isChildOfToken(uint256 tokenId, uint256 childId) private view returns (bool) {

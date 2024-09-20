@@ -25,12 +25,12 @@ describe('Token - TokenHierarchy - Confirm', async () => {
   async function mintTokenAndAppendToHierarchy(owner: HardhatEthersSigner, parentIds: number[]) {
     await tokenInstance.mintTokenAndAppendToHierarchy(
       owner,
-      TOKEN.asset1.uri,
-      TOKEN.asset1.hash,
-      TOKEN.metadata1.uri,
-      TOKEN.metadata1.hash,
+      TOKEN.asset1.uriInitial,
+      TOKEN.asset1.hashInitial,
+      TOKEN.metadata1.uriInitial,
+      TOKEN.metadata1.hashInitial,
       TOKEN.remoteId1,
-      TOKEN.additionalInformation1.initial,
+      TOKEN.additionalData1.initial,
       parentIds,
     );
   }
@@ -157,6 +157,30 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       // Test children of Bob's tokens
       await testChildIds(bob1Id, [], []);
       await testChildIds(bob2Id, [], []);
+    });
+
+    it('should not confirm 1 child because tokenId does not exist', async () => {
+      const aliceId = 0;
+      const bobId = 1;
+
+      // ### Alice tries to confirm Bob's token as child of her token, but her token does not exist ###
+      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bobId)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenDoesNotExist',
+      );
+    });
+
+    it('should not confirm 1 child because childId does not exist', async () => {
+      const aliceId = 0;
+      const bobId = 1;
+
+      await mintTokenAndAppendToHierarchy(alice, []);
+
+      // ### Alice tries to confirm Bob's token as child of her token, but his token does not exist ###
+      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bobId)).to.be.revertedWithCustomError(
+        tokenInstance,
+        'TokenDoesNotExist',
+      );
     });
 
     it('should not confirm 1 child because not allowed', async () => {

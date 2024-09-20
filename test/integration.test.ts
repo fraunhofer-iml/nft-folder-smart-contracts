@@ -44,12 +44,12 @@ describe('Container', async () => {
     async function mintToken() {
       await tokenInstance.mintToken(
         alice,
-        TOKEN.asset1.uri,
-        TOKEN.asset1.hash,
-        TOKEN.metadata1.uri,
-        TOKEN.metadata1.hash,
+        TOKEN.asset1.uriInitial,
+        TOKEN.asset1.hashInitial,
+        TOKEN.metadata1.uriInitial,
+        TOKEN.metadata1.hashInitial,
         TOKEN.remoteId1,
-        TOKEN.additionalInformation1.initial,
+        TOKEN.additionalData1.initial,
       );
 
       const balanceOfAlice = await tokenInstance.balanceOf(alice);
@@ -59,14 +59,14 @@ describe('Container', async () => {
       expect(ownerOf).to.be.equal(alice);
 
       const tokenUri = await tokenInstance.tokenURI('0');
-      expect(tokenUri).to.be.equal(TOKEN.metadata1.uri);
+      expect(tokenUri).to.be.equal(TOKEN.metadata1.uriInitial);
 
-      const additionalInformation = await tokenInstance.getAdditionalInformation('0');
-      expect(additionalInformation).to.be.equal(TOKEN.additionalInformation1.initial);
+      const additionalData = await tokenInstance.getAdditionalData('0');
+      expect(additionalData).to.be.equal(TOKEN.additionalData1.initial);
 
-      const assetInformation = await tokenInstance.getAssetInformation('0');
-      expect(assetInformation.assetUri).to.be.equal(TOKEN.asset1.uri);
-      expect(assetInformation.assetHash).to.be.equal(TOKEN.asset1.hash);
+      const asset = await tokenInstance.getAsset('0');
+      expect(asset.uri).to.be.equal(TOKEN.asset1.uriInitial);
+      expect(asset.hash).to.be.equal(TOKEN.asset1.hashInitial);
 
       const remoteId = await tokenInstance.getRemoteIdByTokenId('0');
       expect(remoteId).to.be.equal(TOKEN.remoteId1);
@@ -77,8 +77,9 @@ describe('Container', async () => {
       const tokenIdForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
       expect(tokenIdForOwner).to.be.equal(0n);
 
-      const metadataHash = await tokenInstance.getMetadataHash('0');
-      expect(metadataHash).to.be.equal(TOKEN.metadata1.hash);
+      const metadata = await tokenInstance.getMetadata('0');
+      expect(metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect(metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
 
       const segments = await tokenInstance.getAllSegments('0');
       expect(segments).to.be.empty;
@@ -96,12 +97,12 @@ describe('Container', async () => {
       await segmentInstance.addToken(await tokenInstance.getAddress(), '0');
 
       // segment side
-      const tokenInformation = await segmentInstance.getTokenInformation('0');
-      expect(tokenInformation.tokenAddress).to.be.equal(await tokenInstance.getAddress());
-      expect(tokenInformation.tokenId).to.be.equal('0');
+      const tokenData = await segmentInstance.getTokenInformation('0');
+      expect(tokenData.tokenAddress).to.be.equal(await tokenInstance.getAddress());
+      expect(tokenData.tokenId).to.be.equal('0');
 
-      const numberOfTokenInformation = await segmentInstance.getNumberOfTokenInformation();
-      expect(numberOfTokenInformation).to.be.equal('1');
+      const numberOfTokenData = await segmentInstance.getNumberOfTokenInformation();
+      expect(numberOfTokenData).to.be.equal('1');
 
       const tokenInSegment_segmentSide = await segmentInstance.isTokenInSegment(await tokenInstance.getAddress(), '0');
       expect(tokenInSegment_segmentSide).to.be.true;
@@ -131,8 +132,8 @@ describe('Container', async () => {
 
       await expectRevert(tokenInstance.ownerOf("0"), "ERC721: invalid token ID");
       await expectRevert(tokenInstance.tokenURI("0"), "ERC721: invalid token ID");
-      await expectRevert(tokenInstance.getAdditionalInformation("0"), "ERC721: invalid token ID");
-      await expectRevert(tokenInstance.getAssetInformation("0"), "ERC721: invalid token ID");
+      await expectRevert(tokenInstance.getAdditionalData("0"), "ERC721: invalid token ID");
+      await expectRevert(tokenInstance.getAssetData("0"), "ERC721: invalid token ID");
       await expectRevert(tokenInstance.getMetadataHash("0"), "ERC721: invalid token ID");
       await expectRevert(tokenInstance.getRemoteIdByTokenId("0"), "ERC721: invalid token ID");
       await expectRevert(tokenInstance.getTokenId(TOKEN.remoteId1), "ERC721: invalid token ID");

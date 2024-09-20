@@ -25,12 +25,12 @@ describe('Token - TokenHierarchy - Append', async () => {
     await expect(
       tokenInstance.mintTokenAndAppendToHierarchy(
         alice,
-        TOKEN.asset1.uri,
-        TOKEN.asset1.hash,
-        TOKEN.metadata1.uri,
-        TOKEN.metadata1.hash,
+        TOKEN.asset1.uriInitial,
+        TOKEN.asset1.hashInitial,
+        TOKEN.metadata1.uriInitial,
+        TOKEN.metadata1.hashInitial,
         TOKEN.remoteId1,
-        TOKEN.additionalInformation1.initial,
+        TOKEN.additionalData1.initial,
         parentIds,
       ),
     )

@@ -12,58 +12,49 @@ pragma solidity ^0.8.24;
 import {TokenExtensionBase} from './TokenExtensionBase.sol';
 
 abstract contract TokenAsset is TokenExtensionBase {
-    struct AssetInformation {
-        string assetUri;
-        string assetHash;
+    struct Asset {
+        string uri;
+        string hash;
     }
 
-    mapping(uint256 => AssetInformation) private _tokenIdWithAssetInformation;
+    mapping(uint256 => Asset) private _tokenIdWithAsset;
+
     event AssetUriSet(
-        string oldAssetUri,
-        string newAssetUri,
+        string oldUri,
+        string newUri,
         address indexed from,
         address indexed tokenAddress,
         uint256 indexed tokenId
     );
     event AssetHashSet(
-        string oldAssetHash,
-        string newAssetHash,
+        string oldHash,
+        string newHash,
         address indexed from,
         address indexed tokenAddress,
         uint256 indexed tokenId
     );
 
-    function setAssetUri(uint256 tokenId, string memory assetUri) public {
+    function setAssetUri(uint256 tokenId, string memory uri) public {
         ensureTokenExists(tokenId);
 
-        string memory oldAssetUri = _tokenIdWithAssetInformation[tokenId].assetUri;
-        _tokenIdWithAssetInformation[tokenId].assetUri = assetUri;
+        string memory oldUri = _tokenIdWithAsset[tokenId].uri;
+        _tokenIdWithAsset[tokenId].uri = uri;
 
-        emit AssetUriSet(oldAssetUri, assetUri, msg.sender, address(this), tokenId);
+        emit AssetUriSet(oldUri, uri, msg.sender, address(this), tokenId);
     }
 
-    function setAssetHash(uint256 tokenId, string memory assetHash) public {
+    function setAssetHash(uint256 tokenId, string memory hash) public {
         ensureTokenExists(tokenId);
 
-        string memory oldAssetHash = _tokenIdWithAssetInformation[tokenId].assetHash;
-        _tokenIdWithAssetInformation[tokenId].assetHash = assetHash;
+        string memory oldHash = _tokenIdWithAsset[tokenId].hash;
+        _tokenIdWithAsset[tokenId].hash = hash;
 
-        emit AssetHashSet(oldAssetHash, assetHash, msg.sender, address(this), tokenId);
+        emit AssetHashSet(oldHash, hash, msg.sender, address(this), tokenId);
     }
 
-    function getAssetInformation(uint256 tokenId) public view returns (AssetInformation memory) {
+    function getAsset(uint256 tokenId) public view returns (Asset memory) {
         ensureTokenExists(tokenId);
-        return _tokenIdWithAssetInformation[tokenId];
-    }
-
-    function getAssetUri(uint256 tokenId) public view returns (string memory) {
-        ensureTokenExists(tokenId);
-        return _tokenIdWithAssetInformation[tokenId].assetUri;
-    }
-
-    function getAssetHash(uint256 tokenId) public view returns (string memory) {
-        ensureTokenExists(tokenId);
-        return _tokenIdWithAssetInformation[tokenId].assetHash;
+        return _tokenIdWithAsset[tokenId];
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this
@@ -71,10 +62,10 @@ abstract contract TokenAsset is TokenExtensionBase {
     function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
         if (
             to == address(0) &&
-            bytes(_tokenIdWithAssetInformation[tokenId].assetUri).length != 0 &&
-            bytes(_tokenIdWithAssetInformation[tokenId].assetHash).length != 0
+            bytes(_tokenIdWithAsset[tokenId].uri).length != 0 &&
+            bytes(_tokenIdWithAsset[tokenId].hash).length != 0
         ) {
-            delete _tokenIdWithAssetInformation[tokenId];
+            delete _tokenIdWithAsset[tokenId];
         }
 
         return super._update(to, tokenId, auth);
