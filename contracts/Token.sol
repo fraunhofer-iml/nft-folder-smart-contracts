@@ -77,7 +77,7 @@ contract Token is
             remoteId,
             additionalData
         );
-        _appendTokenToHierarchy(tokenId, parentIds);
+        _appendNodeToHierarchy(tokenId, parentIds);
     }
 
     function updateToken(

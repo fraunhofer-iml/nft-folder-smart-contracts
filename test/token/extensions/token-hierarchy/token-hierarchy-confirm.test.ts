@@ -44,11 +44,11 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       ]);
     });
 
-    async function testParentIds(tokenId: number, unconfirmedParentIds: number[], confirmedParentIds: number[]) {
-      const unconfirmedParentIdsOfAliceBeforeConfirm = await tokenInstance.getParentIds(tokenId, false);
+    async function testParentIds(childId: number, unconfirmedParentIds: number[], confirmedParentIds: number[]) {
+      const unconfirmedParentIdsOfAliceBeforeConfirm = await tokenInstance.getParentIds(childId, false);
       expect(unconfirmedParentIdsOfAliceBeforeConfirm).to.be.deep.equal(unconfirmedParentIds);
 
-      const confirmedParentIdsOfAliceBeforeConfirm = await tokenInstance.getParentIds(tokenId, true);
+      const confirmedParentIdsOfAliceBeforeConfirm = await tokenInstance.getParentIds(childId, true);
       expect(confirmedParentIdsOfAliceBeforeConfirm).to.be.deep.equal(confirmedParentIds);
     }
 
@@ -80,9 +80,9 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       await testChildIds(bobId, [], []);
 
       // ### Alice confirms Bob's token as child of her token ###
-      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bobId))
-        .to.emit(tokenInstance, 'ChildConfirmed')
-        .withArgs(alice, aliceId, bobId);
+      await expect(tokenInstance.connect(alice).confirmChildOfParent(bobId, aliceId))
+        .to.emit(tokenInstance, 'ChildOfParentConfirmed')
+        .withArgs(alice, bobId, aliceId);
 
       // Test parents of Alice's token
       await testParentIds(aliceId, [], []);
@@ -121,9 +121,9 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       await testChildIds(bob2Id, [], []);
 
       // ### Alice confirms Bob's first token as child of her token ###
-      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bob1Id))
-        .to.emit(tokenInstance, 'ChildConfirmed')
-        .withArgs(alice, aliceId, bob1Id);
+      await expect(tokenInstance.connect(alice).confirmChildOfParent(bob1Id, aliceId))
+        .to.emit(tokenInstance, 'ChildOfParentConfirmed')
+        .withArgs(alice, bob1Id, aliceId);
 
       // Test parents of Alice's token
       await testParentIds(aliceId, [], []);
@@ -140,9 +140,9 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       await testChildIds(bob2Id, [], []);
 
       // ### Alice confirms Bob's second token as child of her token ###
-      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bob2Id))
-        .to.emit(tokenInstance, 'ChildConfirmed')
-        .withArgs(alice, aliceId, bob2Id);
+      await expect(tokenInstance.connect(alice).confirmChildOfParent(bob2Id, aliceId))
+        .to.emit(tokenInstance, 'ChildOfParentConfirmed')
+        .withArgs(alice, bob2Id, aliceId);
 
       // Test parents of Alice's token
       await testParentIds(aliceId, [], []);
@@ -164,7 +164,7 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       const bobId = 1;
 
       // ### Alice tries to confirm Bob's token as child of her token, but her token does not exist ###
-      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bobId)).to.be.revertedWithCustomError(
+      await expect(tokenInstance.connect(alice).confirmChildOfParent(bobId, aliceId)).to.be.revertedWithCustomError(
         tokenInstance,
         'TokenDoesNotExist',
       );
@@ -177,7 +177,7 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       await mintTokenAndAppendToHierarchy(alice, []);
 
       // ### Alice tries to confirm Bob's token as child of her token, but his token does not exist ###
-      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bobId)).to.be.revertedWithCustomError(
+      await expect(tokenInstance.connect(alice).confirmChildOfParent(bobId, aliceId)).to.be.revertedWithCustomError(
         tokenInstance,
         'TokenDoesNotExist',
       );
@@ -191,7 +191,7 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       await mintTokenAndAppendToHierarchy(bob, [aliceId]);
 
       // ### Bob tries to confirm his token as child of Alice's token, but he's not allowed ###
-      await expect(tokenInstance.connect(bob).confirmChild(aliceId, bobId)).to.be.revertedWithCustomError(
+      await expect(tokenInstance.connect(bob).confirmChildOfParent(bobId, aliceId)).to.be.revertedWithCustomError(
         tokenInstance,
         'UnauthorizedAccess',
       );
@@ -205,7 +205,7 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       await mintTokenAndAppendToHierarchy(bob, []);
 
       // ### Alice tries to confirm Bob's token as child of her token, but it's not a child ###
-      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bobId)).to.be.revertedWithCustomError(
+      await expect(tokenInstance.connect(alice).confirmChildOfParent(bobId, aliceId)).to.be.revertedWithCustomError(
         tokenInstance,
         'ChildNotFound',
       );
@@ -218,10 +218,10 @@ describe('Token - TokenHierarchy - Confirm', async () => {
       await mintTokenAndAppendToHierarchy(alice, []);
       await mintTokenAndAppendToHierarchy(bob, [aliceId]);
 
-      await tokenInstance.connect(alice).confirmChild(aliceId, bobId);
+      await tokenInstance.connect(alice).confirmChildOfParent(bobId, aliceId);
 
       // ### Alice tries to confirm Bob's token as child of her token, but it's already confirmed ###
-      await expect(tokenInstance.connect(alice).confirmChild(aliceId, bobId)).to.be.revertedWithCustomError(
+      await expect(tokenInstance.connect(alice).confirmChildOfParent(bobId, aliceId)).to.be.revertedWithCustomError(
         tokenInstance,
         'ChildAlreadyConfirmed',
       );

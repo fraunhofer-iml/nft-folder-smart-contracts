@@ -34,7 +34,7 @@ describe('Token - TokenHierarchy - Append', async () => {
         parentIds,
       ),
     )
-      .to.emit(tokenInstance, 'TokenAppendedToHierarchy')
+      .to.emit(tokenInstance, 'NodeAppendedToHierarchy')
       .withArgs(expectedTokenId, parentIds);
   }
 
@@ -54,9 +54,6 @@ describe('Token - TokenHierarchy - Append', async () => {
 
       const node = await tokenInstance.getNode(rootId);
       expect(node.exists).to.be.true;
-      expect(node.active).to.be.true;
-      expect(node.predecessorId).to.be.equal(ethers.MaxUint256);
-      expect(node.successorId).to.be.equal(ethers.MaxUint256);
       expect(node.childIds).to.be.empty;
       expect(node.parentIds).to.be.empty;
 

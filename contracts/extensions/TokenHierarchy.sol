@@ -14,18 +14,15 @@ import {TokenExtensionBase} from './TokenExtensionBase.sol';
 abstract contract TokenHierarchy is TokenExtensionBase {
     struct Node {
         bool exists;
-        bool active;
-        uint256 predecessorId; // The previous token in the replacement chain that this token replaces
-        uint256 successorId; // The next token in the replacement chain that replaces this token
         uint256[] childIds; // The child tokens that this token is a parent of
         uint256[] parentIds; // The parent tokens that this token is a child of
     }
 
     mapping(uint256 tokenId => Node node) private _nodes;
-    mapping(uint256 tokenId => mapping(uint256 parentId => bool confirmed)) private _parentConfirmations; // The parent token confirmations for each token
+    mapping(uint256 childId => mapping(uint256 parentId => bool confirmed)) private _parentConfirmations; // The parent token confirmations for each token
 
-    event TokenAppendedToHierarchy(uint256 indexed tokenId, uint256[] parentIds);
-    event ChildConfirmed(address indexed from, uint256 indexed tokenId, uint256 indexed childId);
+    event NodeAppendedToHierarchy(uint256 indexed tokenId, uint256[] parentIds);
+    event ChildOfParentConfirmed(address indexed from, uint256 indexed childId, uint256 indexed parentId);
 
     error UnauthorizedAccess();
     error ChildNotFound();
@@ -33,49 +30,45 @@ abstract contract TokenHierarchy is TokenExtensionBase {
     error TokenIsItsOwnParent();
     error TokenIsNotInHierarchy();
 
-    function confirmChild(uint256 tokenId, uint256 childId) public {
-        ensureTokenExists(tokenId);
+    function confirmChildOfParent(uint256 childId, uint256 parentId) public {
         ensureTokenExists(childId);
+        ensureTokenExists(parentId);
 
-        if (_ownerOf(tokenId) != _msgSender()) {
+        if (_ownerOf(parentId) != _msgSender()) {
             revert UnauthorizedAccess();
         }
 
-        if (!_isChildOfToken(tokenId, childId)) {
+        if (!_isChildOfParent(childId, parentId)) {
             revert ChildNotFound();
         }
 
-        if (_parentConfirmations[childId][tokenId]) {
+        if (_parentConfirmations[childId][parentId]) {
             revert ChildAlreadyConfirmed();
         }
 
-        _parentConfirmations[childId][tokenId] = true;
+        _parentConfirmations[childId][parentId] = true;
 
-        emit ChildConfirmed(_msgSender(), tokenId, childId);
+        emit ChildOfParentConfirmed(_msgSender(), childId, parentId);
+    }
+
+    function getParentIds(uint256 childId, bool confirmed) public view returns (uint256[] memory) {
+        ensureTokenExists(childId);
+        return _filterParentOrChildIds(childId, _nodes[childId].parentIds, confirmed, _compareParent);
+    }
+
+    function getChildIds(uint256 parentId, bool confirmed) public view returns (uint256[] memory) {
+        ensureTokenExists(parentId);
+        return _filterParentOrChildIds(parentId, _nodes[parentId].childIds, confirmed, _compareChild);
     }
 
     function getNode(uint256 tokenId) public view returns (Node memory node) {
         ensureTokenExists(tokenId);
-
         return _nodes[tokenId];
     }
 
-    function getParentIds(uint256 tokenId, bool confirmed) public view returns (uint256[] memory) {
-        ensureTokenExists(tokenId);
-        return _filterParentOrChildIds(tokenId, _nodes[tokenId].parentIds, confirmed, _compareParent);
-    }
-
-    function getChildIds(uint256 tokenId, bool confirmed) public view returns (uint256[] memory) {
-        ensureTokenExists(tokenId);
-        return _filterParentOrChildIds(tokenId, _nodes[tokenId].childIds, confirmed, _compareChild);
-    }
-
     // Append only during minting
-    function _appendTokenToHierarchy(uint256 tokenId, uint256[] memory parentIds) internal {
+    function _appendNodeToHierarchy(uint256 tokenId, uint256[] memory parentIds) internal {
         _nodes[tokenId].exists = true;
-        _nodes[tokenId].active = true;
-        _nodes[tokenId].predecessorId = type(uint256).max;
-        _nodes[tokenId].successorId = type(uint256).max;
         _nodes[tokenId].parentIds = parentIds; // if empty, the token is a root token
 
         for (uint256 i = 0; i < parentIds.length; i++) {
@@ -94,7 +87,7 @@ abstract contract TokenHierarchy is TokenExtensionBase {
             _nodes[parentId].childIds.push(tokenId);
         }
 
-        emit TokenAppendedToHierarchy(tokenId, parentIds);
+        emit NodeAppendedToHierarchy(tokenId, parentIds);
     }
 
     // This function is called by the implementing contract, but slither doesn't recognize this
@@ -104,8 +97,8 @@ abstract contract TokenHierarchy is TokenExtensionBase {
         return super._update(to, tokenId, auth);
     }
 
-    function _isChildOfToken(uint256 tokenId, uint256 childId) private view returns (bool) {
-        uint256[] memory childIds = _nodes[tokenId].childIds;
+    function _isChildOfParent(uint256 childId, uint256 parentId) private view returns (bool) {
+        uint256[] memory childIds = _nodes[parentId].childIds;
 
         for (uint256 i = 0; i < childIds.length; i++) {
             if (childIds[i] == childId) {
