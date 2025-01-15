@@ -1,8 +1,9 @@
-/**
- * Copyright 2023 Open Logistics Foundation
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
  *
- * Licensed under the Open Logistics License 1.0.
+ * Licensed under the Apache License, Version 2.0 (the "License").
  * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { ethers } from 'hardhat';

@@ -1,8 +1,9 @@
-/**
- * Copyright 2023 Open Logistics Foundation
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
  *
- * Licensed under the Open Logistics License 1.0.
+ * Licensed under the Apache License, Version 2.0 (the "License").
  * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { expect } from 'chai';
@@ -11,6 +12,7 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/src/si
 
 import { Token } from '../../../typechain-types';
 import { TOKEN } from '../../constants';
+import { TokenDataStorage } from '../../../typechain-types/contracts/Token';
 
 describe('Token - TokenMetadata', async () => {
   let alice: HardhatEthersSigner;
@@ -43,9 +45,9 @@ describe('Token - TokenMetadata', async () => {
         TOKEN.additionalData1.initial,
       );
 
-      const metadata = await tokenInstance.getMetadata(0);
-      expect(metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
-      expect(metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      const tokenDataStruct: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(0)).tokenData;
+      expect(tokenDataStruct.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect(tokenDataStruct.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
     });
 
     it('should get metadata for multiple minted token', async () => {
@@ -68,21 +70,21 @@ describe('Token - TokenMetadata', async () => {
         TOKEN.additionalData2.initial,
       );
 
-      const metadata1 = await tokenInstance.getMetadata(0);
-      expect(metadata1.uri).to.be.equal(TOKEN.metadata1.uriInitial);
-      expect(metadata1.hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      const tokenDataStruct1: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(0)).tokenData;
+      expect(tokenDataStruct1.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect(tokenDataStruct1.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
 
-      const metadata2 = await tokenInstance.getMetadata(1);
-      expect(metadata2.uri).to.be.equal(TOKEN.metadata2.uriInitial);
-      expect(metadata2.hash).to.be.equal(TOKEN.metadata2.hashInitial);
+      const tokenDataStruct2: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(1)).tokenData;
+      expect(tokenDataStruct2.metadata.uri).to.be.equal(TOKEN.metadata2.uriInitial);
+      expect(tokenDataStruct2.metadata.hash).to.be.equal(TOKEN.metadata2.hashInitial);
     });
 
     it('should not get metadata', async () => {
-      await expect(tokenInstance.getMetadata(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
+      await expect(tokenInstance.getToken(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
-  describe('setMetadataUri', function () {
+  describe('setmetadata.uri', function () {
     beforeEach(async () => {
       tokenInstance = await ethers.deployContract('Token', [
         await alice.getAddress(),
@@ -92,7 +94,7 @@ describe('Token - TokenMetadata', async () => {
       tokenAddress = await tokenInstance.getAddress();
     });
 
-    it('should set metadataUri', async () => {
+    it('should set metadata.uri', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -103,16 +105,16 @@ describe('Token - TokenMetadata', async () => {
         TOKEN.additionalData1.initial,
       );
 
-      await expect(tokenInstance.setMetadataUri(0, TOKEN.metadata1.uriUpdated))
-        .to.emit(tokenInstance, 'MetadataUriSet')
-        .withArgs(TOKEN.metadata1.uriInitial, TOKEN.metadata1.uriUpdated, alice, tokenAddress, 0);
+      await expect(tokenInstance.updateToken(0, '', '', TOKEN.metadata1.uriUpdated, '', ''))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 0);
 
-      const metadata = await tokenInstance.getMetadata(0);
-      expect(metadata.uri).to.be.equal(TOKEN.metadata1.uriUpdated);
-      expect(metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      const tokenDataStruct: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(0)).tokenData;
+      expect(tokenDataStruct.metadata.uri).to.be.equal(TOKEN.metadata1.uriUpdated);
+      expect(tokenDataStruct.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
     });
 
-    it('should set metadataUri for multiple minted token', async () => {
+    it('should set metadata.uri for multiple minted token', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -132,32 +134,31 @@ describe('Token - TokenMetadata', async () => {
         TOKEN.additionalData2.initial,
       );
 
-      await expect(tokenInstance.setMetadataUri(0, TOKEN.metadata1.uriUpdated))
-        .to.emit(tokenInstance, 'MetadataUriSet')
-        .withArgs(TOKEN.metadata1.uriInitial, TOKEN.metadata1.uriUpdated, alice, tokenAddress, 0);
+      await expect(tokenInstance.updateToken(0, '', '', TOKEN.metadata1.uriUpdated, '', ''))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 0);
 
-      const metadata1 = await tokenInstance.getMetadata(0);
-      expect(metadata1.uri).to.be.equal(TOKEN.metadata1.uriUpdated);
-      expect(metadata1.hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      const tokenDataStruct1: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(0)).tokenData;
+      expect(tokenDataStruct1.metadata.uri).to.be.equal(TOKEN.metadata1.uriUpdated);
+      expect(tokenDataStruct1.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
 
-      await expect(tokenInstance.setMetadataUri(1, TOKEN.metadata2.uriUpdated))
-        .to.emit(tokenInstance, 'MetadataUriSet')
-        .withArgs(TOKEN.metadata2.uriInitial, TOKEN.metadata2.uriUpdated, alice, tokenAddress, 1);
+      await expect(tokenInstance.updateToken(1, '', '', TOKEN.metadata2.uriUpdated, '', ''))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 1);
 
-      const metadata2 = await tokenInstance.getMetadata(1);
-      expect(metadata2.uri).to.be.equal(TOKEN.metadata2.uriUpdated);
-      expect(metadata2.hash).to.be.equal(TOKEN.metadata2.hashInitial);
+      const tokenDataStruct2: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(1)).tokenData;
+      expect(tokenDataStruct2.metadata.uri).to.be.equal(TOKEN.metadata2.uriUpdated);
+      expect(tokenDataStruct2.metadata.hash).to.be.equal(TOKEN.metadata2.hashInitial);
     });
 
-    it('should not set metadataUri', async () => {
-      await expect(tokenInstance.setMetadataUri(0, TOKEN.metadata1.uriInitial)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenDoesNotExist',
-      );
+    it('should not set metadata.uri', async () => {
+      await expect(
+        tokenInstance.updateToken(0, '', '', '', TOKEN.metadata1.hashUpdated, ''),
+      ).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
-  describe('setMetadataHash', function () {
+  describe('setmetadata.hash', function () {
     beforeEach(async () => {
       tokenInstance = await ethers.deployContract('Token', [
         await alice.getAddress(),
@@ -167,7 +168,7 @@ describe('Token - TokenMetadata', async () => {
       tokenAddress = await tokenInstance.getAddress();
     });
 
-    it('should set metadataHash', async () => {
+    it('should set metadata.hash', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -178,16 +179,16 @@ describe('Token - TokenMetadata', async () => {
         TOKEN.additionalData1.initial,
       );
 
-      await expect(tokenInstance.setMetadataHash(0, TOKEN.metadata1.hashUpdated))
-        .to.emit(tokenInstance, 'MetadataHashSet')
-        .withArgs(TOKEN.metadata1.hashInitial, TOKEN.metadata1.hashUpdated, alice, tokenAddress, 0);
+      await expect(tokenInstance.updateToken(0, '', '', '', TOKEN.metadata1.hashUpdated, ''))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 0);
 
-      const metadata = await tokenInstance.getMetadata(0);
-      expect(metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
-      expect(metadata.hash).to.be.equal(TOKEN.metadata1.hashUpdated);
+      const tokenDataStruct: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(0)).tokenData;
+      expect(tokenDataStruct.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect(tokenDataStruct.metadata.hash).to.be.equal(TOKEN.metadata1.hashUpdated);
     });
 
-    it('should set metadataHash for multiple minted token', async () => {
+    it('should set metadata.hash for multiple minted token', async () => {
       await tokenInstance.mintToken(
         alice,
         TOKEN.asset1.uriInitial,
@@ -207,28 +208,27 @@ describe('Token - TokenMetadata', async () => {
         TOKEN.additionalData2.initial,
       );
 
-      await expect(tokenInstance.setMetadataHash(0, TOKEN.metadata1.hashUpdated))
-        .to.emit(tokenInstance, 'MetadataHashSet')
-        .withArgs(TOKEN.metadata1.hashInitial, TOKEN.metadata1.hashUpdated, alice, tokenAddress, 0);
+      await expect(tokenInstance.updateToken(0, '', '', '', TOKEN.metadata1.hashUpdated, ''))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 0);
 
-      const metadata1 = await tokenInstance.getMetadata(0);
-      expect(metadata1.uri).to.be.equal(TOKEN.metadata1.uriInitial);
-      expect(metadata1.hash).to.be.equal(TOKEN.metadata1.hashUpdated);
+      const tokenDataStruct1: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(0)).tokenData;
+      expect(tokenDataStruct1.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect(tokenDataStruct1.metadata.hash).to.be.equal(TOKEN.metadata1.hashUpdated);
 
-      await expect(tokenInstance.setMetadataHash(1, TOKEN.metadata2.hashUpdated))
-        .to.emit(tokenInstance, 'MetadataHashSet')
-        .withArgs(TOKEN.metadata2.hashInitial, TOKEN.metadata2.hashUpdated, alice, tokenAddress, 1);
+      await expect(tokenInstance.updateToken(1, '', '', '', TOKEN.metadata2.hashUpdated, ''))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 1);
 
-      const metadata2 = await tokenInstance.getMetadata(1);
-      expect(metadata2.uri).to.be.equal(TOKEN.metadata2.uriInitial);
-      expect(metadata2.hash).to.be.equal(TOKEN.metadata2.hashUpdated);
+      const tokenDataStruct2: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(1)).tokenData;
+      expect(tokenDataStruct2.metadata.uri).to.be.equal(TOKEN.metadata2.uriInitial);
+      expect(tokenDataStruct2.metadata.hash).to.be.equal(TOKEN.metadata2.hashUpdated);
     });
 
-    it('should not set metadataHash', async () => {
-      await expect(tokenInstance.setMetadataHash(0, TOKEN.metadata1.hashInitial)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenDoesNotExist',
-      );
+    it('should not set metadata.hash', async () => {
+      await expect(
+        tokenInstance.updateToken(0, '', '', '', TOKEN.metadata1.hashInitial, ''),
+      ).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
@@ -268,14 +268,14 @@ describe('Token - TokenMetadata', async () => {
       const tokenUri = await tokenInstance.tokenURI(1);
       expect(tokenUri).to.be.equal(TOKEN.metadata2.uriInitial);
 
-      const metadata = await tokenInstance.getMetadata(1);
-      expect(metadata.uri).to.be.equal(TOKEN.metadata2.uriInitial);
-      expect(metadata.hash).to.be.equal(TOKEN.metadata2.hashInitial);
+      const tokenDataStruct: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(1)).tokenData;
+      expect(tokenDataStruct.metadata.uri).to.be.equal(TOKEN.metadata2.uriInitial);
+      expect(tokenDataStruct.metadata.hash).to.be.equal(TOKEN.metadata2.hashInitial);
 
       // uri and hash for token with id 0 should be deleted
       await expect(tokenInstance.tokenURI(0)).to.be.revertedWithCustomError(tokenInstance, 'ERC721NonexistentToken');
 
-      await expect(tokenInstance.getMetadata(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
+      await expect(tokenInstance.getToken(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 });

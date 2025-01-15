@@ -1,20 +1,17 @@
-/**
- * SPDX-License-Identifier: Open Logistics Foundation
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
  *
- * Copyright 2023 Open Logistics Foundation
- *
- * Licensed under the Open Logistics License 1.0.
+ * Licensed under the Apache License, Version 2.0 (the "License").
  * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 pragma solidity ^0.8.24;
 
 import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
-import {TokenAdditionalData} from './extensions/TokenAdditionalData.sol';
-import {TokenAsset} from './extensions/TokenAsset.sol';
+import {TokenDataStorage} from './extensions/TokenDataStorage.sol';
 import {ERC721Burnable} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol';
-import {TokenMetadata} from './extensions/TokenMetadata.sol';
 import {TokenSegmentAllocation} from './extensions/TokenSegmentAllocation.sol';
 import {TokenRemoteId} from './extensions/TokenRemoteId.sol';
 import {ERC721URIStorage} from '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
@@ -23,10 +20,8 @@ import {TokenHierarchy} from './extensions/TokenHierarchy.sol';
 contract Token is
     ERC721,
     Ownable,
-    TokenAdditionalData,
-    TokenAsset,
+    TokenDataStorage,
     ERC721Burnable,
-    TokenMetadata,
     TokenSegmentAllocation,
     TokenRemoteId,
     TokenHierarchy
@@ -93,24 +88,9 @@ contract Token is
 
     function getToken(
         uint256 tokenId
-    )
-        public
-        view
-        returns (
-            string memory remoteId,
-            Asset memory asset,
-            Metadata memory metadata,
-            string memory additionalData,
-            Node memory node
-        )
-    {
-        return (
-            getRemoteIdByTokenId(tokenId),
-            getAsset(tokenId),
-            getMetadata(tokenId),
-            getAdditionalData(tokenId),
-            getNode(tokenId)
-        );
+    ) public view returns (string memory remoteId, TokenData memory tokenData, Node memory node) {
+        ensureTokenExists(tokenId);
+        return (getRemoteIdByTokenId(tokenId), tokenIdWithTokenData[tokenId], getNode(tokenId));
     }
 
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
@@ -129,15 +109,7 @@ contract Token is
         address auth
     )
         internal
-        override(
-            ERC721,
-            TokenAdditionalData,
-            TokenAsset,
-            TokenMetadata,
-            TokenSegmentAllocation,
-            TokenRemoteId,
-            TokenHierarchy
-        )
+        override(ERC721, TokenDataStorage, TokenSegmentAllocation, TokenRemoteId, TokenHierarchy)
         returns (address)
     {
         return super._update(to, tokenId, auth);
@@ -175,6 +147,8 @@ contract Token is
         string memory metadataHash,
         string memory additionalData
     ) private {
+        ensureTokenExists(tokenId);
+
         if (bytes(assetUri).length > 0) {
             setAssetUri(tokenId, assetUri);
         }

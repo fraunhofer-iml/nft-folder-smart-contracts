@@ -2,7 +2,6 @@ stages:
   - build
   - test
   - analyze
-  - license
 
 variables:
   GITLAB_TAG: 'be'
@@ -125,42 +124,3 @@ run-sonar-scanner:
       -Dsonar.login="${SONAR_TOKEN}"
   rules:
     - when: on_success
-
-###############
-### license ###
-###############
-
-create-npm-licenses-list:
-  stage: license
-  variables:
-    LICENSES_LIST: 'npm-licenses-list.csv'
-    LICENSES_OVERRIDES: 'third-party-licenses/npm-licenses-overrides.txt'
-    EXCLUDED_PACKAGES: ''
-  before_script:
-    - $NPM_CI
-    - >
-      if [ -e ${LICENSES_OVERRIDES} ]; then
-        EXCLUDED_PACKAGES=$(cat ${LICENSES_OVERRIDES});
-      fi
-  script:
-    - >
-      npx license-checker
-      --unknown
-      --csv
-      --excludePackages "${EXCLUDED_PACKAGES}"
-      --onlyAllow "${NPM_LICENSE_CHECKER_WHITELIST}"
-      --out "${LICENSES_LIST}"
-    - >
-      if [ ${EXCLUDED_PACKAGES} ]; then
-        echo -e "\n\nManually overridden packages excluded from the licenses check:\n${EXCLUDED_PACKAGES}" >> ${LICENSES_LIST};
-      fi
-    - cat "${LICENSES_LIST}"
-  artifacts:
-    name: 'npm-licenses-list'
-    expose_as: 'NPM Licenses List'
-    expire_in: 1 hour
-    paths:
-      - $LICENSES_LIST
-  rules:
-    - if: $CI_MERGE_REQUEST_IID
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

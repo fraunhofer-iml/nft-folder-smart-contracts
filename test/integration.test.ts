@@ -1,8 +1,9 @@
-/**
- * Copyright 2023 Open Logistics Foundation
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
  *
- * Licensed under the Open Logistics License 1.0.
+ * Licensed under the Apache License, Version 2.0 (the "License").
  * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { expect } from 'chai';
@@ -11,6 +12,7 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/src/si
 
 import { Container, Segment, Token } from '../typechain-types';
 import { CONTAINER, SEGMENT, TOKEN } from './constants';
+import { TokenDataStorage } from '../typechain-types/contracts/Token';
 
 describe('Container', async () => {
   let alice: HardhatEthersSigner;
@@ -61,12 +63,11 @@ describe('Container', async () => {
       const tokenUri = await tokenInstance.tokenURI('0');
       expect(tokenUri).to.be.equal(TOKEN.metadata1.uriInitial);
 
-      const additionalData = await tokenInstance.getAdditionalData('0');
-      expect(additionalData).to.be.equal(TOKEN.additionalData1.initial);
+      const tokenDataStruct: TokenDataStorage.TokenDataStruct = (await tokenInstance.getToken(0)).tokenData;
+      expect(tokenDataStruct.additionalData).to.be.equal(TOKEN.additionalData1.initial);
 
-      const asset = await tokenInstance.getAsset('0');
-      expect(asset.uri).to.be.equal(TOKEN.asset1.uriInitial);
-      expect(asset.hash).to.be.equal(TOKEN.asset1.hashInitial);
+      expect(tokenDataStruct.asset.uri).to.be.equal(TOKEN.asset1.uriInitial);
+      expect(tokenDataStruct.asset.hash).to.be.equal(TOKEN.asset1.hashInitial);
 
       const remoteId = await tokenInstance.getRemoteIdByTokenId('0');
       expect(remoteId).to.be.equal(TOKEN.remoteId1);
@@ -77,9 +78,8 @@ describe('Container', async () => {
       const tokenIdForOwner: bigint = (await tokenInstance.getTokenIdsByOwner(alice))[0];
       expect(tokenIdForOwner).to.be.equal(0n);
 
-      const metadata = await tokenInstance.getMetadata('0');
-      expect(metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
-      expect(metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      expect(tokenDataStruct.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect(tokenDataStruct.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
 
       const segments = await tokenInstance.getAllSegments('0');
       expect(segments).to.be.empty;

@@ -1,8 +1,9 @@
-/**
- * Copyright 2023 Open Logistics Foundation
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
  *
- * Licensed under the Open Logistics License 1.0.
+ * Licensed under the Apache License, Version 2.0 (the "License").
  * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { expect } from 'chai';
@@ -43,7 +44,7 @@ describe('Token - TokenAdditionalData', async () => {
         TOKEN.additionalData1.initial,
       );
 
-      const additionalData = await tokenInstance.getAdditionalData(0);
+      const additionalData = (await tokenInstance.getToken(0)).tokenData.additionalData;
       expect(additionalData).to.be.equal(TOKEN.additionalData1.initial);
     });
 
@@ -67,18 +68,15 @@ describe('Token - TokenAdditionalData', async () => {
         TOKEN.additionalData2.initial,
       );
 
-      const additionalData1 = await tokenInstance.getAdditionalData(0);
+      const additionalData1 = (await tokenInstance.getToken(0)).tokenData.additionalData;
       expect(additionalData1).to.be.equal(TOKEN.additionalData1.initial);
 
-      const additionalData2 = await tokenInstance.getAdditionalData(1);
+      const additionalData2 = (await tokenInstance.getToken(1)).tokenData.additionalData;
       expect(additionalData2).to.be.equal(TOKEN.additionalData2.initial);
     });
 
     it('should not get additional data', async () => {
-      await expect(tokenInstance.getAdditionalData(0)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenDoesNotExist',
-      );
+      await expect(tokenInstance.getToken(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
@@ -103,11 +101,11 @@ describe('Token - TokenAdditionalData', async () => {
         TOKEN.additionalData1.initial,
       );
 
-      await expect(tokenInstance.setAdditionalData(0, TOKEN.additionalData1.updated))
-        .to.emit(tokenInstance, 'AdditionalDataSet')
-        .withArgs(TOKEN.additionalData1.initial, TOKEN.additionalData1.updated, alice, tokenAddress, 0);
+      await expect(tokenInstance.updateToken(0, '', '', '', '', TOKEN.additionalData1.updated))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 0);
 
-      const additionalData = await tokenInstance.getAdditionalData(0);
+      const additionalData = (await tokenInstance.getToken(0)).tokenData.additionalData;
       expect(additionalData).to.be.equal(TOKEN.additionalData1.updated);
     });
 
@@ -131,26 +129,25 @@ describe('Token - TokenAdditionalData', async () => {
         TOKEN.additionalData2.initial,
       );
 
-      await expect(tokenInstance.setAdditionalData(0, TOKEN.additionalData1.updated))
-        .to.emit(tokenInstance, 'AdditionalDataSet')
-        .withArgs(TOKEN.additionalData1.initial, TOKEN.additionalData1.updated, alice, tokenAddress, 0);
+      await expect(tokenInstance.updateToken(0, '', '', '', '', TOKEN.additionalData1.updated))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 0);
 
-      const additionalData1 = await tokenInstance.getAdditionalData(0);
+      const additionalData1 = (await tokenInstance.getToken(0)).tokenData.additionalData;
       expect(additionalData1).to.be.equal(TOKEN.additionalData1.updated);
 
-      await expect(tokenInstance.setAdditionalData(1, TOKEN.additionalData2.updated))
-        .to.emit(tokenInstance, 'AdditionalDataSet')
-        .withArgs(TOKEN.additionalData2.initial, TOKEN.additionalData2.updated, alice, tokenAddress, 1);
+      await expect(tokenInstance.updateToken(1, '', '', '', '', TOKEN.additionalData2.updated))
+        .to.emit(tokenInstance, 'TokenUpdate')
+        .withArgs(alice, tokenAddress, 1);
 
-      const additionalData2 = await tokenInstance.getAdditionalData(1);
+      const additionalData2 = (await tokenInstance.getToken(1)).tokenData.additionalData;
       expect(additionalData2).to.be.equal(TOKEN.additionalData2.updated);
     });
 
     it('should not set additional data', async () => {
-      await expect(tokenInstance.setAdditionalData(0, TOKEN.additionalData1.initial)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenDoesNotExist',
-      );
+      await expect(
+        tokenInstance.updateToken(0, '', '', '', '', TOKEN.additionalData1.initial),
+      ).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 
@@ -187,14 +184,11 @@ describe('Token - TokenAdditionalData', async () => {
       await tokenInstance.burn(0);
 
       // additionalData for token with id 1 should still exist
-      const additionalData2 = await tokenInstance.getAdditionalData(1);
+      const additionalData2 = (await tokenInstance.getToken(1)).tokenData.additionalData;
       expect(additionalData2).to.be.equal(TOKEN.additionalData2.initial);
 
       // additionalData for token with id 0 should be deleted
-      await expect(tokenInstance.getAdditionalData(0)).to.be.revertedWithCustomError(
-        tokenInstance,
-        'TokenDoesNotExist',
-      );
+      await expect(tokenInstance.getToken(0)).to.be.revertedWithCustomError(tokenInstance, 'TokenDoesNotExist');
     });
   });
 });

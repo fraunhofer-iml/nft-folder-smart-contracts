@@ -1,10 +1,9 @@
-/**
- * SPDX-License-Identifier: Open Logistics Foundation
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
  *
- * Copyright 2023 Open Logistics Foundation
- *
- * Licensed under the Open Logistics License 1.0.
+ * Licensed under the Apache License, Version 2.0 (the "License").
  * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 pragma solidity ^0.8.24;
@@ -12,9 +11,9 @@ pragma solidity ^0.8.24;
 import {TokenExtensionBase} from './TokenExtensionBase.sol';
 
 abstract contract TokenRemoteId is TokenExtensionBase {
-    mapping(uint256 => string) private _tokenIdWithRemoteId;
-    mapping(string => uint256[]) private _remoteIdWithTokenIds;
-    mapping(address => uint256[]) private _ownerWithTokenIds;
+    mapping(uint256 tokenId => string remoteId) private _tokenIdWithRemoteId;
+    mapping(string remoteId => uint256[] tokenIds) private _remoteIdWithTokenIds;
+    mapping(address owner => uint256[] tokenIds) private _ownerWithTokenIds;
 
     error RemoteIdDoesNotExist();
 
@@ -53,8 +52,6 @@ abstract contract TokenRemoteId is TokenExtensionBase {
     }
 
     function _associateRemoteIdWithTokenId(uint256 tokenId, string memory remoteId) internal {
-        ensureTokenExists(tokenId);
-
         _tokenIdWithRemoteId[tokenId] = remoteId;
         _remoteIdWithTokenIds[remoteId].push(tokenId);
     }

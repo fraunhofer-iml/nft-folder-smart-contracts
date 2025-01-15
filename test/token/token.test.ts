@@ -1,8 +1,9 @@
-/**
- * Copyright 2023 Open Logistics Foundation
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
  *
- * Licensed under the Open Logistics License 1.0.
+ * Licensed under the Apache License, Version 2.0 (the "License").
  * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { expect } from 'chai';
@@ -56,14 +57,14 @@ describe('Token', async () => {
     });
 
     it('should set all information on token creation', async () => {
-      expect((await tokenInstance.getAsset(0)).uri).to.be.equal(TOKEN.asset1.uriInitial);
-      expect((await tokenInstance.getAsset(0)).hash).to.be.equal(TOKEN.asset1.hashInitial);
-      expect((await tokenInstance.getMetadata(0)).uri).to.be.equal(TOKEN.metadata1.uriInitial);
-      expect((await tokenInstance.getMetadata(0)).hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).asset.uri).to.be.equal(TOKEN.asset1.uriInitial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).asset.hash).to.be.equal(TOKEN.asset1.hashInitial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
       expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
       expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
       expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
-      expect(await tokenInstance.getAdditionalData(0)).to.be.equal(TOKEN.additionalData1.initial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).additionalData).to.be.equal(TOKEN.additionalData1.initial);
     });
 
     it('should be burnable', async () => {
@@ -113,11 +114,11 @@ describe('Token', async () => {
 
       const token = await tokenInstance.getToken(0);
       expect(token.remoteId).to.be.equal(TOKEN.remoteId1);
-      expect(token.asset.uri).to.be.equal(TOKEN.asset1.uriInitial);
-      expect(token.asset.hash).to.be.equal(TOKEN.asset1.hashInitial);
-      expect(token.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
-      expect(token.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
-      expect(token.additionalData).to.be.equal(TOKEN.additionalData1.initial);
+      expect(token.tokenData.asset.uri).to.be.equal(TOKEN.asset1.uriInitial);
+      expect(token.tokenData.asset.hash).to.be.equal(TOKEN.asset1.hashInitial);
+      expect(token.tokenData.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect(token.tokenData.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      expect(token.tokenData.additionalData).to.be.equal(TOKEN.additionalData1.initial);
     });
 
     it('should not get token, because tokenId does not exist', async () => {
@@ -154,14 +155,14 @@ describe('Token', async () => {
         TOKEN.additionalData2.initial,
       );
 
-      expect((await tokenInstance.getAsset(0)).uri).to.be.equal(TOKEN.asset2.uriInitial);
-      expect((await tokenInstance.getAsset(0)).hash).to.be.equal(TOKEN.asset2.hashInitial);
-      expect((await tokenInstance.getMetadata(0)).uri).to.be.equal(TOKEN.metadata2.uriInitial);
-      expect((await tokenInstance.getMetadata(0)).hash).to.be.equal(TOKEN.metadata2.hashInitial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).asset.uri).to.be.equal(TOKEN.asset2.uriInitial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).asset.hash).to.be.equal(TOKEN.asset2.hashInitial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).metadata.uri).to.be.equal(TOKEN.metadata2.uriInitial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).metadata.hash).to.be.equal(TOKEN.metadata2.hashInitial);
       expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
       expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
       expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
-      expect(await tokenInstance.getAdditionalData(0)).to.be.equal(TOKEN.additionalData2.initial);
+      expect((await tokenInstance.tokenIdWithTokenData(0)).additionalData).to.be.equal(TOKEN.additionalData2.initial);
     });
 
     it('should not update token, because of empty strings', async () => {
@@ -177,14 +178,14 @@ describe('Token', async () => {
 
       await tokenInstance.updateToken(0, '', '', '', '', '');
 
-      expect((await tokenInstance.getAsset(0)).uri).to.be.equal(TOKEN.asset1.uriInitial);
-      expect((await tokenInstance.getAsset(0)).hash).to.be.equal(TOKEN.asset1.hashInitial);
-      expect((await tokenInstance.getMetadata(0)).uri).to.be.equal(TOKEN.metadata1.uriInitial);
-      expect((await tokenInstance.getMetadata(0)).hash).to.be.equal(TOKEN.metadata1.hashInitial);
+      expect((await tokenInstance.getToken(0)).tokenData.asset.uri).to.be.equal(TOKEN.asset1.uriInitial);
+      expect((await tokenInstance.getToken(0)).tokenData.asset.hash).to.be.equal(TOKEN.asset1.hashInitial);
+      expect((await tokenInstance.getToken(0)).tokenData.metadata.uri).to.be.equal(TOKEN.metadata1.uriInitial);
+      expect((await tokenInstance.getToken(0)).tokenData.metadata.hash).to.be.equal(TOKEN.metadata1.hashInitial);
       expect(await tokenInstance.getRemoteIdByTokenId(0)).to.be.equal(TOKEN.remoteId1);
       expect((await tokenInstance.getTokenIdsByRemoteId(TOKEN.remoteId1))[0]).to.be.equal(0n);
       expect((await tokenInstance.getTokenIdsByOwner(alice))[0]).to.be.equal(0n);
-      expect(await tokenInstance.getAdditionalData(0)).to.be.equal(TOKEN.additionalData1.initial);
+      expect((await tokenInstance.getToken(0)).tokenData.additionalData).to.be.equal(TOKEN.additionalData1.initial);
     });
   });
 });
