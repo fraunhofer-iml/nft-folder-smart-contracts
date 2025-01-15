@@ -1,5 +1,6 @@
 {
   "printWidth": 120,
   "singleQuote": true,
-  "plugins": ["prettier-plugin-solidity"]
+  "trailingComma": "all",
+  "plugins": ["prettier-plugin-properties", "prettier-plugin-solidity"]
 }

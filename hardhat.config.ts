@@ -19,15 +19,6 @@ const DEV_INITIAL_ADDRESS_INDEX = parseInt(process.env.DEV_INITIAL_ADDRESS_INDEX
 
 const config: HardhatUserConfig = {
   networks: {
-    localhost: {
-      accounts: {
-        mnemonic: 'test test test test test test test test test test test junk',
-        path: "m/44'/60'/0'/0",
-        initialIndex: 0,
-        count: 3,
-        passphrase: '',
-      },
-    },
     dev: {
       gas: 0x1ffffffffffffe,
       gasPrice: 0,
