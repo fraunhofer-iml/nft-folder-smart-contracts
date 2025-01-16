@@ -43,33 +43,33 @@ contract Token is
 
     function mintToken(
         address receiver,
+        string memory remoteId,
         string memory assetUri,
         string memory assetHash,
         string memory metadataUri,
         string memory metadataHash,
-        string memory remoteId,
         string memory additionalData
     ) external {
-        _mintToken(receiver, assetUri, assetHash, metadataUri, metadataHash, remoteId, additionalData);
+        _mintToken(receiver, remoteId, assetUri, assetHash, metadataUri, metadataHash, additionalData);
     }
 
     function mintTokenAndAppendToHierarchy(
         address receiver,
+        string memory remoteId,
         string memory assetUri,
         string memory assetHash,
         string memory metadataUri,
         string memory metadataHash,
-        string memory remoteId,
         string memory additionalData,
         uint256[] memory parentIds
     ) external {
         uint256 tokenId = _mintToken(
             receiver,
+            remoteId,
             assetUri,
             assetHash,
             metadataUri,
             metadataHash,
-            remoteId,
             additionalData
         );
         _appendNodeToHierarchy(tokenId, parentIds);
@@ -117,11 +117,11 @@ contract Token is
 
     function _mintToken(
         address receiver,
+        string memory remoteId,
         string memory assetUri,
         string memory assetHash,
         string memory metadataUri,
         string memory metadataHash,
-        string memory remoteId,
         string memory additionalData
     ) private returns (uint256 tokenId) {
         tokenId = _tokenIdCounter;

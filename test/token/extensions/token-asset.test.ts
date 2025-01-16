@@ -37,11 +37,11 @@ describe('Token - TokenAsset', async () => {
     it('should get asset', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
 
@@ -53,20 +53,20 @@ describe('Token - TokenAsset', async () => {
     it('should get asset for multiple minted token', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId2,
         TOKEN.asset2.uriInitial,
         TOKEN.asset2.hashInitial,
         TOKEN.metadata2.uriInitial,
         TOKEN.metadata2.hashInitial,
-        TOKEN.remoteId2,
         TOKEN.additionalData2.initial,
       );
 
@@ -97,11 +97,11 @@ describe('Token - TokenAsset', async () => {
     it('should set asset.uri', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
 
@@ -117,20 +117,20 @@ describe('Token - TokenAsset', async () => {
     it('should set asset.uri for multiple minted token', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId2,
         TOKEN.asset2.uriInitial,
         TOKEN.asset2.hashInitial,
         TOKEN.metadata2.uriInitial,
         TOKEN.metadata2.hashInitial,
-        TOKEN.remoteId2,
         TOKEN.additionalData2.initial,
       );
 
@@ -172,11 +172,11 @@ describe('Token - TokenAsset', async () => {
     it('should set asset.hash', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
 
@@ -192,20 +192,20 @@ describe('Token - TokenAsset', async () => {
     it('should set asset.hash for multiple minted token', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId2,
         TOKEN.asset2.uriInitial,
         TOKEN.asset2.hashInitial,
         TOKEN.metadata2.uriInitial,
         TOKEN.metadata2.hashInitial,
-        TOKEN.remoteId2,
         TOKEN.additionalData2.initial,
       );
 
@@ -246,20 +246,20 @@ describe('Token - TokenAsset', async () => {
     it('should delete asset.uri and hash on burning', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId2,
         TOKEN.asset2.uriInitial,
         TOKEN.asset2.hashInitial,
         TOKEN.metadata2.uriInitial,
         TOKEN.metadata2.hashInitial,
-        TOKEN.remoteId2,
         TOKEN.additionalData1.initial,
       );
 

@@ -47,11 +47,11 @@ describe('Token', async () => {
       ]);
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
     });
@@ -104,11 +104,11 @@ describe('Token', async () => {
     it('should get token', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
 
@@ -138,11 +138,11 @@ describe('Token', async () => {
     it('should update token', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
 
@@ -168,11 +168,11 @@ describe('Token', async () => {
     it('should not update token, because of empty strings', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
 

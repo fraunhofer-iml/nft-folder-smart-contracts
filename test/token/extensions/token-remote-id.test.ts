@@ -34,11 +34,11 @@ describe('Token - TokenRemoteId', async () => {
     it('should get remote id', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
 
@@ -49,20 +49,20 @@ describe('Token - TokenRemoteId', async () => {
     it('should get different remote ids for different tokens', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId2,
         TOKEN.asset2.uriInitial,
         TOKEN.asset2.hashInitial,
         TOKEN.metadata2.uriInitial,
         TOKEN.metadata2.hashInitial,
-        TOKEN.remoteId2,
         TOKEN.additionalData2.initial,
       );
 
@@ -93,11 +93,11 @@ describe('Token - TokenRemoteId', async () => {
     it('should get token id', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
 
@@ -111,20 +111,20 @@ describe('Token - TokenRemoteId', async () => {
     it('should get different token ids for different tokens', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId2,
         TOKEN.asset2.uriInitial,
         TOKEN.asset2.hashInitial,
         TOKEN.metadata2.uriInitial,
         TOKEN.metadata2.hashInitial,
-        TOKEN.remoteId2,
         TOKEN.additionalData2.initial,
       );
 
@@ -162,20 +162,20 @@ describe('Token - TokenRemoteId', async () => {
     it('should delete ids on burning', async () => {
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId1,
         TOKEN.asset1.uriInitial,
         TOKEN.asset1.hashInitial,
         TOKEN.metadata1.uriInitial,
         TOKEN.metadata1.hashInitial,
-        TOKEN.remoteId1,
         TOKEN.additionalData1.initial,
       );
       await tokenInstance.mintToken(
         alice,
+        TOKEN.remoteId2,
         TOKEN.asset2.uriInitial,
         TOKEN.asset2.hashInitial,
         TOKEN.metadata2.uriInitial,
         TOKEN.metadata2.hashInitial,
-        TOKEN.remoteId2,
         TOKEN.additionalData2.initial,
       );
 

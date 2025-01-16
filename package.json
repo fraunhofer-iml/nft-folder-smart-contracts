@@ -1,20 +1,34 @@
 {
-  "name": "@nft-folder/smart-contracts",
-  "version": "1.5.0",
-  "description": "Solidity smart contracts of the NFT Folder project",
-  "author": {
-    "name": "Fraunhofer Institute for Material Flow and Logistics",
-    "url": "https://www.iml.fraunhofer.de/en.html"
-  },
+  "name": "@fraunhofer-iml/nft-folder-smart-contracts",
+  "version": "1.5.1",
+  "description": "Solidity smart contracts for the NFT Folder project, enabling tokenization, structuring, and secure storage of assets as NFTs on the blockchain.",
+  "keywords": [
+    "fraunhofer",
+    "blockchain",
+    "smart contracts",
+    "nft",
+    "ethereum",
+    "solidity",
+    "tokenization"
+  ],
+  "homepage": "https://github.com/fraunhofer-iml/nft-folder-smart-contracts",
+  "bugs": "https://github.com/fraunhofer-iml/nft-folder-smart-contracts/issues",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/fraunhofer-iml/nft-folder-smart-contracts/issues"
-  },
+  "contributors": [
+    {
+      "name": "Lukas Grieger",
+      "email": "lukas.grieger@iml.fraunhofer.de"
+    },
+    {
+      "name": "Michael Pichura",
+      "email": "michael.pichura@iml.fraunhofer.de"
+    }
+  ],
+  "main": "./hardhat.config.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fraunhofer-iml/nft-folder-smart-contracts"
+    "url": "git+https://github.com/fraunhofer-iml/nft-folder-smart-contracts.git"
   },
-  "main": "hardhat.config.ts",
   "scripts": {
     "clean": "rm -rf artifacts/ cache/ coverage/ typechain-types/ coverage.json",
     "compile": "npx hardhat compile",
