@@ -19,7 +19,7 @@
   },
   "plugins": ["license-header", "prettier"],
   "rules": {
-    "license-header/header": ["error", "LICENSE-HEADER"],
+    "license-header/header": ["error", ".license-header"],
     "prettier/prettier": ["error"]
   }
 }
