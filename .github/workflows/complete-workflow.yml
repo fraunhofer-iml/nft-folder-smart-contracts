@@ -1,0 +1,109 @@
+name: Complete Workflow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  install-and-compile:
+    name: Install Dependencies and Compile Smart Contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --include dev
+
+      - name: Compile smart contracts
+        run: npm run compile
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compilation-artifacts
+          path: |
+            artifacts
+            cache
+            typechain-types
+          include-hidden-files: true
+          if-no-files-found: error
+
+  test:
+    name: Test Smart Contracts
+    runs-on: ubuntu-latest
+    needs: install-and-compile
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: compilation-artifacts
+
+      - name: Install dependencies
+        run: npm ci --include dev
+
+      - name: Run coverage with unit tests
+        run: npm run coverage
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-artifacts
+          path: |
+            coverage
+            coverage.json
+          include-hidden-files: true
+          if-no-files-found: error
+
+  analyze:
+    name: Analyze Codebase
+    runs-on: ubuntu-latest
+    needs: install-and-compile
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: compilation-artifacts
+
+      - name: Install dependencies
+        run: npm ci --include dev
+
+      - name: Run ESLint
+        run: npm run eslint-check
+
+      - name: Run Prettier
+        run: npm run prettier-check
+
+      - name: Run Solhint
+        run: npm run solhint
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.4.0
+        with:
+          node-version: 22
+          slither-args: --exclude-dependencies --filter-paths openzeppelin
