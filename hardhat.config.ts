@@ -15,7 +15,7 @@ import 'hardhat-tracer';
 
 const DEV_NODE_URL = process.env.DEV_NODE_URL || '';
 const DEV_MNEMONIC = process.env.DEV_MNEMONIC || '';
-const DEV_INITIAL_ADDRESS_INDEX = parseInt(process.env.DEV_INITIAL_ADDRESS_INDEX || '0', 10);
+const DEV_INITIAL_ACCOUNT_INDEX = parseInt(process.env.DEV_INITIAL_ACCOUNT_INDEX || '0', 10);
 
 const config: HardhatUserConfig = {
   networks: {
@@ -26,7 +26,7 @@ const config: HardhatUserConfig = {
       accounts: {
         mnemonic: DEV_MNEMONIC,
         path: "m/44'/60'/0'/0",
-        initialIndex: DEV_INITIAL_ADDRESS_INDEX,
+        initialIndex: DEV_INITIAL_ACCOUNT_INDEX,
         count: 1,
         passphrase: '',
       },
