@@ -1,0 +1,43 @@
+name: Build, Test and Analyze
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-test-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --include dev
+
+      - name: Compile smart contracts
+        run: npm run compile
+
+      - name: Run coverage with unit tests
+        run: npm run coverage
+
+      - name: Run ESLint
+        run: npm run eslint-check
+
+      - name: Run Prettier
+        run: npm run prettier-check
+
+      - name: Run Solhint
+        run: npm run solhint
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.4.0
+        with:
+          node-version: 22
+          slither-args: --exclude-dependencies --filter-paths openzeppelin
