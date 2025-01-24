@@ -1,8 +1,9 @@
-name: Complete Workflow
+name: Main Workflow
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -10,17 +11,8 @@ jobs:
     name: Install Dependencies and Compile Smart Contracts
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --include dev
+      - name: Common Setup
+        uses: ./.github/actions/common-setup
 
       - name: Compile smart contracts
         run: npm run compile
@@ -41,24 +33,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: install-and-compile
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - name: Common Setup
+        uses: ./.github/actions/common-setup
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-
-      - name: Download artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
           name: compilation-artifacts
 
-      - name: Install dependencies
-        run: npm ci --include dev
-
-      - name: Run coverage with unit tests
+      - name: Run Coverage with Unit Tests
         run: npm run coverage
 
       - name: Upload artifacts
@@ -76,22 +59,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: install-and-compile
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - name: Common Setup
+        uses: ./.github/actions/common-setup
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-
-      - name: Download artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
           name: compilation-artifacts
-
-      - name: Install dependencies
-        run: npm ci --include dev
 
       - name: Run ESLint
         run: npm run eslint-check
