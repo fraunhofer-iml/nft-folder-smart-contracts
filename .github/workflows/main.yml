@@ -11,8 +11,17 @@ jobs:
     name: Install Dependencies and Compile Smart Contracts
     runs-on: ubuntu-latest
     steps:
-      - name: Common Setup
-        uses: ./.github/actions/common-setup
+      - name: Check out Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --include dev
 
       - name: Compile smart contracts
         run: npm run compile
@@ -33,8 +42,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: install-and-compile
     steps:
-      - name: Common Setup
-        uses: ./.github/actions/common-setup
+      - name: Check out Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --include dev
+
+      - name: Compile smart contracts
+        run: npm run compile
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -59,8 +80,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: install-and-compile
     steps:
-      - name: Common Setup
-        uses: ./.github/actions/common-setup
+      - name: Check out Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --include dev
+
+      - name: Compile smart contracts
+        run: npm run compile
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
